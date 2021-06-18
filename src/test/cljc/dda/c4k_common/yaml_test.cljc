@@ -1,8 +1,8 @@
-(ns dda.c4k_common.yaml-test
+(ns dda.c4k-common.yaml-test
   (:require
    #?(:clj [clojure.test :refer [deftest is are testing run-tests]]
       :cljs [cljs.test :refer-macros [deftest is are testing run-tests]])
-   [dda.c4k_common.yaml :as cut]))
+   [dda.c4k-common.yaml :as cut]))
 
 (deftest should-parse-yaml-string
   (is (= {:hallo "welt"}

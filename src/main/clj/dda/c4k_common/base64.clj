@@ -1,4 +1,4 @@
-(ns dda.c4k_common.base64
+(ns dda.c4k-common.base64
   (:import (java.util Base64)))
 
 (defn encode

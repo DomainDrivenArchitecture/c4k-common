@@ -1,8 +1,7 @@
-(ns dda.c4k_common.browser
+(ns dda.c4k-common.browser
   (:require
    [clojure.string :as st]
    [clojure.spec.alpha :as s]
-   [clojure.tools.reader.edn :as edn]
    [expound.alpha :as expound]
    [orchestra.core :refer-macros [defn-spec]]))
 

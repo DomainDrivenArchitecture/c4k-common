@@ -1,4 +1,4 @@
-(ns dda.c4k_common.yaml
+(ns dda.c4k-common.yaml
   (:require
    ["js-yaml" :as yaml]
    [shadow.resource :as rc]))

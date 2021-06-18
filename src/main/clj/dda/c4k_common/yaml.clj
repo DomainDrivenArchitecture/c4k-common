@@ -1,4 +1,4 @@
-(ns dda.c4k_common.yaml
+(ns dda.c4k-common.yaml
   (:require
    [clojure.java.io :as io]
    [clj-yaml.core :as yaml]
