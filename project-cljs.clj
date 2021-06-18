@@ -8,7 +8,7 @@
                  [orchestra "2021.01.01-1"]
                  [expound "0.8.9"]]
   :source-paths ["src/main/cljc"
-                 "src/main/cls"]
+                 "src/main/cljs"]
   :resource-paths ["src/main/resources"]
   :repositories [["snapshots" :clojars]
                  ["releases" :clojars]]
