@@ -1,5 +1,5 @@
 {
-  "name": "c4k-common",
+  "name": "c4k-common-cljs",
   "description": "Contains predicates and tools for c4k",
   "author": "meissa GmbH",
   "version": "0.1.0-SNAPSHOT",
