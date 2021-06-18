@@ -1,0 +1,26 @@
+# pybuilder
+.pybuilder/
+__pycache__/
+
+# lein
+target/
+.lein-repl-history
+.lein-failures
+pom.*
+
+# cljs
+.shadow-cljs
+.nrepl-*
+package-lock.json
+node_modules/
+public/js/
+
+# ide
+.calva
+
+*.iml
+.idea/
+
+valid-auth.edn
+valid-config.edn
+my-auth.edn
