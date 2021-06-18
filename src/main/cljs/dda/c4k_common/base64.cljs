@@ -1,4 +1,4 @@
-(ns dda.c4k-keycloak.base64
+(ns dda.c4k_common.base64
   (:require
    ["js-base64" :as b64]))
 

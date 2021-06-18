@@ -1,12 +1,10 @@
-(ns dda.c4k-keycloak.browser
+(ns dda.c4k_common.browser
   (:require
    [clojure.string :as st]
    [clojure.spec.alpha :as s]
    [clojure.tools.reader.edn :as edn]
    [expound.alpha :as expound]
-   [orchestra.core :refer-macros [defn-spec]]
-   [dda.c4k-keycloak.core :as core]
-   [dda.c4k-keycloak.keycloak :as kc]))
+   [orchestra.core :refer-macros [defn-spec]]))
 
 (defn-spec print-debug string?
   [sth string?]
