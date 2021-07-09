@@ -1,4 +1,4 @@
-(defproject org.domaindrivenarchitecture/c4k-common-clj "0.2.1"
+(defproject org.domaindrivenarchitecture/c4k-common-clj "0.2.2-SNAPSHOT"
   :description "Contains predicates and tools for c4k"
   :url "https://domaindrivenarchitecture.org"
   :license {:name "Apache License, Version 2.0"
@@ -13,8 +13,7 @@
                  "src/main/clj"]
   :resource-paths ["src/main/resources"]
   :repositories [["snapshots" :clojars]
-                 ["releases" {:url "https://clojars.org/repo"
-                              :sign-releases false}]]
+                 ["releases" :clojars]]
   :deploy-repositories [["snapshots" :clojars]
                         ["releases" {:url "https://clojars.org/repo"
                                      :sign-releases false}]]

@@ -1,4 +1,4 @@
-(defproject org.domaindrivenarchitecture/c4k-common-cljs "0.2.0-SNAPSHOT"
+(defproject org.domaindrivenarchitecture/c4k-common-cljs "0.2.2-SNAPSHOT"
   :description "Contains predicates and tools for c4k"
   :url "https://domaindrivenarchitecture.org"
   :license {:name "Apache License, Version 2.0"
@@ -13,7 +13,8 @@
   :repositories [["snapshots" :clojars]
                  ["releases" :clojars]]
   :deploy-repositories [["snapshots" :clojars]
-                        ["releases" :clojars]]
+                        ["releases" {:url "https://clojars.org/repo"
+                                     :sign-releases false}]]
   :release-tasks [["vcs" "assert-committed"]
                   ["change" "version" "leiningen.release/bump-version" "release"]
                   ["vcs" "commit"]
