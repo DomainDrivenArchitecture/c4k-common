@@ -12,11 +12,8 @@
   :source-paths ["src/main/cljc"
                  "src/main/clj"]
   :resource-paths ["src/main/resources"]
-  :repositories [["snapshots" :clojars]
-                 ["releases" :clojars]]
-  :deploy-repositories [["snapshots" :clojars]
-                        ["releases" {:url "https://clojars.org/repo"
-                                     :sign-releases false}]]
+  :deploy-repositories [["clojars" {:url "https://clojars.org/repo"
+                                    :sign-releases false}]]
   :profiles {:test {:test-paths ["src/test/clj"
                                  "src/test/cljc"]
                     :resource-paths ["src/test/resources"]

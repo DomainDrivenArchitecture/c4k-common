@@ -10,11 +10,8 @@
   :source-paths ["src/main/cljc"
                  "src/main/cljs"]
   :resource-paths ["src/main/resources"]
-  :repositories [["snapshots" :clojars]
-                 ["releases" :clojars]]
-  :deploy-repositories [["snapshots" :clojars]
-                        ["releases" {:url "https://clojars.org/repo"
-                                     :sign-releases false}]]
+  :deploy-repositories [["clojars" {:url "https://clojars.org/repo"
+                                    :sign-releases false}]]
   :release-tasks [["vcs" "assert-committed"]
                   ["change" "version" "leiningen.release/bump-version" "release"]
                   ["vcs" "commit"]
