@@ -1,8 +1,11 @@
 (ns dda.c4k-common.yaml-test
   (:require
-   #?(:clj [clojure.test :refer [deftest is are testing run-tests]]
-      :cljs [cljs.test :refer-macros [deftest is are testing run-tests]])
+   [cljs.test :refer-macros [deftest is are testing run-tests]]
    [dda.c4k-common.yaml :as cut]))
+
+(deftest should-dispatch-by-resource-name
+  (is (= :postgres
+         (cut/dispatch-by-resource-name "postgres/etc"))))
 
 (deftest should-parse-yaml-string
   (is (= {:hallo "welt"}
@@ -42,4 +45,4 @@
               [{:backend
                 {:serviceName "another_keycloak"
                  :servicePort 8081}}]}}]}}
-         (cut/from-string (cut/load-resource "ingress_test.yaml")))))
+         (cut/from-string (cut/load-resource "test/ingress_test.yaml")))))
