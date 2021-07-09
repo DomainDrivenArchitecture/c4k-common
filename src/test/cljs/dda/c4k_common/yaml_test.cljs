@@ -1,7 +1,13 @@
 (ns dda.c4k-common.yaml-test
   (:require
    [cljs.test :refer-macros [deftest is are testing run-tests]]
+   [shadow.resource :as rc]
    [dda.c4k-common.yaml :as cut]))
+
+(defmethod cut/load-resource :test [resource-name]
+  (case resource-name
+    "test/ingress_test.yaml" (rc/inline "test/ingress_test.yaml")
+    (throw (js/Error. "Undefined Resource!"))))
 
 (deftest should-dispatch-by-resource-name
   (is (= :postgres
