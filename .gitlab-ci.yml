@@ -38,19 +38,19 @@ test-cljs:
   script:
     - shadow-cljs compile test
 
-.upload-clj-prerelease:
+upload-clj-prerelease:
   <<: *clj
   stage: upload
   rules:
-    - if: '$CI_COMMIT_BRANCH == "master" && $CI_COMMIT_TAG == null'
+    - if: '$CI_COMMIT_BRANCH == "main" && $CI_COMMIT_TAG == null'
   script:
     - lein deploy clojars
 
-.upload-cljs-prerelease:
+upload-cljs-prerelease:
   <<: *clj
   stage: upload
   rules:
-    - if: '$CI_COMMIT_BRANCH == "master" && $CI_COMMIT_TAG == null'
+    - if: '$CI_COMMIT_BRANCH == "main" && $CI_COMMIT_TAG == null'
   script:
     - mv project.clj project-clj.clj && mv project-cljs.clj project.clj
     - lein deploy clojars
@@ -59,7 +59,7 @@ upload-clj-release:
   <<: *clj
   stage: upload
   rules:
-    - if: '$CI_COMMIT_TAG != null'
+    - if: '$CI_COMMIT_BRANCH == "main" && $CI_COMMIT_TAG != null'
   script:
     - lein deploy clojars
 
@@ -67,7 +67,7 @@ upload-cljs-release:
   <<: *clj
   stage: upload
   rules:
-    - if: '$CI_COMMIT_TAG != null'
+    - if: '$CI_COMMIT_BRANCH == "main" && $CI_COMMIT_TAG != null'
   script:
     - mv project.clj project-clj.clj && mv project-cljs.clj project.clj
     - lein deploy clojars
