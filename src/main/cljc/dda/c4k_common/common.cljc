@@ -2,17 +2,18 @@
   (:require
    [clojure.walk]))
 
-(defn bash-env-string?
+
+(defn ^{:deprecated "0.1"} bash-env-string?
   [input]
   (and (string? input)
        (not (re-matches #".*['\"\$]+.*" input))))
 
-(defn fqdn-string?
+(defn ^{:deprecated "0.1"} fqdn-string?
   [input]
   (and (string? input)
        (some? (re-matches #"(?=^.{4,253}$)(^((?!-)[a-zA-Z0-9-]{0,62}[a-zA-Z0-9]\.)+[a-zA-Z]{2,63}$)" input))))
 
-(defn letsencrypt-issuer? 
+(defn ^{:deprecated "0.1"} letsencrypt-issuer?
   [input]
   (contains? #{:prod :staging} input))
 

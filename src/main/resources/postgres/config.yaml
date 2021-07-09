@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgres-config
+  labels:
+    app: postgres
+data:
+  postgres-db: jira
+  postgresql.conf: |
+    max_connections = 1000
+    shared_buffers = 512MB

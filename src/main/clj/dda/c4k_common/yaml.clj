@@ -10,7 +10,7 @@
                             (into [] %)
                             %) lazy-seq))
 
-(defn load-resource [resource-name]
+(defmethod load-resource :clj [resource-name]
   (slurp (io/resource  resource-name)))
 
 (defn from-string [input]
@@ -18,3 +18,8 @@
 
 (defn to-string [edn]
   (yaml/generate-string edn :dumper-options {:flow-style :block}))
+
+(defn dispatch-by-resource-name 
+  [resource])
+
+(defmulti load-resource dispatch-by-resource-name)
