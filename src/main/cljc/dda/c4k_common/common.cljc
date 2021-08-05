@@ -2,7 +2,7 @@
   (:require
    [clojure.walk]))
 
-
+;; deprecated functions were moved to dda.c4k-common.prefixes
 (defn ^{:deprecated "0.1"} bash-env-string?
   [input]
   (and (string? input)
