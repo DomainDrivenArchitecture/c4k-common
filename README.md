@@ -25,7 +25,7 @@ Our convention 4 kubernetes c4k-* tools combine the advantages of both approache
 ## Refactoring & Module Overview
 
 | Module           | Version | common postgres | frontend script | provider adapter |
-|------------------|---------|-----------------|-----------------|------------------|
+|------------------|---------|:---------------:|:---------------:|:----------------:|
 | c4k-mastodon-bot | 0.1     |       -         |                 |                  |
 | c4k-keycloak     | 0.2     |                 |                 |                  |
 | c4k-jira         | 1.0     |       x         |       x         |                  |
