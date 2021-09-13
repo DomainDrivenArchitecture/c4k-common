@@ -4,7 +4,7 @@
    #?(:cljs [shadow.resource :as rc])
    [dda.c4k-common.yaml :as yaml]
    [dda.c4k-common.base64 :as b64]
-   [dda.c4k-common.common :as cm]))
+   [dda.c4k-common.prefixes :as cm]))
 
 (defn postgres-size?
   [input]
