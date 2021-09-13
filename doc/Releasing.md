@@ -1,7 +1,7 @@
 # stable release (should be done from master)
 
 ```
-#adjust [version]
+#adjust [version] and remove the -SNAPSHOT
 vi project-cljs.clj
 
 lein release
