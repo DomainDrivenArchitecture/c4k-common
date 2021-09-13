@@ -20,7 +20,6 @@
                     :dependencies [[dda/data-test "0.1.1"]]}
              :dev {:plugins [[lein-shell "0.5.0"]]}}
   :release-tasks [["test"]
-                  ["vcs" "assert-committed"]
                   ["change" "version" "leiningen.release/bump-version" "release"]
                   ["vcs" "commit"]
                   ["vcs" "tag"]
