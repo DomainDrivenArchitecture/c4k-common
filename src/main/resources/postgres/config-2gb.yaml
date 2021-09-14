@@ -5,7 +5,7 @@ metadata:
   labels:
     app: postgres
 data:
-  postgres-db: jira
   postgresql.conf: |
-    max_connections = 1000
-    shared_buffers = 512MB
+    max_connections = 100
+    work_mem = 4MB
+    shared_buffers = 128MB

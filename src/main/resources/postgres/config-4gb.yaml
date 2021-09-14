@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgres-config
+  labels:
+    app: postgres
+data:
+  postgresql.conf: |
+    max_connections = 500
+    work_mem = 2MB
+    shared_buffers = 256MB
