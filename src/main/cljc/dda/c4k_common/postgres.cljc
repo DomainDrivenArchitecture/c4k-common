@@ -4,14 +4,15 @@
    #?(:cljs [shadow.resource :as rc])
    [dda.c4k-common.yaml :as yaml]
    [dda.c4k-common.base64 :as b64]
-   [dda.c4k-common.prefixes :as cm]))
+   [dda.c4k-common.prefixes :as cp]
+   [dda.c4k-common.common :as cm]))
 
 (defn postgres-size?
   [input]
   (contains? #{:2gb :4gb :8gb :16gb} input))
 
-(s/def ::postgres-db-user cm/bash-env-string?)
-(s/def ::postgres-db-password cm/bash-env-string?)
+(s/def ::postgres-db-user cp/bash-env-string?)
+(s/def ::postgres-db-password cp/bash-env-string?)
 (s/def ::postgres-data-volume-path string?)
 (s/def ::postgres-size postgres-size?)
 

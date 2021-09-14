@@ -87,18 +87,18 @@
   [id
    label
    default-value]
-  (str (generate-label id label)
-       {:type :element :attrs {:class "form-control" :type "text" :name id :value default-value} :tag :input :content nil}
-       (generate-feedback-tag id)))
+  [(generate-label id label)
+   {:type :element :attrs {:class "form-control" :type "text" :name id :value default-value} :tag :input :content nil}
+   (generate-feedback-tag id)])
 
 (defn generate-text-area
   [id
    label
    default-value
    rows]
-  (str (generate-label id label)
-       {:type :element :attrs {:name id :id id :class "form-control" :rows rows} :tag :textarea :content [default-value]}
-       (generate-feedback-tag id)))
+  [(generate-label id label)
+   {:type :element :attrs {:name id :id id :class "form-control" :rows rows} :tag :textarea :content [default-value]}
+   (generate-feedback-tag id)])
 
 (defn generate-button
   [id
@@ -117,7 +117,7 @@
    label
    rows]
   {:type :element, :attrs {:id id}, :tag :div, :content [{:type :element, :attrs {:for "output", :class "form-label"}, :tag :label, :content [label]}
-                                                            {:type :element, :attrs {:name "output", :id "output", :class "form-control", :rows rows}, :tag :textarea, :content []}]})
+                                                         {:type :element, :attrs {:name "output", :id "output", :class "form-control", :rows rows}, :tag :textarea, :content []}]})
 
 (defn generate-needs-validation
   []
