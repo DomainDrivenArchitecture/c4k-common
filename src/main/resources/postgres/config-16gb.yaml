@@ -8,4 +8,4 @@ data:
   postgresql.conf: |
     max_connections = 1000
     work_mem = 4MB
-    shared_buffers = 512MB
+    shared_buffers = 2048MB
