@@ -5,6 +5,7 @@ metadata:
   labels:
     app: postgres
 data:
+  postgres-db: postgres
   postgresql.conf: |
     max_connections = 700
     work_mem = 3MB

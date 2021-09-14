@@ -31,9 +31,12 @@
        (throw (js/Error. "Undefined Resource!")))))
 
 (defn generate-config [& args]
-  (let [{:keys [postgres-size]
-         :or {postgres-size :2gb}} args]
-    (yaml/from-string (yaml/load-resource (str "postgres/config-" (name postgres-size) ".yaml")))))
+  (let [{:keys [postgres-size db-name]
+         :or {postgres-size :2gb
+              db-name "postgres"}} args]
+    (->
+     (yaml/from-string (yaml/load-resource (str "postgres/config-" (name postgres-size) ".yaml")))
+     (assoc-in [:data :postgres-db] db-name))))
 
 (defn generate-deployment []
   (yaml/from-string (yaml/load-resource "postgres/deployment.yaml")))
