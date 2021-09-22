@@ -90,9 +90,10 @@
 (defn generate-input-field
   [id
    label
-   default-value]
+   default-value
+   project-file-path]
   [(generate-label id label)
-   {:type :element :attrs {:class "form-control" :type "text" :name id :value default-value :onblur "dda.c4k_jira.browser.validate_all_BANG_ ()"} :tag :input :content nil}
+   {:type :element :attrs {:class "form-control" :type "text" :name id :id id :value default-value :onblur (str project-file-path ".validate_all_BANG_()")} :tag :input :content nil}
    (generate-feedback-tag id)
    (generate-br)])
 
@@ -100,9 +101,10 @@
   [id
    label
    default-value
-   rows]
+   rows
+   project-file-path]
   [(generate-label id label)
-   {:type :element :attrs {:name id :id id :class "form-control" :rows rows :onblur "dda.c4k_jira.browser.validate_all_BANG_ ()"} :tag :textarea :content [default-value]}
+   {:type :element :attrs {:name id :id id :class "form-control" :rows rows :onblur (str project-file-path ".validate_all_BANG_()")} :tag :textarea :content [default-value]}
    (generate-feedback-tag id)
    (generate-br)])
 
@@ -110,7 +112,7 @@
   [id
    label]
   [{:type :element
-    :attrs {:type "button", :id id, :class "btn btn-primary" :onblur "dda.c4k_jira.browser.validate_all_BANG_ ()"}
+    :attrs {:type "button", :id id, :class "btn btn-primary"}
     :tag :button
     :content [label]}
    (generate-br)])
