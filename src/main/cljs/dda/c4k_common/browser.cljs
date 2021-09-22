@@ -83,13 +83,18 @@
    label]
   {:type :element :attrs {:for id-for :class "form-label"} :tag :label :content [label]})
 
+(defn generate-br
+  []
+  {:type :element, :attrs nil, :tag :br, :content nil})
+
 (defn generate-input-field
   [id
    label
    default-value]
   [(generate-label id label)
-   {:type :element :attrs {:class "form-control" :type "text" :name id :value default-value} :tag :input :content nil}
-   (generate-feedback-tag id)])
+   {:type :element :attrs {:class "form-control" :type "text" :name id :value default-value :onblur "dda.c4k_jira.browser.validate_all_BANG_ ()"} :tag :input :content nil}
+   (generate-feedback-tag id)
+   (generate-br)])
 
 (defn generate-text-area
   [id
@@ -97,27 +102,26 @@
    default-value
    rows]
   [(generate-label id label)
-   {:type :element :attrs {:name id :id id :class "form-control" :rows rows} :tag :textarea :content [default-value]}
-   (generate-feedback-tag id)])
+   {:type :element :attrs {:name id :id id :class "form-control" :rows rows :onblur "dda.c4k_jira.browser.validate_all_BANG_ ()"} :tag :textarea :content [default-value]}
+   (generate-feedback-tag id)
+   (generate-br)])
 
 (defn generate-button
   [id
    label]
-  {:type :element
-    :attrs {:type "button", :id id, :class "btn btn-primary"}
+  [{:type :element
+    :attrs {:type "button", :id id, :class "btn btn-primary" :onblur "dda.c4k_jira.browser.validate_all_BANG_ ()"}
     :tag :button
-    :content [label]})
-
-(defn generate-br
-  []
-  {:type :element, :attrs nil, :tag :br, :content nil})
+    :content [label]}
+   (generate-br)])
 
 (defn generate-output
   [id
    label
    rows]
-  {:type :element, :attrs {:id id}, :tag :div, :content [{:type :element, :attrs {:for "output", :class "form-label"}, :tag :label, :content [label]}
-                                                         {:type :element, :attrs {:name "output", :id "output", :class "form-control", :rows rows}, :tag :textarea, :content []}]})
+  [{:type :element, :attrs {:id id}, :tag :div, :content [{:type :element, :attrs {:for "output", :class "form-label"}, :tag :label, :content [label]}
+                                                          {:type :element, :attrs {:name "output", :id "output", :class "form-control", :rows rows}, :tag :textarea, :content []}]}
+   (generate-br)])
 
 (defn generate-needs-validation
   []
