@@ -1,4 +1,4 @@
-(defproject org.domaindrivenarchitecture/c4k-common-clj "0.3.2"
+(defproject org.domaindrivenarchitecture/c4k-common-clj "0.3.3-SNAPSHOT"
   :description "Contains predicates and tools for c4k"
   :url "https://domaindrivenarchitecture.org"
   :license {:name "Apache License, Version 2.0"
