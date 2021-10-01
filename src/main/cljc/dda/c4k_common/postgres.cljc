@@ -15,6 +15,7 @@
 (s/def ::postgres-db-password cp/bash-env-string?)
 (s/def ::postgres-data-volume-path string?)
 (s/def ::postgres-size postgres-size?)
+(s/def ::db-name cp/bash-env-string?)
 
 #?(:cljs
    (defmethod yaml/load-resource :postgres [resource-name]
