@@ -102,10 +102,9 @@
 (defn generate-input-field
   [id
    label
-   default-value
-   project-file-path]
+   default-value]
   [(generate-label id label)
-   {:type :element :attrs {:class "form-control" :type "text" :name id :id id :value default-value :onblur (str project-file-path ".validate_all_BANG_()")} :tag :input :content nil}
+   {:type :element :attrs {:class "form-control" :type "text" :name id :id id :value default-value} :tag :input :content nil}
    (generate-feedback-tag id)
    (generate-br)])
 
@@ -113,10 +112,9 @@
   [id
    label
    default-value
-   rows
-   project-file-path]
+   rows]
   [(generate-label id label)
-   {:type :element :attrs {:name id :id id :class "form-control" :rows rows :onblur (str project-file-path ".validate_all_BANG_()")} :tag :textarea :content [default-value]}
+   {:type :element :attrs {:name id :id id :class "form-control" :rows rows} :tag :textarea :content [default-value]}
    (generate-feedback-tag id)
    (generate-br)])
 
