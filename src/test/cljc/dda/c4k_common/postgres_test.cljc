@@ -39,3 +39,30 @@
           :data
           {:postgres-user "eHgtdXM=", :postgres-password "eHgtcHc="}}
          (cut/generate-secret {:postgres-db-user "xx-us" :postgres-db-password "xx-pw"}))))
+
+(deftest should-generate-deployment
+  (is (= [{:image "postgres:14"
+           :name "postgresql"
+           :env
+           [{:name "POSTGRES_USER"
+             :valueFrom
+             {:secretKeyRef
+              {:name "postgres-secret", :key "postgres-user"}}}
+            {:name "POSTGRES_PASSWORD"
+             :valueFrom
+             {:secretKeyRef
+              {:name "postgres-secret", :key "postgres-password"}}}
+            {:name "POSTGRES_DB"
+             :valueFrom
+             {:configMapKeyRef
+              {:name "postgres-config", :key "postgres-db"}}}]
+           :ports [{:containerPort 5432, :name "postgresql"}]
+           :volumeMounts
+           [{:name "postgres-config-volume"
+             :mountPath "/etc/postgresql/postgresql.conf"
+             :subPath "postgresql.conf"
+             :readOnly true}
+            {:name "postgre-data-volume"
+             :mountPath "/var/lib/postgresql/data"}]}]
+         (get-in (cut/generate-deployment :postgres-image "postgres:14")
+                 [:spec :template :spec :containers]))))

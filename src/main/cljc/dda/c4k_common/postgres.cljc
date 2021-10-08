@@ -39,8 +39,12 @@
      (yaml/from-string (yaml/load-resource (str "postgres/config-" (name postgres-size) ".yaml")))
      (assoc-in [:data :postgres-db] db-name))))
 
-(defn generate-deployment []
-  (yaml/from-string (yaml/load-resource "postgres/deployment.yaml")))
+(defn generate-deployment [& args]
+  (let [{:keys [postgres-image]
+         :or {postgres-image "postgres:13"}} args]
+    (->
+     (yaml/from-string (yaml/load-resource "postgres/deployment.yaml"))
+     (assoc-in [:spec :template :spec :containers 0 :image] postgres-image))))
 
 (defn generate-persistent-volume [config]
   (let [{:keys [postgres-data-volume-path]} config]
