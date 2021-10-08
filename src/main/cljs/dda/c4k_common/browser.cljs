@@ -67,12 +67,24 @@
       (.-classList)
       (.add "was-validated")))
 
-(defn replace-element-content
-  [name
-   content]
-  (-> (get-element-by-id name)
-      (.-innerHTML)
-      (set! (hr/hickory-to-html content))))
+(defn create-js-obj-from-html
+  [html-string]
+  (-> js/document
+      .createRange
+      (.createContextualFragment html-string)))
+
+(defn append-to-body
+  [js-obj]
+  (-> js/document
+      .-body
+      (.appendChild js-obj)))
+
+(defn append-hickory
+  [hickory-obj]
+  (-> hickory-obj
+      (hr/hickory-to-html)
+      (create-js-obj-from-html)
+      (append-to-body)))
 
 (defn generate-feedback-tag
   [id]
