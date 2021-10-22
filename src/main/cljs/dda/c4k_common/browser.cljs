@@ -73,10 +73,9 @@
       .createRange
       (.createContextualFragment html-string)))
 
-(defn append-to-body
+(defn append-to-c4k-content
   [js-obj]
-  (-> js/document
-      .-body
+  (-> (get-element-by-id "c4k-content")
       (.appendChild js-obj)))
 
 (defn append-hickory
@@ -84,7 +83,7 @@
   (-> hickory-obj
       (hr/hickory-to-html)
       (create-js-obj-from-html)
-      (append-to-body)))
+      (append-to-c4k-content)))
 
 (defn generate-feedback-tag
   [id]
