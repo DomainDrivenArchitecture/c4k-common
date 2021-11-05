@@ -6,12 +6,14 @@
    [orchestra.core :refer-macros [defn-spec]]
    [hickory.render :as hr]))
 
+(def js-object? any?)
+
 (defn-spec print-debug string?
   [sth string?]
   (print "debug " sth)
   sth)
 
-(defn-spec get-element-by-id any?
+(defn-spec get-element-by-id js-object?
   [name string?]
   (-> js/document
       (.getElementById name)))
@@ -19,7 +21,7 @@
 (s/def ::deserializer fn?)
 (s/def ::optional boolean?)
 (def dom-function-parameter (s/keys :opt-un [::deserializer ::optional]))
-(defn-spec get-content-from-element any?
+(defn-spec get-content-from-element js-object?
   [name string?
    & {:keys [deserializer optional]
       :or {deserializer nil optional false}} dom-function-parameter]
@@ -34,9 +36,9 @@
       :else
       content)))
 
-(defn-spec set-validation-result! any?
+(defn-spec set-validation-result! js-object?
   [name string?
-   validation-result any?]
+   validation-result js-object?]
   (-> (get-element-by-id (str name "-validation"))
       (.-innerHTML)
       (set! validation-result))
@@ -44,9 +46,9 @@
       (.setCustomValidity validation-result))
   validation-result)
 
-(defn-spec validate! any?
+(defn-spec validate! js-object?
   [name string?
-   spec any?
+   spec js-object?
    & {:keys [deserializer optional]
       :or {deserializer nil optional false}} dom-function-parameter]
   (let [content (get-content-from-element name :optional optional :deserializer deserializer)]
@@ -56,86 +58,116 @@
       (set-validation-result! name
        (expound/expound-str spec content {:print-specs? false})))))
 
-(defn-spec set-output! any?
+(defn-spec set-output! js-object?
   [input string?]
   (-> js/document
       (.getElementById "output")
       (.-value)
       (set! input)))
 
-(defn-spec set-validated! any? 
+(defn-spec set-form-validated! js-object? 
   []
   (-> (get-element-by-id "form")
       (.-classList)
       (.add "was-validated")))
+(defn-spec ^{:deprecated "0.4"} set-validated! js-object?
+  []
+  (set-form-validated!))
 
-(defn create-js-obj-from-html
-  [html-string]
+(defn-spec create-js-obj-from-html js-object?
+  [html-string string?]
   (-> js/document
       .createRange
       (.createContextualFragment html-string)))
 
-(defn append-to-c4k-content
-  [js-obj]
+(defn-spec append-to-c4k-content js-object?
+  [js-obj js-object?]
   (-> (get-element-by-id "c4k-content")
       (.appendChild js-obj)))
 
-(defn append-hickory
-  [hickory-obj]
+(defn-spec append-hickory js-object?
+  [hickory-obj map?]
   (-> hickory-obj
       (hr/hickory-to-html)
       (create-js-obj-from-html)
       (append-to-c4k-content)))
 
-(defn generate-feedback-tag
-  [id]
-  {:type :element :attrs {:class "invalid-feedback"} :tag :div :content [{:type :element :attrs {:id (str id "-validation")} :tag :pre :content nil}]})
+(defn-spec generate-feedback-tag map?
+  [id string?]
+  {:type :element 
+   :attrs {:class "invalid-feedback"} 
+   :tag :div 
+   :content [{:type :element 
+              :attrs {:id (str id "-validation")} 
+              :tag :pre 
+              :content nil}]})
 
-(defn generate-label
-  [id-for
-   label]
-  {:type :element :attrs {:for id-for :class "form-label"} :tag :label :content [label]})
+(defn-spec generate-label map?
+  [id-for string?
+   label string?]
+  {:type :element
+   :attrs {:for id-for :class "form-label"} 
+   :tag :label 
+   :content [label]})
 
-(defn generate-br
+(defn-spec generate-br map?
   []
   {:type :element, :attrs nil, :tag :br, :content nil})
 
-(defn generate-input-field
-  [id
-   label
-   default-value]
+(defn-spec generate-input-field map?
+  [id string?
+   label string?
+   default-value string?]
   [(generate-label id label)
-   {:type :element :attrs {:class "form-control" :type "text" :name id :id id :value default-value} :tag :input :content nil}
+   {:type :element 
+    :attrs {:class "form-control" :type "text" :name id :id id :value default-value} 
+    :tag :input 
+    :content nil}
    (generate-feedback-tag id)
    (generate-br)])
 
-(defn generate-text-area
-  [id
-   label
-   default-value
-   rows]
+(defn-spec generate-text-area map?
+  [id string?
+   label string?
+   default-value string?
+   rows pos-int?]
   [(generate-label id label)
-   {:type :element :attrs {:name id :id id :class "form-control" :rows rows} :tag :textarea :content [default-value]}
+   {:type :element 
+    :attrs {:name id :id id :class "form-control" :rows rows} 
+    :tag :textarea 
+    :content [default-value]}
    (generate-feedback-tag id)
    (generate-br)])
 
-(defn generate-button
-  [id
-   label]
+(defn-spec generate-button map?
+  [id string?
+   label string?]
   [{:type :element
     :attrs {:type "button", :id id, :class "btn btn-primary"}
     :tag :button
     :content [label]}
    (generate-br)])
 
-(defn generate-output
-  [id
-   label
-   rows]
-  [{:type :element, :attrs {:id id}, :tag :div, :content [{:type :element, :attrs {:for "output", :class "form-label"}, :tag :label, :content [label]}
-                                                          {:type :element, :attrs {:name "output", :id "output", :class "form-control", :rows rows}, :tag :textarea, :content []}]}
+(defn-spec generate-output vector?
+  [id string?
+   label string?
+   rows pos-int?]
+  [{:type :element, 
+    :attrs {:id id}, 
+    :tag :div, 
+    :content [{:type :element
+               :attrs {:for "output", :class "form-label"}
+               :tag :label, :content [label]}
+              {:type :element, :attrs {:name "output", 
+                                       :id "output", 
+                                       :class "form-control", 
+                                       :rows rows}, 
+               :tag :textarea, :content []}]}
    (generate-br)])
 
-(defn generate-needs-validation
+(defn-spec generate-needs-validation map?
   []
-  {:type :element, :attrs {:class "needs-validation", :id "form"}, :tag :form, :content []})
+  {:type :element, 
+   :attrs {:class "needs-validation", :id "form"}, 
+   :tag :form, 
+   :content []})
