@@ -1,4 +1,4 @@
-(ns dda.c4k-common.prefixes)
+(ns dda.c4k-common.predicate)
 
 (defn bash-env-string?
   [input]
@@ -13,3 +13,7 @@
 (defn letsencrypt-issuer?
   [input]
   (contains? #{:prod :staging} input))
+
+(defn map-or-seq?
+  [input]
+  (or (map? input) (seq? input)))

@@ -4,20 +4,22 @@
    [clj-yaml.core :as yaml]
    [clojure.walk]
    [orchestra.core :refer [defn-spec]]
-   [orchestra.spec.test :as st]))
+   [dda.c4k-common.predicate :as cp]))
 
 
 
-(defn-spec cast-lazy-seq-to-vec vector?
-  [lazy-seq map?]
+(defn-spec resolve-lazy-sequences cp/map-or-seq?
+  [lazy-seq cp/map-or-seq?]
   (clojure.walk/postwalk #(if (instance? clojure.lang.LazySeq %)
                             (into [] %)
                             %) lazy-seq))
 
-(defn-spec from-string map? [input string?]
-  (cast-lazy-seq-to-vec (yaml/parse-string input)))
+(defn-spec from-string cp/map-or-seq? 
+  [input string?]
+  (resolve-lazy-sequences (yaml/parse-string input)))
 
-(defn-spec to-string string? [edn map?]
+(defn-spec to-string string?
+  [edn cp/map-or-seq?]
   (yaml/generate-string edn :dumper-options {:flow-style :block}))
 
 (defn dispatch-by-resource-name 
@@ -28,5 +30,3 @@
 
 (defmethod load-resource :clj [resource-name]
   (slurp (io/resource  resource-name)))
-
-(st/instrument)
