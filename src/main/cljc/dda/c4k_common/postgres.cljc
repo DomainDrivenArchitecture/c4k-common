@@ -23,9 +23,9 @@
 (s/def ::postgres-size postgres-size?)
 (s/def ::db-name cp/bash-env-string?)
 (defn pg-config? [input]
-  (s/keys :un-opt [::postgres-size ::db-name ::postgres-data-volume-path]))
+  (s/keys :opt-un [::postgres-size ::db-name ::postgres-data-volume-path]))
 (defn pg-auth? [input]
-  (s/keys :un-opt [::postgres-db-user ::postgres-db-password]))
+  (s/keys :opt-un [::postgres-db-user ::postgres-db-password]))
 
 (def postgres-function (s/keys :opt-un [::deserializer ::optional]))
 
@@ -44,18 +44,20 @@
        (throw (js/Error. "Undefined Resource!")))))
 
 (defn-spec generate-config cp/map-or-seq?
-  [& args pg-config?]
+  [& config (s/? pg-config?)]
   (let [{:keys [postgres-size db-name]
          :or {postgres-size :2gb
-              db-name "postgres"}} args]
+              db-name "postgres"}} (first config)]
     (->
-     (yaml/from-string (yaml/load-resource (str "postgres/config-" (name postgres-size) ".yaml")))
+     (yaml/from-string (yaml/load-resource
+                        (str "postgres/config-" (name postgres-size) ".yaml")))
      (assoc-in [:data :postgres-db] db-name))))
 
+
 (defn-spec generate-deployment cp/map-or-seq?
-  [& args postgres-image?]
+  [& config (s/? pg-config?)]
   (let [{:keys [postgres-image]
-         :or {postgres-image "postgres:13"}} args]
+         :or {postgres-image "postgres:13"}} (first config)]
     (->
      (yaml/from-string (yaml/load-resource "postgres/deployment.yaml"))
      (assoc-in [:spec :template :spec :containers 0 :image] postgres-image))))
@@ -72,7 +74,7 @@
   (yaml/from-string (yaml/load-resource "postgres/pvc.yaml")))
 
 (defn-spec generate-secret cp/map-or-seq? 
-  [my-auth pg-auth?]
+  [my-auth any?]
   (let [{:keys [postgres-db-user postgres-db-password]} my-auth]
     (->
      (yaml/from-string (yaml/load-resource "postgres/secret.yaml"))

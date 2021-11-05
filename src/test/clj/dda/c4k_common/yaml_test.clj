@@ -1,8 +1,10 @@
 (ns dda.c4k-common.yaml-test
   (:require
    [clojure.test :refer [deftest is are testing run-tests]]
-   [dda.c4k-common.yaml :as cut]
-   [orchestra.spec.test :as st]))
+   [orchestra.spec.test :as st]
+   [dda.c4k-common.yaml :as cut]))
+
+(st/instrument)
 
 (deftest should-dispatch-by-resource-name
   (is (= :clj
@@ -47,5 +49,3 @@
                 {:serviceName "another_keycloak"
                  :servicePort 8081}}]}}]}}
          (cut/from-string (cut/load-resource "test/ingress_test.yaml")))))
-
-(st/instrument)

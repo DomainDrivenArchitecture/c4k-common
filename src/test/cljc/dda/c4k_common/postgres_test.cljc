@@ -2,7 +2,10 @@
   (:require
    #?(:clj [clojure.test :refer [deftest is are testing run-tests]]
       :cljs [cljs.test :refer-macros [deftest is are testing run-tests]])
+   [orchestra.spec.test :as st]
    [dda.c4k-common.postgres :as cut]))
+
+(st/instrument)
 
 (deftest should-generate-config
   (is (= {:postgres-db "postgres"
@@ -12,11 +15,11 @@
   (is (= {:postgres-db "postgres"
           :postgresql.conf
           "max_connections = 700\nwork_mem = 3MB\nshared_buffers = 2048MB\n"}
-         (:data (cut/generate-config :postgres-size :8gb))))
+         (:data (cut/generate-config {:postgres-size :8gb}))))
   (is (= {:postgres-db "test"
           :postgresql.conf
           "max_connections = 100\nwork_mem = 4MB\nshared_buffers = 512MB\n"}
-         (:data (cut/generate-config :db-name "test"))))
+         (:data (cut/generate-config {:db-name "test"}))))
   )
 
 (deftest should-generate-persistent-volume
@@ -64,5 +67,5 @@
              :readOnly true}
             {:name "postgre-data-volume"
              :mountPath "/var/lib/postgresql/data"}]}]
-         (get-in (cut/generate-deployment :postgres-image "postgres:14")
+         (get-in (cut/generate-deployment {:postgres-image "postgres:14"})
                  [:spec :template :spec :containers]))))
