@@ -1,21 +1,17 @@
 (ns dda.c4k-common.base64
   (:import (java.util Base64))
   (:require
-   [orchestra.core :refer [defn-spec]]
-   [orchestra.spec.test :as st]
-   [clojure.spec.alpha :as s]))
+   [orchestra.core :refer [defn-spec]]))
 
 
 (defn-spec encode string?
-  [string string?]
+  [input string?]
   (.encodeToString 
    (Base64/getEncoder) 
-   (.getBytes string "UTF-8"))) 
+   (.getBytes input "UTF-8"))) 
 
 (defn-spec decode string?
-  [string string?]
+  [input string?]
   (String. 
-   (.decode (Base64/getDecoder) string) 
+   (.decode (Base64/getDecoder) input) 
    "UTF-8"))
-
-(st/instrument)

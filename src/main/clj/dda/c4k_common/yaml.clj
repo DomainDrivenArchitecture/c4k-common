@@ -4,11 +4,11 @@
    [clj-yaml.core :as yaml]
    [clojure.walk]
    [orchestra.core :refer [defn-spec]]
-   [orchestra.spec.test :as st]
-   [clojure.spec.alpha :as s]))
+   [orchestra.spec.test :as st]))
 
 
-(defn-spec cast-lazy-seq-to-vec map?
+
+(defn-spec cast-lazy-seq-to-vec vector?
   [lazy-seq map?]
   (clojure.walk/postwalk #(if (instance? clojure.lang.LazySeq %)
                             (into [] %)
