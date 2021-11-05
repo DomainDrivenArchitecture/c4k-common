@@ -18,10 +18,11 @@
 
 (s/def ::deserializer fn?)
 (s/def ::optional boolean?)
+(def dom-function-parameter (s/keys :opt-un [::deserializer ::optional]))
 (defn-spec get-content-from-element any?
   [name string?
    & {:keys [deserializer optional]
-      :or {deserializer nil optional false}} (s/keys :opt-un [::deserializer ::optional])]
+      :or {deserializer nil optional false}} dom-function-parameter]
   (let [content (-> (get-element-by-id name)
                     (.-value))]
     (cond
@@ -47,7 +48,7 @@
   [name string?
    spec any?
    & {:keys [deserializer optional]
-      :or {deserializer nil optional false}} (s/keys :opt-un [::deserializer ::optional])]
+      :or {deserializer nil optional false}} dom-function-parameter]
   (let [content (get-content-from-element name :optional optional :deserializer deserializer)]
     (if (or (and optional (st/blank? content)) 
             (s/valid? spec content))
@@ -55,14 +56,15 @@
       (set-validation-result! name
        (expound/expound-str spec content {:print-specs? false})))))
 
-(defn set-output!
-  [input]
+(defn-spec set-output! any?
+  [input string?]
   (-> js/document
       (.getElementById "output")
       (.-value)
       (set! input)))
 
-(defn set-validated! []
+(defn-spec set-validated! any? 
+  []
   (-> (get-element-by-id "form")
       (.-classList)
       (.add "was-validated")))
