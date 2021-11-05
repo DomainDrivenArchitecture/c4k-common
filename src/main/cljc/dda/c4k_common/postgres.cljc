@@ -2,6 +2,8 @@
   (:require
    [clojure.spec.alpha :as s]
    #?(:cljs [shadow.resource :as rc])
+   #?(:clj [orchestra.core :refer [defn-spec]]
+      :cljs [orchestra.core :refer-macros [defn-spec]])
    [dda.c4k-common.yaml :as yaml]
    [dda.c4k-common.base64 :as b64]
    [dda.c4k-common.predicate :as cp]
@@ -16,6 +18,8 @@
 (s/def ::postgres-data-volume-path string?)
 (s/def ::postgres-size postgres-size?)
 (s/def ::db-name cp/bash-env-string?)
+
+(def postgres-function (s/keys :opt-un [::deserializer ::optional]))
 
 #?(:cljs
    (defmethod yaml/load-resource :postgres [resource-name]
@@ -46,21 +50,23 @@
      (yaml/from-string (yaml/load-resource "postgres/deployment.yaml"))
      (assoc-in [:spec :template :spec :containers 0 :image] postgres-image))))
 
-(defn generate-persistent-volume [config]
+(defn-spec generate-persistent-volume cp/map-or-seq?
+  [config (s/keys :req-un [::postgres-data-volume-path])]
   (let [{:keys [postgres-data-volume-path]} config]
     (->
      (yaml/from-string (yaml/load-resource "postgres/persistent-volume.yaml"))
      (assoc-in [:spec :hostPath :path] postgres-data-volume-path))))
 
-(defn generate-pvc []
+(defn-spec generate-pvc cp/map-or-seq? []
   (yaml/from-string (yaml/load-resource "postgres/pvc.yaml")))
 
-(defn generate-secret [my-auth]
+(defn-spec generate-secret cp/map-or-seq? 
+  [my-auth (s/keys :req-un [::postgres-db-user ::postgres-db-password])]
   (let [{:keys [postgres-db-user postgres-db-password]} my-auth]
     (->
      (yaml/from-string (yaml/load-resource "postgres/secret.yaml"))
      (cm/replace-key-value :postgres-user (b64/encode postgres-db-user))
      (cm/replace-key-value :postgres-password (b64/encode postgres-db-password)))))
 
-(defn generate-service []
+(defn-spec generate-service cp/map-or-seq? []
   (yaml/from-string (yaml/load-resource "postgres/service.yaml")))
