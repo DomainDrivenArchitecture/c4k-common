@@ -1,6 +1,9 @@
 (ns dda.c4k-common.common
   (:require
-   [clojure.walk]))
+   [clojure.walk]
+   [orchestra.core :refer [defn-spec]]
+   [dda.c4k-common.predicate :as cp]))
+
 
 ;; deprecated functions were moved to dda.c4k-common.predicate
 (defn ^{:deprecated "0.1"} bash-env-string?
@@ -17,24 +20,30 @@
   [input]
   (contains? #{:prod :staging} input))
 
-(defn replace-named-value
-  [coll name value]
+(defn-spec replace-named-value cp/map-or-seq?
+  [coll cp/map-or-seq?
+   name string?
+   value string?]
   (clojure.walk/postwalk #(if (and (map? %)
                                    (= name (:name %)))
                             {:name name :value value}
                             %) 
                          coll))
 
-(defn replace-key-value
-  [coll key value]
+(defn-spec replace-key-value cp/map-or-seq?
+  [coll cp/map-or-seq?
+   key keyword?
+   value string?]
   (clojure.walk/postwalk #(if (and (map? %)
                                    (contains? % key))
                             (assoc % key value)
                             %)
                          coll))
 
-(defn replace-all-matching-values-by-new-value
-  [coll value-to-match value-to-replace]
+(defn-spec replace-all-matching-values-by-new-value cp/map-or-seq?
+  [coll string?
+   value-to-match string?
+   value-to-replace string?]
   (clojure.walk/postwalk #(if (and (= (type value-to-match) (type %))
                                    (= value-to-match %))
                             value-to-replace
