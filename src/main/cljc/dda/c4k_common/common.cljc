@@ -1,7 +1,8 @@
 (ns dda.c4k-common.common
   (:require
    [clojure.walk]
-   [orchestra.core :refer [defn-spec]]
+   #?(:clj [orchestra.core :refer [defn-spec]]
+      :cljs [orchestra.core :refer-macros [defn-spec]])
    [dda.c4k-common.predicate :as cp]))
 
 

@@ -2,10 +2,15 @@
   (:require
    #?(:clj [clojure.test :refer [deftest is are testing run-tests]]
       :cljs [cljs.test :refer-macros [deftest is are testing run-tests]])
-   [orchestra.spec.test :as st]
+   [clojure.spec.test.alpha :as st]
    [dda.c4k-common.postgres :as cut]))
 
-(st/instrument)
+(st/instrument `cut/generate-config)
+(st/instrument `cut/generate-deployment)
+(st/instrument `cut/generate-persistent-volume)
+(st/instrument `cut/generate-pvc)
+(st/instrument `cut/generate-secret)
+(st/instrument `cut/generate-service)
 
 (deftest should-generate-config
   (is (= {:postgres-db "postgres"

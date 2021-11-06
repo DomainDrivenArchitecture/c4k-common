@@ -1,10 +1,12 @@
 (ns dda.c4k-common.yaml-test
   (:require
    [clojure.test :refer [deftest is are testing run-tests]]
-   [orchestra.spec.test :as st]
+   [clojure.spec.test.alpha :as st]
    [dda.c4k-common.yaml :as cut]))
 
-(st/instrument)
+(st/instrument `cut/from-string)
+(st/instrument `cut/to-string)
+(st/instrument `cut/dispatch-by-resource-name)
 
 (deftest should-dispatch-by-resource-name
   (is (= :clj

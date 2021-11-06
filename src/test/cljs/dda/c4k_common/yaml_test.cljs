@@ -2,7 +2,12 @@
   (:require
    [cljs.test :refer-macros [deftest is are testing run-tests]]
    [shadow.resource :as rc]
+   [clojure.spec.test.alpha :as st]
    [dda.c4k-common.yaml :as cut]))
+
+(st/instrument `cut/from-string)
+(st/instrument `cut/to-string)
+(st/instrument `cut/dispatch-by-resource-name)
 
 (defmethod cut/load-resource :test [resource-name]
   (case resource-name
