@@ -29,7 +29,7 @@ Our convention 4 kubernetes c4k-* tools combine the advantages of both approache
 | c4k-mastodon-bot | 0.1     |       -         |                 |                  |                  |
 | c4k-keycloak     | 0.2     |                 |                 |                  |                  |
 | c4k-jira         | 1.0     |       x         |       x         |                  |        x         |
-| c4k-nextcloud    | 0.1     |                 |                 |                  |                  |
+| c4k-nextcloud    | 0.1     |       x         |       x         |                  |      x         |
 
 [bak1]: https://gitlab.com/domaindrivenarchitecture/c4k-jira/-/merge_requests/1
 
