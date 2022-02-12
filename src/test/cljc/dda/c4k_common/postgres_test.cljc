@@ -37,7 +37,39 @@
            :accessModes ["ReadWriteOnce"]
            :capacity {:storage "10Gi"}
            :hostPath {:path "xx"}}}
-         (cut/generate-persistent-volume {:postgres-data-volume-path "xx"}))))
+         (cut/generate-persistent-volume {:postgres-data-volume-path "xx"})))
+  (is (= {:kind "PersistentVolume"
+          :apiVersion "v1"
+          :metadata
+          {:name "postgres-pv-volume", :labels {:type "local"}}
+          :spec
+          {:storageClassName "manual"
+           :accessModes ["ReadWriteOnce"]
+           :capacity {:storage "20Gi"}
+           :hostPath {:path "xx"}}}
+         (cut/generate-persistent-volume {:postgres-data-volume-path "xx"
+                                          :pv-storage-size-gb 20}))))
+
+(deftest should-generate-persistent-volume-claim
+  (is (= {:apiVersion "v1"
+          :kind "PersistentVolumeClaim"
+          :metadata
+          {:name "postgres-claim", :labels {:app "postgres"}}
+          :spec
+          {:storageClassName "manual"
+           :accessModes ["ReadWriteOnce"]
+           :resources {:requests {:storage "10Gi"}}}}
+         (cut/generate-pvc {})))
+  (is (= {:apiVersion "v1"
+          :kind "PersistentVolumeClaim"
+          :metadata
+          {:name "postgres-claim", :labels {:app "postgres"}}
+          :spec
+          {:storageClassName "local-path"
+           :accessModes ["ReadWriteOnce"]
+           :resources {:requests {:storage "20Gi"}}}}
+         (cut/generate-pvc {:pv-storage-size-gb 20
+                            :pvc-storage-class-name :local-path}))))
 
 (deftest should-generate-secret
   (is (= {:apiVersion "v1"

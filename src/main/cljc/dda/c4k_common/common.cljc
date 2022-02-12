@@ -1,6 +1,7 @@
 (ns dda.c4k-common.common
   (:require
    [clojure.walk]
+   [clojure.spec.alpha :as s]
    #?(:clj [orchestra.core :refer [defn-spec]]
       :cljs [orchestra.core :refer-macros [defn-spec]])
    [dda.c4k-common.predicate :as cp]))
@@ -50,3 +51,8 @@
                             value-to-replace
                             %) 
                          coll))
+
+(defn-spec concat-vec vector?
+  [& vs (s/* seq?)]
+  (into []
+        (apply concat vs)))

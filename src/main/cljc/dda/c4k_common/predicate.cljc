@@ -17,3 +17,7 @@
 (defn map-or-seq?
   [input]
   (or (map? input) (seq? input)))
+
+(defn pvc-storage-class-name?
+  [input]
+  (contains? #{:manual :local-path} input))

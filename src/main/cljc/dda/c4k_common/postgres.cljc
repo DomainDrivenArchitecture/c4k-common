@@ -22,8 +22,11 @@
 (s/def ::postgres-data-volume-path string?)
 (s/def ::postgres-size postgres-size?)
 (s/def ::db-name cp/bash-env-string?)
+(s/def ::pvc-storage-class-name cp/pvc-storage-class-name?)
+(s/def ::pv-storage-size-gb pos?)
 (defn pg-config? [input]
-  (s/keys :opt-un [::postgres-size ::db-name ::postgres-data-volume-path]))
+  (s/keys :opt-un [::postgres-size ::db-name ::postgres-data-volume-path 
+                   ::pvc-storage-class-name ::pv-storage-size-gb]))
 (defn pg-auth? [input]
   (s/keys :opt-un [::postgres-db-user ::postgres-db-password]))
 
@@ -53,7 +56,7 @@
                         (str "postgres/config-" (name postgres-size) ".yaml")))
      (assoc-in [:data :postgres-db] db-name))))
 
-
+; TODO: why do we need a sequence of configs?
 (defn-spec generate-deployment cp/map-or-seq?
   [& config (s/? pg-config?)]
   (let [{:keys [postgres-image]
@@ -64,14 +67,23 @@
 
 (defn-spec generate-persistent-volume cp/map-or-seq?
   [config pg-config?]
-  (let [{:keys [postgres-data-volume-path]} config]
+  (let [{:keys [postgres-data-volume-path pv-storage-size-gb] 
+         :or {postgres-data-volume-path "/var/postgres"
+              pv-storage-size-gb 10}} config]
     (->
      (yaml/from-string (yaml/load-resource "postgres/persistent-volume.yaml"))
-     (assoc-in [:spec :hostPath :path] postgres-data-volume-path))))
+     (assoc-in [:spec :hostPath :path] postgres-data-volume-path)
+     (assoc-in [:spec :capacity :storage] (str pv-storage-size-gb "Gi")))))
 
 (defn-spec generate-pvc cp/map-or-seq? 
-  []
-  (yaml/from-string (yaml/load-resource "postgres/pvc.yaml")))
+  [config pg-config?]
+  (let [{:keys [pv-storage-size-gb pvc-storage-class-name] 
+         :or {pv-storage-size-gb 10
+              pvc-storage-class-name :manual}} config]
+  (-> 
+   (yaml/from-string (yaml/load-resource "postgres/pvc.yaml"))
+   (assoc-in [:spec :resources :requests :storage] (str pv-storage-size-gb "Gi"))
+   (assoc-in [:spec :storageClassName] (name pvc-storage-class-name)))))
 
 (defn-spec generate-secret cp/map-or-seq? 
   [my-auth any?]
