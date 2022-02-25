@@ -22,5 +22,5 @@
   :release-tasks [["test"]
                   ["change" "version" "leiningen.release/bump-version" "release"]
                   ["vcs" "commit"]
-                  ["vcs" "tag"]
+                  ["vcs" "tag"  "--no-sign"]
                   ["change" "version" "leiningen.release/bump-version"]])

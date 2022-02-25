@@ -44,7 +44,7 @@ upload-clj-release:
   rules:
     - if: '$CI_COMMIT_TAG != null'
   script:
-    - lein deploy clojars
+    - lein deploy
 
 upload-cljs-release:
   <<: *clj
@@ -53,5 +53,5 @@ upload-cljs-release:
     - if: '$CI_COMMIT_TAG != null'
   script:
     - mv project.clj project-clj.clj && mv project-cljs.clj project.clj
-    - lein deploy clojars
+    - lein deploy
 
