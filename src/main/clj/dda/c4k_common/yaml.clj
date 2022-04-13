@@ -2,6 +2,7 @@
   (:require
    [clojure.java.io :as io]
    [clj-yaml.core :as yaml]
+   [clojure.string :as cs]
    [clojure.walk]
    [orchestra.core :refer [defn-spec]]
    [dda.c4k-common.predicate :as cp]))
@@ -21,6 +22,12 @@
 (defn-spec to-string string?
   [edn cp/map-or-seq?]
   (yaml/generate-string edn :dumper-options {:flow-style :block}))
+
+(defn-spec is-yaml? boolean?
+  [filename string?]
+  (or
+   (cs/ends-with? filename ".yaml")
+   (cs/ends-with? filename ".yml")))
 
 (defn dispatch-by-resource-name 
   [resource]
