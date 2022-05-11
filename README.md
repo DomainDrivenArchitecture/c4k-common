@@ -24,18 +24,19 @@ Our convention 4 kubernetes c4k-* tools combine the advantages of both approache
 
 ## Refactoring & Module Overview
 
-| Module           | Version | common postgres | frontend script | provider adapter | [backup as deployment][bak1] | [speced c4k-common][com1] |
-|------------------|---------|:---------------:|:---------------:|:----------------:|:----------------------------:|:-------------------------:|
-| c4k-mastodon-bot | 0.1     |       -         |                 |                  |                              |                           |
-| c4k-keycloak     | 0.2     |                 |                 |                  |                              |                           |
-| c4k-jira         | 1.0     |       x         |       x         |                  |        x                     |                           |
-| c4k-nextcloud    | 1.0     |       x         |       x         |                  |        x                     |             x             |
+| Module           | Version | common postgres | frontend script | provider adapter | [backup as deployment][bak1] | [speced c4k-common][com1] | [configs can be of type EDN and YAML][yaml1] |
+|------------------|---------|:---------------:|:---------------:|:----------------:|:----------------------------:|:-------------------------:|:--------------------------------------------:|
+| c4k-mastodon-bot | 0.1     |       -         |                 |                  |                              |                           |                                              |
+| c4k-keycloak     | 0.2     |                 |                 |                  |                              |                           |                                              |
+| c4k-jira         | 1.0     |       x         |       x         |                  |        x                     |                           |                                              |
+| c4k-nextcloud    | 4.0     |       x         |       x         |                  |        x                     |             x             |                       x                      |
 
 [bak1]: https://gitlab.com/domaindrivenarchitecture/c4k-jira/-/merge_requests/1
 [com1]: https://gitlab.com/domaindrivenarchitecture/c4k-nextcloud/-/merge_requests/3
+[yaml1]: https://gitlab.com/domaindrivenarchitecture/c4k-nextcloud/-/merge_requests/4
 
 ## License
 
-Copyright © 2021 meissa GmbH
+Copyright © 2022 meissa GmbH
 Licensed under the [Apache License, Version 2.0](LICENSE) (the "License")
 Pls. find licenses of our subcomponents [here](doc/SUBCOMPONENT_LICENSE)
