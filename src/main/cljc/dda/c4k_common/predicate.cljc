@@ -12,7 +12,7 @@
 
 (defn letsencrypt-issuer?
   [input]
-  (contains? #{:prod :staging} input))
+  (contains? #{"prod" "staging"} input))
 
 (defn map-or-seq?
   [input]
