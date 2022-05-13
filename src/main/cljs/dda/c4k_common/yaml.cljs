@@ -19,3 +19,8 @@
   (keyword (first (st/split resource #"/"))))
 
 (defmulti load-resource dispatch-by-resource-name)
+
+(defmulti load-as-edn dispatch-by-resource-name)
+
+(defmethod load-as-edn :clj [resource-name]
+  (from-string (load-resource resource-name)))
