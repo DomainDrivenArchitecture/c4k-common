@@ -36,4 +36,9 @@
 (defmulti load-resource dispatch-by-resource-name)
 
 (defmethod load-resource :clj [resource-name]
-  (slurp (io/resource  resource-name)))
+  (slurp (io/resource resource-name)))
+
+(defmulti load-as-edn dispatch-by-resource-name)
+
+(defmethod load-as-edn :clj [resource-name]
+  (from-string (load-resource resource-name)))
