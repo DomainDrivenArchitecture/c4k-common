@@ -14,7 +14,7 @@
   (and (string? input)
        (some? (re-matches #"(?=^.{4,253}$)(^((?!-)[a-zA-Z0-9-]{0,62}[a-zA-Z0-9]\.)+[a-zA-Z]{2,63}$)" input))))
 
-(defn list-of-separated-by? 
+(defn string-of-separated-by? 
   [input spec-function separator]
   (every? true? (map spec-function (str/split input separator))))
 
