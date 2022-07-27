@@ -15,7 +15,7 @@
        (some? (re-matches #"(?=^.{4,253}$)(^((?!-)[a-zA-Z0-9-]{0,62}[a-zA-Z0-9]\.)+[a-zA-Z]{2,63}$)" input))))
 
 (defn string-of-separated-by? 
-  [input spec-function separator]
+  [spec-function separator input]
   (every? true? (map spec-function (str/split input separator))))
 
 (defn letsencrypt-issuer?
