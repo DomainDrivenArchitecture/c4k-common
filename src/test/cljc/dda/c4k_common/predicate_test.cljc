@@ -17,11 +17,11 @@
   (is (false? (cut/fqdn-string? "test&test.de"))))
 
 (deftest test-string-of-separated-by?
-  (is (true? (cut/string-of-separated-by? "abcd" cut/bash-env-string? #":")))
-  (is (true? (cut/string-of-separated-by? "abcd:efgh" cut/bash-env-string? #":")))
-  (is (false? (cut/string-of-separated-by? "abcd:ef$gh" cut/bash-env-string? #":")))
-  (is (true? (cut/string-of-separated-by? "test.de,test-gmbh.de,test-llc.com" cut/fqdn-string? #",")))
-  (is (false? (cut/string-of-separated-by? "test.123,test.de" cut/fqdn-string? #","))))
+  (is (true? (cut/string-of-separated-by? cut/bash-env-string? #":" "abcd")))
+  (is (true? (cut/string-of-separated-by? cut/bash-env-string? #":" "abcd:efgh")))
+  (is (false? (cut/string-of-separated-by? cut/bash-env-string? #":" "abcd:ef$gh")))
+  (is (true? (cut/string-of-separated-by? cut/fqdn-string? #"," "test.de,test-gmbh.de,test-llc.com")))
+  (is (false? (cut/string-of-separated-by? cut/fqdn-string? #"," "test.123,test.de"))))
 
 (deftest test-letsencrypt-issuer?
   (is (false? (cut/letsencrypt-issuer? "issuer")))
