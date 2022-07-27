@@ -33,7 +33,7 @@
             {:keys [config auth]} args]
         (cond
           (some #(= "-h" %) options)
-          (println usage)
+          (println (usage name))
           :else
           (let [config-str (slurp config)
                 auth-str (slurp auth)
