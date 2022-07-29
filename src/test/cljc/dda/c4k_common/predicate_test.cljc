@@ -50,3 +50,8 @@
   (is (false? (cut/host-and-port-string? "test.de,1234")))
   (is (false? (cut/host-and-port-string? "test.123:1234")))
   (is (false? (cut/host-and-port-string? "test.de:abc"))))
+
+(deftest test-string-vector?
+  (is (true? (cut/string-vector? ["hallo" "welt" "!"])))
+  (is (false? (cut/string-vector? ["hallo" 1 "welt" "!"])))
+  (is (false? (cut/string-vector? "hallo welt!"))))

@@ -14,7 +14,7 @@
   (and (string? input)
        (some? (re-matches #"(?=^.{4,253}$)(^((?!-)[a-zA-Z0-9-]{0,62}[a-zA-Z0-9]\.)+[a-zA-Z]{2,63}$)" input))))
 
-(defn string-of-separated-by? 
+(defn string-of-separated-by?
   [spec-function separator input]
   (every? true? (map spec-function (str/split input separator))))
 
@@ -43,4 +43,10 @@
          (and (= (count split-string) 2)
               (fqdn-string? (first split-string))
               (port-number? (edn/read-string (second split-string)))))))
+
+(defn string-vector?
+  [input]
+  (and (vector? input)
+       (every? true?
+               (map #(string? %) input))))
 

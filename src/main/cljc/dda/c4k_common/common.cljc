@@ -58,6 +58,11 @@
   (into []
         (apply concat vs)))
 
+(defn-spec concat-str-vec cp/string-vector?
+  [& vs (s/* seq?)]
+  (into []
+        (apply concat vs)))
+
 (defn generate-common [my-config my-auth config-defaults k8s-objects]
   (let [resulting-config (merge config-defaults my-config my-auth)]
     (cs/join
