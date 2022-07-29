@@ -54,12 +54,7 @@
                          coll))
 
 (defn-spec concat-vec vector?
-  [& vs (s/* seq?)]
-  (into []
-        (apply concat vs)))
-
-(defn-spec concat-str-vec cp/string-vector?
-  [& vs (s/* seq?)]
+  [& vs (s/* cp/string-sequence?)]
   (into []
         (apply concat vs)))
 

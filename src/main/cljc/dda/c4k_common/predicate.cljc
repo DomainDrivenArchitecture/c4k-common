@@ -44,9 +44,9 @@
               (fqdn-string? (first split-string))
               (port-number? (edn/read-string (second split-string)))))))
 
-(defn string-vector?
+(defn string-sequence?
   [input]
-  (and (vector? input)
+  (and (sequential? input)
        (every? true?
                (map #(string? %) input))))
 
