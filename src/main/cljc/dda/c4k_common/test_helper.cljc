@@ -1,4 +1,4 @@
-(ns dda.c4k-common.common-test)
+(ns dda.c4k-common.test-helper)
 
 ; Heavily assumes c1 and c2 have an identical structure but maybe different values
 ; This function finds the diff of two nested maps/vectors

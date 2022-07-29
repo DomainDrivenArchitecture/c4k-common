@@ -3,7 +3,7 @@
    #?(:clj [clojure.test :refer [deftest is are testing run-tests]]
       :cljs [cljs.test :refer-macros [deftest is are testing run-tests]])
    [clojure.spec.test.alpha :as st]
-   [dda.c4k-common.common-test :as ct]
+   [dda.c4k-common.test-helper :as ct]
    [dda.c4k-common.postgres :as cut]))
 
 (st/instrument `cut/generate-config)

@@ -24,19 +24,21 @@ Our convention 4 kubernetes c4k-* tools combine the advantages of both approache
 
 ## Refactoring & Module Overview
 
-| Module           | Version | common postgres | frontend script | provider adapter | [backup as deployment][bak1] | [speced c4k-common][com1] | [configs can be of type EDN and YAML][yaml1] |
-|------------------|---------|:---------------:|:---------------:|:----------------:|:----------------------------:|:-------------------------:|:--------------------------------------------:|
-| c4k-mastodon-bot | 0.1     |       -         |                 |                  |                              |                           |                                              |
-| c4k-keycloak     | 0.2     |                 |                 |                  |                              |                           |                                              |
-| c4k-jira         | 1.1     |       x         |       x         |                  |        x                     |                           |                                              |
-| c4k-nextcloud    | 2.0     |       x         |       x         |                  |        x                     |             x             |                       x                      |
-| c4k-jitsi        | 1.2     |                 |                 |                  |                              |                           |                                              |
-| c4k-gittea       | 0.1     |                 |                 |                  |                              |                           |                                              |
-| c4k-shynet       | 1.0     |                 |                 |                  |                              |                           |                                              |
+| Module           | Version | common postgres | frontend script | provider adapter | [backup as deployment][bak1] | [speced c4k-common][com1] | [configs as EDN and YAML][yaml1] | [renamed test-helper][th1] |
+|------------------|---------|:---------------:|:---------------:|:----------------:|:----------------------------:|:-------------------------:|:--------------------------------:|:--------------------------:|
+| c4k-mastodon-bot | 0.1     |       -         |                 |                  |                              |                           |                                  |                            |
+| c4k-keycloak     | 0.2     |                 |                 |                  |                              |                           |                                  |                            |
+| c4k-jira         | 1.1     |       x         |       x         |                  |        x                     |                           |                                  |                            |
+| c4k-nextcloud    | 2.0     |       x         |       x         |                  |        x                     |             x             |           x                      |                            |
+| c4k-jitsi        | 1.2     |                 |                 |                  |                              |                           |                                  |                            |
+| c4k-gittea       | 0.1     |                 |                 |                  |                              |                           |                                  |                            |
+| c4k-shynet       | 1.0     |                 |                 |                  |                              |                           |                                  |                            |
+| c4k-website      | 0.1     |                 |                 |                  |                              |                           |                                  |                            |
 
 [bak1]: https://gitlab.com/domaindrivenarchitecture/c4k-jira/-/merge_requests/1
 [com1]: https://gitlab.com/domaindrivenarchitecture/c4k-nextcloud/-/merge_requests/3
 [yaml1]: https://gitlab.com/domaindrivenarchitecture/c4k-nextcloud/-/merge_requests/4
+[th1]: https://
 
 ## License
 
