@@ -55,3 +55,11 @@
   (is (true? (cut/string-sequence? ["hallo" "welt" "!"])))
   (is (false? (cut/string-sequence? ["hallo" 1 "welt" "!"])))
   (is (false? (cut/string-sequence? "hallo welt!"))))
+
+(deftest test-int-gt-n?
+  (is (not (cut/int-gt-n? 5 0)))
+  (is (not (cut/int-gt-n? 5 "s")))
+  (is (not (cut/int-gt-n? 0 0)))
+  (is (cut/int-gt-n? 5 6))
+  (is ((partial cut/int-gt-n? 5) 10))
+  (is (not ((partial cut/int-gt-n? 5) 4))))

@@ -50,3 +50,8 @@
        (every? true?
                (map #(string? %) input))))
 
+(defn int-gt-n?
+  [n input]
+  (and (int? input)
+       (> input n)))
+
