@@ -9,6 +9,5 @@
                 [expound "0.8.9"]
                 [hickory "0.7.1"]]
  :builds {:test {:target    :node-test
-                 :output-to "target/node-tests.js"
-                 :autorun   true
+                 :output-to "target/node-tests.js"                 
                  :repl-pprint  true}}}
