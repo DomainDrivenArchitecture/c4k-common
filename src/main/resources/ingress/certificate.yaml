@@ -1,0 +1,16 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: c4k-common-cert
+  namespace: default
+spec:
+  secretName: c4k-common-cert
+  commonName: FQDN
+  duration: 2160h # 90d
+  renewBefore: 360h # 15d
+  dnsNames:
+  - FQDN
+  issuerRef:
+    name: staging
+    kind: ClusterIssuer
+    
