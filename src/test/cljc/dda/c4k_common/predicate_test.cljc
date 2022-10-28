@@ -51,6 +51,15 @@
   (is (false? (cut/host-and-port-string? "test.123:1234")))
   (is (false? (cut/host-and-port-string? "test.de:abc"))))
 
+(deftest test-integer-string?
+  (is (true? (cut/integer-string? "1")))
+  (is (true? (cut/integer-string? "42")))
+  (is (false? (cut/integer-string? 42)))
+  (is (false? (cut/integer-string? "42.2")))
+  (is (false? (cut/integer-string? "4 2")))
+  (is (false? (cut/integer-string? "1e2")))
+  (is (false? (cut/integer-string? true))))
+
 (deftest test-string-sequence?
   (is (true? (cut/string-sequence? ["hallo" "welt" "!"])))
   (is (false? (cut/string-sequence? ["hallo" 1 "welt" "!"])))

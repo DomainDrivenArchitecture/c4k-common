@@ -44,6 +44,12 @@
               (fqdn-string? (first split-string))
               (port-number? (edn/read-string (second split-string)))))))
 
+(defn integer-string?
+  [input]
+  (and (string? input)
+       (some? (re-matches #"^\d+$" input))
+       (integer? (edn/read-string input))))
+
 (defn string-sequence?
   [input]
   (and (sequential? input)
