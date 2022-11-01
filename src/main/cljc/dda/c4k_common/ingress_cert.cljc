@@ -12,15 +12,16 @@
 
 (s/def ::issuer pred/letsencrypt-issuer?)
 (s/def ::service-name string?)
+(s/def ::app-name string?)
 (s/def ::ingress-name string?)
 (s/def ::cert-name string?)
 (s/def ::service-port pos-int?)
 (s/def ::fqdns (s/coll-of pred/fqdn-string?))
 
-(def ingress? (s/keys :req-un [::fqdns ::ingress-name ::service-name ::service-port]
+(def ingress? (s/keys :req-un [::fqdns ::app-name ::ingress-name ::service-name ::service-port]
                       :opt-un [::issuer ::cert-name]))
 
-(def certificate? (s/keys :req-un [::fqdns ::cert-name]
+(def certificate? (s/keys :req-un [::fqdns ::app-name ::cert-name]
                           :opt-un [::issuer]))
 
 #?(:cljs
@@ -32,48 +33,51 @@
        "ingress/https-ingress.yaml" (rc/inline "ingress/https-ingress.yaml")
        (throw (js/Error. "Undefined Resource!")))))
 
+; TODO: Review jem 2022/10/26: generalize!
 #?(:cljs
    (defmethod yaml/load-as-edn :ingress [resource-name]
      (yaml/from-string (yaml/load-resource resource-name))))
 
 (defn-spec generate-host-rule  pred/map-or-seq?
   [service-name ::service-name
-   service-port ::service-port   
+   service-port ::service-port
    fqdn pred/fqdn-string?]
-    (->
-     (yaml/load-as-edn "ingress/host-rule.yaml")
-     (cm/replace-all-matching-values-by-new-value "FQDN" fqdn)
-     (cm/replace-all-matching-values-by-new-value "SERVICE_PORT" service-port)
-     (cm/replace-all-matching-values-by-new-value "SERVICE_NAME" service-name)))
+  (->
+   (yaml/load-as-edn "ingress/host-rule.yaml")
+   (cm/replace-all-matching-values-by-new-value "FQDN" fqdn)
+   (cm/replace-all-matching-values-by-new-value "SERVICE_PORT" service-port)
+   (cm/replace-all-matching-values-by-new-value "SERVICE_NAME" service-name)))
 
 (defn-spec generate-http-ingress pred/map-or-seq?
   [config ingress?]
-  (let [{:keys [ingress-name service-name service-port fqdns]} config]
+  (let [{:keys [ingress-name service-name service-port fqdns app-name]} config]
     (->
      (yaml/load-as-edn "ingress/http-ingress.yaml")
-     (assoc-in [:metadata :name] ingress-name)     
+     (assoc-in [:metadata :name] ingress-name)
+     (assoc-in [:metadata :labels :app.kubernetes.part-of] app-name)
      (assoc-in [:spec :rules] (mapv (partial generate-host-rule service-name service-port) fqdns)))))
 
 (defn-spec generate-https-ingress pred/map-or-seq?
   [config ingress?]
-  (let [{:keys [ingress-name cert-name service-name service-port fqdns]} config]
+  (let [{:keys [ingress-name cert-name service-name service-port fqdns app-name]} config]
     (->
      (yaml/load-as-edn "ingress/https-ingress.yaml")
      (assoc-in [:metadata :name] ingress-name)
+     (assoc-in [:metadata :labels :app.kubernetes.part-of] app-name)
      (assoc-in [:spec :tls 0 :secretName] cert-name)
      (assoc-in [:spec :tls 0 :hosts] fqdns)
      (assoc-in [:spec :rules] (mapv (partial generate-host-rule service-name service-port) fqdns)))))
 
 (defn-spec generate-certificate pred/map-or-seq?
   [config certificate?]
-  (let [{:keys [cert-name issuer fqdns]
+  (let [{:keys [cert-name issuer fqdns app-name]
          :or {issuer "staging"}} config
         letsencrypt-issuer (name issuer)]
     (->
-     (yaml/load-as-edn "ingress/certificate.yaml")     
+     (yaml/load-as-edn "ingress/certificate.yaml")
      (assoc-in [:metadata :name] cert-name)
+     (assoc-in [:metadata :labels :app.kubernetes.part-of] app-name)
      (assoc-in [:spec :secretName] cert-name)
      (assoc-in [:spec :commonName] (first fqdns))
      (assoc-in [:spec :dnsNames] fqdns)
      (assoc-in [:spec :issuerRef :name] letsencrypt-issuer))))
- 

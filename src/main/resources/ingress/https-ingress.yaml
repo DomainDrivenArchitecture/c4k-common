@@ -3,6 +3,8 @@ kind: Ingress
 metadata:
   name: c4k-common-https-ingress
   namespace: default
+  labels:
+    app.kubernetes.part-of: c4k-common-app
   annotations:
     traefik.ingress.kubernetes.io/router.entrypoints: websecure
     traefik.ingress.kubernetes.io/router.tls: "true"    
