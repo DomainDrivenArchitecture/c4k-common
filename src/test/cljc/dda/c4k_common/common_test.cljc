@@ -15,12 +15,13 @@
   (is (= ["a1" "a2" "b1"]
          (cut/concat-vec '("a1" "a2") '("b1")))))
 
-(deftest should-refuse-illegal-inputs
-  (is (thrown? Exception
-               (cut/concat-vec ["a1" "a2"] "b1")))
-  (is (thrown? Exception
-               (cut/concat-vec ["a1" "a2"] nil)))
-  (is (thrown? Exception
-               (cut/concat-vec ["a1" "a2"] 2)))
-  (is (thrown? Exception
-               (cut/concat-vec {"a1" "a2"} []))))
+#?(:clj
+   (deftest should-refuse-illegal-inputs
+     (is (thrown? Exception
+                  (cut/concat-vec ["a1" "a2"] "b1")))
+     (is (thrown? Exception
+                  (cut/concat-vec ["a1" "a2"] nil)))
+     (is (thrown? Exception
+                  (cut/concat-vec ["a1" "a2"] 2)))
+     (is (thrown? Exception
+                  (cut/concat-vec {"a1" "a2"} [])))))
