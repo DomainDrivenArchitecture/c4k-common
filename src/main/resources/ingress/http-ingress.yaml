@@ -15,7 +15,7 @@ spec:
         paths:
           - pathType: Prefix
             path: "/"
-            backend: # TODO: Review jem 2022/10/26: wo backend as we should only do a redirect here ... ?
+            backend:
               service:
                 name: SERVICE_NAME
                 port:
