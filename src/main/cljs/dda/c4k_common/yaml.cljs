@@ -24,16 +24,10 @@
 
 (defmulti load-resource dispatch-by-resource-name)
 
-(defmethod load-resource :default [allowed-resources resource-name]
-  (if (some #(= % resource-name) allowed-resources)
-    (rc/inline resource-name)
-    (throw (js/Error. "Undefined Resource!"))))
-
 (defmulti load-as-edn dispatch-by-resource-name)
 
 (defmethod load-as-edn :default [resource-name]
-  (let [allowed-resources (allowed-resources)]
-   (from-string (load-resource allowed-resources resource-name))))
+  (from-string (load-resource resource-name)))
 
 (defmulti allowed-resources dispatch-by-resource-name)
 

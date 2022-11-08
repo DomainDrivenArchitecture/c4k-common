@@ -9,8 +9,10 @@
 (st/instrument `cut/to-string)
 (st/instrument `cut/dispatch-by-resource-name)
 
-#?(:cljs (defmethod cut/allowed-resources :cljs []
-           ["test/ingress_test.yaml"]))
+(defmethod cut/load-resource :test [resource-name]
+  (case resource-name
+    "test/ingress_test.yaml" (rc/inline "test/ingress_test.yaml")
+    (throw (js/Error. "Undefined Resource!"))))
 
 (deftest should-dispatch-by-resource-name
   (is (= :postgres
