@@ -28,8 +28,3 @@
 
 (defmethod load-as-edn :default [resource-name]
   (from-string (load-resource resource-name)))
-
-(defmulti allowed-resources dispatch-by-resource-name)
-
-(defmethod allowed-resources :default []
-  [])
