@@ -33,18 +33,16 @@
 (def postgres-function (s/keys :opt-un [::deserializer ::optional]))
 
 #?(:cljs
-   (defmethod yaml/load-resource :postgres [resource-name]
-     (case resource-name
-       "postgres/config-2gb.yaml" (rc/inline "postgres/config-2gb.yaml")
-       "postgres/config-4gb.yaml" (rc/inline "postgres/config-4gb.yaml")
-       "postgres/config-8gb.yaml" (rc/inline "postgres/config-8gb.yaml")
-       "postgres/config-16gb.yaml" (rc/inline "postgres/config-16gb.yaml")
-       "postgres/deployment.yaml" (rc/inline "postgres/deployment.yaml")
-       "postgres/persistent-volume.yaml" (rc/inline "postgres/persistent-volume.yaml")
-       "postgres/pvc.yaml" (rc/inline "postgres/pvc.yaml")
-       "postgres/secret.yaml" (rc/inline "postgres/secret.yaml")
-       "postgres/service.yaml" (rc/inline "postgres/service.yaml")
-       (throw (js/Error. "Undefined Resource!")))))
+   (defmethod yaml/allowed-resources :postgres []
+     ["postgres/config-2gb.yaml"
+      "postgres/config-4gb.yaml"
+      "postgres/config-8gb.yaml"
+      "postgres/config-16gb.yaml"
+      "postgres/deployment.yaml"
+      "postgres/persistent-volume.yaml"
+      "postgres/pvc.yaml"
+      "postgres/secret.yaml"
+      "postgres/service.yaml"]))
 
 (defn-spec generate-config cp/map-or-seq?
   [& config (s/? pg-config?)]

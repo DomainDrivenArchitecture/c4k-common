@@ -9,10 +9,8 @@
 (st/instrument `cut/to-string)
 (st/instrument `cut/dispatch-by-resource-name)
 
-(defmethod cut/load-resource :test [resource-name]
-  (case resource-name
-    "test/ingress_test.yaml" (rc/inline "test/ingress_test.yaml")
-    (throw (js/Error. "Undefined Resource!"))))
+#?(:cljs (defmethod cut/allowed-resources :cljs []
+           ["test/ingress_test.yaml"]))
 
 (deftest should-dispatch-by-resource-name
   (is (= :postgres
@@ -56,4 +54,4 @@
               [{:backend
                 {:serviceName "another_keycloak"
                  :servicePort 8081}}]}}]}}
-         (cut/from-string (cut/load-resource "test/ingress_test.yaml")))))
+         (cut/load-as-edn "test/ingress_test.yaml"))))
