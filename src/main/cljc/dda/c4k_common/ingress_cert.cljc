@@ -33,11 +33,6 @@
        "ingress/https-ingress.yaml" (rc/inline "ingress/https-ingress.yaml")
        (throw (js/Error. "Undefined Resource!")))))
 
-; TODO: Review jem 2022/10/26: generalize!
-#?(:cljs
-   (defmethod yaml/load-as-edn :ingress [resource-name]
-     (yaml/from-string (yaml/load-resource resource-name))))
-
 (defn-spec generate-host-rule  pred/map-or-seq?
   [service-name ::service-name
    service-port ::service-port
