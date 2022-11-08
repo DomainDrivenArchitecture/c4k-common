@@ -28,7 +28,10 @@
 
 (defmulti load-as-edn dispatch-by-resource-name)
 
-(defmethod load-as-edn :cljs [resource-name]
-  (yaml/from-string (yaml/load-resource resource-name)))
+(defmethod load-as-edn :cljs [allowed-resource resource-name]
+  (from-string (load-resource (allowed-resource) resource-name)))
 
 (defmulti allowed-resources dispatch-by-resource-name)
+
+(defmethod allowed-resources :cljs []
+  [])
