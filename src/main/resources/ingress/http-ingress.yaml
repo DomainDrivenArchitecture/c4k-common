@@ -1,0 +1,22 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: c4k-common-http-ingress
+  namespace: default
+  labels:
+    app.kubernetes.part-of: c4k-common-app
+  annotations:    
+    traefik.ingress.kubernetes.io/router.entrypoints: web    
+    traefik.ingress.kubernetes.io/router.middlewares: default-redirect-https@kubernetescrd    
+spec:
+  rules:
+    - host: FQDN
+      http:
+        paths:
+          - pathType: Prefix
+            path: "/"
+            backend:
+              service:
+                name: SERVICE_NAME
+                port:
+                  number: 80

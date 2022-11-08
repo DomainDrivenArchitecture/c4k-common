@@ -56,4 +56,4 @@
               [{:backend
                 {:serviceName "another_keycloak"
                  :servicePort 8081}}]}}]}}
-         (cut/from-string (cut/load-resource "test/ingress_test.yaml")))))
+         (cut/load-as-edn "test/ingress_test.yaml"))))

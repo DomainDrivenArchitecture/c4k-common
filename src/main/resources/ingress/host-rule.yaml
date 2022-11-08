@@ -1,0 +1,10 @@
+host: FQDN
+http:
+  paths:
+    - pathType: Prefix
+      path: "/"
+      backend:
+        service:
+          name: SERVICE_NAME
+          port:
+            number: SERVICE_PORT
