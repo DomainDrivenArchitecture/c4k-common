@@ -29,8 +29,7 @@
      (case resource-name
        "ingress/host-rule.yaml" (rc/inline "ingress/host-rule.yaml")
        "ingress/certificate.yaml" (rc/inline "ingress/certificate.yaml")
-       "ingress/http-ingress.yaml" (rc/inline "ingress/http-ingress.yaml")
-       "ingress/https-ingress.yaml" (rc/inline "ingress/https-ingress.yaml")
+       "ingress/ingress.yaml" (rc/inline "ingress/ingress.yaml")
        (throw (js/Error. "Undefined Resource!")))))
 
 (defn-spec generate-host-rule  pred/map-or-seq?
@@ -43,20 +42,11 @@
    (cm/replace-all-matching-values-by-new-value "SERVICE_PORT" service-port)
    (cm/replace-all-matching-values-by-new-value "SERVICE_NAME" service-name)))
 
-(defn-spec generate-http-ingress pred/map-or-seq?
-  [config ingress?]
-  (let [{:keys [ingress-name service-name service-port fqdns app-name]} config]
-    (->
-     (yaml/load-as-edn "ingress/http-ingress.yaml")
-     (assoc-in [:metadata :name] ingress-name)
-     (assoc-in [:metadata :labels :app.kubernetes.part-of] app-name)
-     (assoc-in [:spec :rules] (mapv (partial generate-host-rule service-name service-port) fqdns)))))
-
-(defn-spec generate-https-ingress pred/map-or-seq?
+(defn-spec generate-ingress pred/map-or-seq?
   [config ingress?]
   (let [{:keys [ingress-name cert-name service-name service-port fqdns app-name]} config]
     (->
-     (yaml/load-as-edn "ingress/https-ingress.yaml")
+     (yaml/load-as-edn "ingress/ingress.yaml")
      (assoc-in [:metadata :name] ingress-name)
      (assoc-in [:metadata :labels :app.kubernetes.part-of] app-name)
      (assoc-in [:spec :tls 0 :secretName] cert-name)
