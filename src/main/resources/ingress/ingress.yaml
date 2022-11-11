@@ -7,7 +7,6 @@ metadata:
     app.kubernetes.part-of: c4k-common-app
   annotations:
     traefik.ingress.kubernetes.io/router.entrypoints: web, websecure
-    traefik.ingress.kubernetes.io/router.tls: "true"
     traefik.ingress.kubernetes.io/router.middlewares: default-redirect-https@kubernetescrd
 spec:
   tls:
