@@ -26,7 +26,7 @@
           {:name "test-io-https-ingress",
            :namespace "default",
            :labels {:app.kubernetes.part-of "c4k-common-app"},
-           :annotations #:traefik.ingress.kubernetes.io{:router.entrypoints "web, websecure", :router.tls "true", :router.middlewares "default-redirect-https@kubernetescrd"}}}
+           :annotations #:traefik.ingress.kubernetes.io{:router.entrypoints "web, websecure", :router.middlewares "default-redirect-https@kubernetescrd"}}}
          (dissoc (cut/generate-ingress
                   {:issuer "prod"
                    :service-name "test-io-service"
