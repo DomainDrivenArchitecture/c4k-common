@@ -14,7 +14,7 @@ C4Context
             Container_Boundary(k3s, "K3S") {
                 Component(lb, "metallb")
                 Component(api, "K8s API")
-                Component(grafana-agent, "Grfana Agent")
+                Component(prometheus, "Prometheus in proxy mode")
                 Container_Boundary(app, "Application") {
                     Component(app, "App-container")
                     Component(app-backup, "backup & restore-container using restic")
@@ -41,8 +41,8 @@ C4Context
     Rel(app, app-file-storage, "file")
     Rel(app, app-db-storage, "*dbc")
 
-    Rel(grafana-agent, api, "http")
-    Rel(grafana-agent, grafana, "http")
+    Rel(prometheus, api, "http")
+    Rel(prometheus, grafana, "http")
 
     Rel(app-backup, backup, "s3")
     Rel(app-backup, app-file-storage, "file")

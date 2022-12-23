@@ -9,6 +9,7 @@
                  [orchestra "2021.01.01-1"]
                  [expound "0.9.0"]
                  [clj-commons/clj-yaml "0.7.108"]]
+  :target-path "target/%s/"
   :source-paths ["src/main/cljc"
                  "src/main/clj"]
   :resource-paths ["src/main/resources"]
@@ -20,10 +21,21 @@
                                  "src/test/cljc"]
                     :resource-paths ["src/test/resources"]
                     :dependencies [[dda/data-test "0.1.1"]]}
-             :dev {:plugins [[lein-shell "0.5.0"]]}}
+             :dev {:plugins [[lein-shell "0.5.0"]]}
+             :uberjar {:aot :all
+                       :main dda.c4k-common.uberjar
+                       :uberjar-name "c4k-common-standalone.jar"
+                       :dependencies [[org.clojure/tools.cli "1.0.206"]
+                                      [ch.qos.logback/logback-classic "1.3.0-alpha4"
+                                       :exclusions [com.sun.mail/javax.mail]]
+                                      [org.slf4j/jcl-over-slf4j "2.0.0-alpha1"]]}}
   :release-tasks [["test"]
                   ["vcs" "assert-committed"]
                   ["change" "version" "leiningen.release/bump-version" "release"]
                   ["vcs" "commit"]
                   ["vcs" "tag" "v" "--no-sign"]
-                  ["change" "version" "leiningen.release/bump-version"]])
+                  ["change" "version" "leiningen.release/bump-version"]]
+  :aliases {"inst" ["shell"
+                    "sh"
+                    "-c"
+                    "lein uberjar && sudo install -m=755 target/uberjar/c4k-common-standalone.jar /usr/local/bin/c4k-common-standalone.jar"]})
