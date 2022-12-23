@@ -22,6 +22,10 @@
   [input]
   (contains? #{"prod" "staging"} input))
 
+(defn stage?
+  [input]
+  (contains? #{:prod :acc :int :test :dev} input))
+
 (defn map-or-seq?
   [input]
   (or (map? input) (seq? input)))

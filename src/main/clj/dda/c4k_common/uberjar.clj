@@ -1,16 +1,18 @@
 (ns dda.c4k-common.uberjar
+  (:gen-class)
   (:require
    [clojure.spec.alpha :as s]
    [clojure.string :as cs]
    [clojure.tools.reader.edn :as edn]
    [dda.c4k-common.common :as cm]
+   [dda.c4k-common.core :as core]
    [expound.alpha :as expound]))
 
 (defn usage [name]
   (str
    "usage:
         
-   " name "{your configuraton file} {your authorization file}"))
+   " name " {your configuraton file} {your authorization file}"))
 
 (s/def ::options (s/* #{"-h"}))
 (s/def ::filename (s/and string?
@@ -50,3 +52,11 @@
                 (when (not auth-valid?)
                   (println
                    (expound/expound-str auth-spec? auth-edn {:print-specs? false})))))))))))
+
+(defn -main [& cmd-args]
+  (main-common "c4k-common"
+               core/config?
+               core/auth?
+               core/config-defaults
+               core/k8s-objects
+               cmd-args))

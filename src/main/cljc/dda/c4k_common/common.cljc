@@ -44,7 +44,7 @@
                          coll))
 
 (defn-spec replace-all-matching-values-by-new-value cp/map-or-seq?
-  [coll string?
+  [coll cp/map-or-seq?
    value-to-match string?
    value-to-replace string?]
   (clojure.walk/postwalk #(if (and (= (type value-to-match) (type %))
@@ -59,7 +59,7 @@
         (apply concat vs)))
 
 (defn generate-common [my-config my-auth config-defaults k8s-objects]
-  (let [resulting-config (merge config-defaults my-config my-auth)]
+  (let [resulting-config (merge config-defaults my-config)]
     (cs/join
      "\n---\n"
-     (k8s-objects resulting-config))))
+     (k8s-objects resulting-config my-auth))))

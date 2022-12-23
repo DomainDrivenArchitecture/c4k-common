@@ -1,0 +1,64 @@
+global:
+  scrape_interval: 60s
+  evaluation_interval: 60s
+  external_labels:
+    cluster: $CLUSTERNAME
+    stage: $TEST_OR_PROD
+remote_write:
+  - url: GRAFANA_CLOUD_URL
+    basic_auth:
+      username: GRAFANA_CLOUD_USER
+      password: GRAFANA_CLOUD_PASSWORD
+    write_relabel_configs:
+    - source_labels:
+      - __name__
+      regex: FILTER_REGEX
+      action: keep
+rule_files:
+  - /etc/prometheus/prometheus.rules
+scrape_configs:
+
+  - job_name: 'kubernetes-nodes'
+    kubernetes_sd_configs:
+    - role: node
+    scheme: https
+    tls_config:
+      ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+    bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
+    relabel_configs:
+    - action: labelmap
+      regex: __meta_kubernetes_node_label_(.+)
+    - target_label: __address__
+      replacement: kubernetes.default.svc:443
+    - source_labels: [__meta_kubernetes_node_name]
+      regex: (.+)
+      target_label: __metrics_path__
+      replacement: /api/v1/nodes/${1}/proxy/metrics
+
+  - job_name: 'node-exporter'
+    kubernetes_sd_configs:
+      - role: endpoints
+    relabel_configs:
+    - source_labels: [__meta_kubernetes_endpoints_name]
+      regex: 'node-exporter'
+      action: keep
+
+  - job_name: 'traefik'
+    kubernetes_sd_configs:
+      - role: endpoints
+    relabel_configs:
+    - source_labels: [__meta_kubernetes_endpoints_name]
+      regex: 'traefik'
+      action: keep
+
+  - job_name: 'kube-state-metrics'
+    kubernetes_sd_configs:
+      - role: endpoints
+    relabel_configs:
+    - source_labels: [__meta_kubernetes_endpoints_name]
+      regex: 'kube-state-metrics'
+      action: keep
+
+  - job_name: "prometheus"
+    static_configs:
+      - targets: ["localhost:9090"]
