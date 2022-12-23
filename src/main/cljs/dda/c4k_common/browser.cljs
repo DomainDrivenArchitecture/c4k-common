@@ -171,3 +171,17 @@
    :attrs {:class "needs-validation", :id "form"}, 
    :tag :form, 
    :content []})
+
+(defn-spec generate-group map?
+  [name string?
+   content any?]
+  [{:type :element
+    :tag :div
+    :attrs {:class "rounded border border-3  m-3 p-2"}
+    :content [{:type :element
+               :tag :b
+               :attrs {:style "z-index: 1; position: relative; top: -1.3rem;"}
+               :content name}
+              {:type :element
+               :tag :fieldset
+               :content content}]}])
