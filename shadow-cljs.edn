@@ -6,7 +6,7 @@
                 "src/test/resources"]
  :dependencies [[aero "1.1.6"]
                 [orchestra "2021.01.01-1"]
-                [expound "0.8.9"]
+                [expound "0.9.0"]
                 [hickory "0.7.1"]]
  :builds {:test {:target    :node-test
                  :output-to "target/node-tests.js"                 
