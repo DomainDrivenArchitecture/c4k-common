@@ -65,16 +65,16 @@ c4k-common provides the basic functionality for our c4k-modules.
 12. use common ingress
 -->
 
-| Module           | Version | common postgres | frontend script | [backup as deployment][bak1] | [use common pred. ][com1] | [configs as EDN and YAML][yaml1] | [renamed test-helper][th1] | [common load-as-edn][edn1] | standardized uberjar | groups for webview | [use common ingress][ing1] |
-|------------------|---------|:---------------:|:---------------:|:----------------------------:|:-------------------------:|:--------------------------------:|:--------------------------:|:--------------------------:|:--------------------------:|:--------------------------:|:--------------------------:|:--------------------------:|
-| c4k-mastodon-bot | 0.0 | - |   | - |   |   |   |   |   |   |   |
-| c4k-keycloak     | 0.2 |   |   |   |   |   |   |   |   |   |   |
-| c4k-jira         | 1.1 | x | x | x | x |   | - |   |   |   |   |
-| c4k-nextcloud    | 4.0 | x | x | x | x | x | - |   |   |   |   |
-| c4k-jitsi        | 1.2 | - | x | - | x |   | - |   |   |   |   |
-| c4k-gittea       | 1.0 | x | x | x | x | x | x |   | x | x |   |
-| c4k-shynet       | 1.0 | x | x | - | x |   | - |   | x |   |   |
-| c4k-website      | 0.2 | x | x | x | x | x | x | x | x | x | x |
+| Module           | Version | common postgres  | frontend script | [backup as deployment][bak1] | [use common pred. ][com1] | [renamed test-helper][th1] | [common load-as-edn][edn1] | [standardized uberjar][ujar] | groups for webview | [use common ingress][ing1] | use common monitoring |
+|------------------|---------|:----------------:|:---------------:|:----------------------------:|:-------------------------:|:--------------------------:|:--------------------------:|:----------------------------:|:------------------:|:--------------------------:|:---------------------:|
+| c4k-mastodon-bot | 0.0     |        -         |                 |              -               |                           |                            |                            |                              |                    |                            |                       |
+| c4k-keycloak     | 0.2     |                  |                 |                              |                           |                            |                            |                              |                    |                            |                       | 
+| c4k-jira         | 1.1     |        x         |        x        |              x               |             x             |             -              |                            |                              |                    |                            |                       |
+| c4k-nextcloud    | 4.0     |        x         |        x        |              x               |             x             |             -              |                            |                              |                    |                            |                       |
+| c4k-jitsi        | 1.2     |        -         |        x        |              -               |             x             |             -              |                            |              x               |                    |                            |                       |
+| c4k-gittea       | 1.0     |        x         |        x        |              x               |             x             |             x              |                            |              x               |         x          |                            |                       |
+| c4k-shynet       | 1.0     |        x         |        x        |              -               |             x             |             -              |                            |              x               |                    |                            |                       |
+| c4k-website      | 0.2     |        x         |        x        |              x               |             x             |             x              |             x              |              x               |         x          |             x              |                       |
 
 [bak1]: https://gitlab.com/domaindrivenarchitecture/c4k-jira/-/merge_requests/1
 [com1]: https://gitlab.com/domaindrivenarchitecture/c4k-nextcloud/-/merge_requests/3
@@ -82,6 +82,7 @@ c4k-common provides the basic functionality for our c4k-modules.
 [th1]: https://gitlab.com/domaindrivenarchitecture/c4k-gitea/-/merge_requests/1
 [edn1]: https://gitlab.com/domaindrivenarchitecture/c4k-website/-/merge_requests/1
 [ing1]: https://gitlab.com/domaindrivenarchitecture/c4k-website/-/merge_requests/2
+[ujar]: https://gitlab.com/domaindrivenarchitecture/c4k-jitsi/-/commit/b852a74dc561c3ab619e4f4d0748ab51e75edc13
 
 ## License
 
