@@ -5,7 +5,32 @@
 
 ## Purpose
 
-c4k-common ....
+c4k-common provides the foundation for all our c4k modules.
+
+It is now possible to generate a working prometheus monitoring file in yaml format.
+Your config.edn and your auth.edn should at least contain the following fields:
+
+config.edn - minimal example
+
+```clojure
+{:k3s-cluster-name "your-cluster-name"
+ :k3s-cluster-stage :prod
+ :grafana-cloud-url "your-url"}
+```  
+
+auth.edn - minimal example  
+
+```clojure
+{:grafana-cloud-user "user"
+ :grafana-cloud-password "password"}
+```  
+
+call (with jarwrapper installed):  
+
+```bash
+c4k-common-standalone.jar config.edn auth.edn > monitoring.yaml
+```
+
 
 ## Rationale
 
