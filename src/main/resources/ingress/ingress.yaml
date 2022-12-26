@@ -8,6 +8,7 @@ metadata:
   annotations:
     traefik.ingress.kubernetes.io/router.entrypoints: web, websecure
     traefik.ingress.kubernetes.io/router.middlewares: default-redirect-https@kubernetescrd
+    metallb.universe.tf/address-pool: public
 spec:
   tls:
     - hosts:
