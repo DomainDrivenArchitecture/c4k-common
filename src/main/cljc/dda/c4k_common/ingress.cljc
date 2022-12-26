@@ -1,4 +1,4 @@
-(ns dda.c4k-common.ingress-cert
+(ns dda.c4k-common.ingress
   (:require
    [clojure.spec.alpha :as s]
    #?(:cljs [shadow.resource :as rc])
@@ -18,11 +18,16 @@
 (s/def ::service-port pos-int?)
 (s/def ::fqdns (s/coll-of pred/fqdn-string?))
 
+(def simple-ingress? (s/keys :req-un [::fqdns ::service-name ::service-port]
+                             :opt-un [::issuer]))
+
 (def ingress? (s/keys :req-un [::fqdns ::app-name ::ingress-name ::service-name ::service-port]
                       :opt-un [::issuer ::cert-name]))
 
 (def certificate? (s/keys :req-un [::fqdns ::app-name ::cert-name]
                           :opt-un [::issuer]))
+
+(def ingress-defaults {:issuer "staging"})
 
 #?(:cljs
    (defmethod yaml/load-resource :ingress [resource-name]
@@ -66,3 +71,14 @@
      (assoc-in [:spec :commonName] (first fqdns))
      (assoc-in [:spec :dnsNames] fqdns)
      (assoc-in [:spec :issuerRef :name] letsencrypt-issuer))))
+
+(defn-spec generate-ingress-and-cert any?
+  [simple-ingress-config simple-ingress?]
+  (let [{:keys [service-name]} simple-ingress-config
+        config (merge {:app-name service-name
+                               :ingress-name service-name
+                               :cert-name service-name}
+                              ingress-defaults
+                              simple-ingress-config)]
+    [(generate-certificate config)
+     (generate-ingress config)]))
