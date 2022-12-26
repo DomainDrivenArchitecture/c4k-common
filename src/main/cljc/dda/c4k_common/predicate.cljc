@@ -28,7 +28,8 @@
 
 (defn map-or-seq?
   [input]
-  (or (map? input) (seq? input)))
+  (or (map? input) 
+      (seq? input)))
 
 (defn pvc-storage-class-name?
   [input]
@@ -64,4 +65,10 @@
   [n input]
   (and (int? input)
        (> input n)))
+
+(defn str-or-number? 
+  [input]
+  (or 
+   (string? input) 
+   (number? input)))
 

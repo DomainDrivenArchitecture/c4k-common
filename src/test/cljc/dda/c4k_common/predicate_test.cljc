@@ -72,3 +72,8 @@
   (is (cut/int-gt-n? 5 6))
   (is ((partial cut/int-gt-n? 5) 10))
   (is (not ((partial cut/int-gt-n? 5) 4))))
+
+(deftest test-str-or-number?
+  (is (cut/str-or-number? "string"))
+  (is (cut/str-or-number? 42))
+  (is (not (cut/str-or-number? []))))
