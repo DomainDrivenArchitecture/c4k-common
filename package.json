@@ -2,7 +2,7 @@
     "name": "c4k-common-cljs",
     "description": "Contains predicates and tools for c4k",
     "author": "meissa GmbH",
-    "version": "0.2.0-SNAPSHOT",
+    "version": "4.0.0",
     "homepage": "https://gitlab.com/domaindrivenarchitecture/c4k-common#readme",
     "repository": "https://www.npmjs.com/package/c4k-common",
     "license": "APACHE2",
@@ -19,7 +19,7 @@
         "convention4kubernetes"
     ],
     "bugs": {
-        "url": "https://gitlab.com/domaindrivenarchitecture/c4k-common/issues"
+        "url": "https://repo.prod.meissa.de/meissa/c4k-common/issues"
     },
     "dependencies": {
         "js-base64": "^3.7.2",
