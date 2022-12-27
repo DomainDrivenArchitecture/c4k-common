@@ -19,14 +19,15 @@
 (s/def ::traefik-regex string?)
 (s/def ::kube-state-regex string?)
 
-;; TODO: rename to monitoring
-(defn grafana-config? [input]
-  (s/keys :req-un [::grafana-cloud-url ::k3s-cluster-name ::k3s-cluster-stage]))
+(defn config? [input]
+  (s/keys :req-un [::grafana-cloud-url 
+                   ::k3s-cluster-name 
+                   ::k3s-cluster-stage]))
 
-(defn grafana-auth? [input]
+(defn auth? [input]
   (s/keys :req-un [::grafana-cloud-user ::grafana-cloud-password]))
 
-(defn grafana-provider? [input]
+(defn storage? [input]
   (s/keys :opt-un [::pvc-storage-class-name]))
 
 (defn filter-regex? [input]
@@ -74,7 +75,7 @@
        (throw (js/Error. "Undefined Resource!")))))
 
 (defn-spec generate-stateful-set cp/map-or-seq?
-  [config grafana-provider?]
+  [config storage?]
   (let [{:keys [pvc-storage-class-name]
          :or {pvc-storage-class-name :manual}} config]
     (->
@@ -82,8 +83,8 @@
      (assoc-in [:spec :volumeClaimTemplates 0 :spec :storageClassName] (name pvc-storage-class-name)))))
 
 (defn-spec generate-prometheus-config cp/map-or-seq?
-  [config grafana-config?
-   auth grafana-auth?]
+  [config config?
+   auth auth?]
   (let [{:keys [grafana-cloud-url k3s-cluster-name k3s-cluster-stage]} config
         {:keys [grafana-cloud-user grafana-cloud-password]} auth]
     (->
@@ -101,8 +102,8 @@
      (cm/replace-all-matching-values-by-new-value "FILTER_REGEX" filter-regex-string))))
 
 (defn-spec generate-config cp/map-or-seq?
-  [config grafana-config?
-   auth grafana-auth?]
+  [config config?
+   auth auth?]
   (->
    (yaml/from-string (yaml/load-resource "monitoring/prometheus/config.yaml"))
    (assoc-in [:stringData :prometheus.yaml]
@@ -110,8 +111,8 @@
               (generate-prometheus-config config auth)))))
 
 (defn-spec generate cp/map-or-seq?
-  [config grafana-config?
-   auth grafana-auth?]
+  [config config?
+   auth auth?]
   [(yaml/from-string (yaml/load-resource "monitoring/namespace.yaml"))
    (yaml/from-string (yaml/load-resource "monitoring/prometheus/cluster-role.yaml"))
    (yaml/from-string (yaml/load-resource "monitoring/prometheus/cluster-role-binding.yaml"))
