@@ -71,7 +71,7 @@ c4k-common provides the basic functionality for our c4k-modules.
 | c4k-keycloak     | 0.2     |                  |                 |                              |                           |                            |                            |                              |                            |                            |                       | 
 | c4k-jira         | 1.1     |        x         |        x        |              x               |             x             |             -              |                            |                              |                            |                            |                       |
 | c4k-nextcloud    | 4.0     |        x         |        x        |              x               |             x             |             -              |                            |                              |                            |                            |                       |
-| c4k-jitsi        | 1.2     |        -         |        x        |              -               |             x             |             -              |             x              |              x               |             x              |                            |                       |
+| c4k-jitsi        | 1.2     |        -         |        x        |              -               |             x             |             -              |             x              |              x               |             x              |             x              |                       |
 | c4k-gittea       | 1.0     |        x         |        x        |              x               |             x             |             x              |                            |              x               |             x              |                            |                       |
 | c4k-shynet       | 1.0     |        x         |        x        |              -               |             x             |             -              |                            |              x               |                            |                            |                       |
 | c4k-website      | 0.2     |        x         |        x        |              x               |             x             |             x              |             x              |              x               |             x              |             x              |                       |
@@ -81,7 +81,7 @@ c4k-common provides the basic functionality for our c4k-modules.
 [yaml1]: https://gitlab.com/domaindrivenarchitecture/c4k-nextcloud/-/merge_requests/4
 [th1]: https://gitlab.com/domaindrivenarchitecture/c4k-gitea/-/merge_requests/1
 [edn1]: https://gitlab.com/domaindrivenarchitecture/c4k-website/-/merge_requests/1
-[ing1]: https://gitlab.com/domaindrivenarchitecture/c4k-website/-/merge_requests/2
+[ing1]: https://gitlab.com/domaindrivenarchitecture/c4k-jitsi/-/commit/214aa41c28662fbf7a49998e17404e7ac9216430
 [ujar]: https://gitlab.com/domaindrivenarchitecture/c4k-jitsi/-/commit/b852a74dc561c3ab619e4f4d0748ab51e75edc13
 [bgrp]: https://gitlab.com/domaindrivenarchitecture/c4k-jitsi/-/commit/7ea442adaef727d5b48b242fd0baaaf51902d06e
 
