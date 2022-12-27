@@ -60,7 +60,8 @@
 (defn generate-common 
   [my-config 
    my-auth 
-   config-defaults k8s-objects]
+   config-defaults 
+   k8s-objects]
   (let [resulting-config (merge config-defaults my-config)]
     (cs/join
      "\n---\n"
