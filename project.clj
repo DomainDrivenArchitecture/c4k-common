@@ -1,4 +1,4 @@
-(defproject org.domaindrivenarchitecture/c4k-common-clj "4.0.0"
+(defproject org.domaindrivenarchitecture/c4k-common-clj "4.0.1-SNAPSHOT"
   :description "Contains predicates and tools for c4k"
   :url "https://domaindrivenarchitecture.org"
   :license {:name "Apache License, Version 2.0"
@@ -32,9 +32,7 @@
   :release-tasks [["test"]
                   ["vcs" "assert-committed"]
                   ["change" "version" "leiningen.release/bump-version" "release"]
-                  ["vcs" "commit"]
-                  ["vcs" "tag" "v" "--no-sign"]
-                  ["change" "version" "leiningen.release/bump-version"]]
+                  ["vcs" "tag" "v" "--no-sign"]]
   :aliases {"inst" ["shell"
                     "sh"
                     "-c"
