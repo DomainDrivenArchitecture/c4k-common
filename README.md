@@ -81,11 +81,11 @@ c4k-common provides the basic functionality for our c4k-modules.
 [yaml1]: https://gitlab.com/domaindrivenarchitecture/c4k-nextcloud/-/merge_requests/4
 [th1]: https://gitlab.com/domaindrivenarchitecture/c4k-gitea/-/merge_requests/1
 [edn1]: https://gitlab.com/domaindrivenarchitecture/c4k-website/-/merge_requests/1
-[ing1]: https://gitlab.com/domaindrivenarchitecture/c4k-jitsi/-/commit/214aa41c28662fbf7a49998e17404e7ac9216430
-[ujar1]: https://gitlab.com/domaindrivenarchitecture/c4k-jitsi/-/commit/b852a74dc561c3ab619e4f4d0748ab51e75edc13
-[bgrp1]: https://gitlab.com/domaindrivenarchitecture/c4k-jitsi/-/commit/7ea442adaef727d5b48b242fd0baaaf51902d06e
-[mon1]: https://gitlab.com/domaindrivenarchitecture/c4k-jitsi/-/commit/19e580188ea56ea26ff3a0bfb08ca428b881ad9a
-[val1]: https://gitlab.com/domaindrivenarchitecture/c4k-jitsi/-/commit/5f08a108072569473463fb8f19150a12e564e54f
+[ing1]:  https://repo.prod.meissa.de/meissa/c4k-jitsi/commit/214aa41c28662fbf7a49998e17404e7ac9216430
+[ujar1]: https://repo.prod.meissa.de/meissa/c4k-jitsi/commit/b852a74dc561c3ab619e4f4d0748ab51e75edc13
+[bgrp1]: https://repo.prod.meissa.de/meissa/c4k-jitsi/commit/7ea442adaef727d5b48b242fd0baaaf51902d06e
+[mon1]:  https://repo.prod.meissa.de/meissa/c4k-jitsi/commit/19e580188ea56ea26ff3a0bfb08ca428b881ad9a
+[val1]:  https://repo.prod.meissa.de/meissa/c4k-jitsi/commit/5f08a108072569473463fb8f19150a12e564e54f
 
 ## License
 
