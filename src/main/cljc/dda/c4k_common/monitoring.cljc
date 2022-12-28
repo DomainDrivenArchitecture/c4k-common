@@ -11,9 +11,9 @@
 
 (s/def ::grafana-cloud-user cp/bash-env-string?)
 (s/def ::grafana-cloud-password cp/bash-env-string?)
-(s/def ::grafana-cloud-url cp/fqdn-string?)
-(s/def ::k3s-cluster-name cp/bash-env-string?)
-(s/def ::k3s-cluster-stage cp/stage?)
+(s/def ::grafana-cloud-url string?)
+(s/def ::cluster-name string?)
+(s/def ::cluster-stage cp/stage?)
 (s/def ::pvc-storage-class-name cp/pvc-storage-class-name?)
 (s/def ::node-regex string?)
 (s/def ::traefik-regex string?)
@@ -21,8 +21,8 @@
 
 (defn config? [input]
   (s/keys :req-un [::grafana-cloud-url 
-                   ::k3s-cluster-name 
-                   ::k3s-cluster-stage]))
+                   ::cluster-name 
+                   ::cluster-stage]))
 
 (defn auth? [input]
   (s/keys :req-un [::grafana-cloud-user ::grafana-cloud-password]))
@@ -55,23 +55,24 @@
    (defmethod yaml/load-resource :monitoring [resource-name]
      (case resource-name
        "monitoring/namespace.yaml" (rc/inline "monitoring/namespace.yaml")
-       "monitoring/prometheus/config.yaml" (rc/inline "monitoring/prometheus/config.yaml")
-       "monitoring/prometheus/cluster-role.yaml" (rc/inline "monitoring/prometheus/cluster-role.yaml")
-       "monitoring/prometheus/cluster-role-binding.yaml" (rc/inline "monitoring/prometheus/cluster-role-binding.yaml")
-       "monitoring/prometheus/deployment.yaml" (rc/inline "monitoring/prometheus/deployment.yaml")
-       "monitoring/prometheus/prometheus.yaml" (rc/inline "monitoring/prometheus/prometheus.yaml")
-       "monitoring/prometheus/service.yaml" (rc/inline "monitoring/prometheus/service.yaml")
-       "monitoring/prometheus/service-account.yaml" (rc/inline "monitoring/prometheus/service-account.yaml")   
-       "monitoring/node-exporter/daemon-set.yaml" (rc/inline "monitoring/node-exporter/daemon-set.yaml")
-       "monitoring/node-exporter/service.yaml" (rc/inline "monitoring/node-exporter/service.yaml")
-       "monitoring/node-exporter/cluster-role-binding.yaml" (rc/inline "monitoring/node-exporter/cluster-role-binding.yaml")
-       "monitoring/node-exporter/cluster-role.yaml" (rc/inline "monitoring/node-exporter/cluster-role.yaml")
-       "monitoring/node-exporter/service-account.yaml" (rc/inline "monitoring/node-exporter/service-account.yaml")
+
        "monitoring/kube-state-metrics/cluster-role-binding.yaml" (rc/inline "monitoring/kube-state-metrics/cluster-role-binding.yaml")
        "monitoring/kube-state-metrics/cluster-role.yaml" (rc/inline "monitoring/kube-state-metrics/cluster-role.yaml")
        "monitoring/kube-state-metrics/deployment.yaml" (rc/inline "monitoring/kube-state-metrics/deployment.yaml")
        "monitoring/kube-state-metrics/service-account.yaml" (rc/inline "monitoring/kube-state-metrics/service-account.yaml")
        "monitoring/kube-state-metrics/service.yaml" (rc/inline "monitoring/kube-state-metrics/service.yaml")
+       "monitoring/node-exporter/cluster-role-binding.yaml" (rc/inline "monitoring/node-exporter/cluster-role-binding.yaml")
+       "monitoring/node-exporter/cluster-role.yaml" (rc/inline "monitoring/node-exporter/cluster-role.yaml")
+       "monitoring/node-exporter/daemon-set.yaml" (rc/inline "monitoring/node-exporter/daemon-set.yaml")
+       "monitoring/node-exporter/service-account.yaml" (rc/inline "monitoring/node-exporter/service-account.yaml")
+       "monitoring/node-exporter/service.yaml" (rc/inline "monitoring/node-exporter/service.yaml")
+       "monitoring/prometheus/cluster-role-binding.yaml" (rc/inline "monitoring/prometheus/cluster-role-binding.yaml")
+       "monitoring/prometheus/cluster-role.yaml" (rc/inline "monitoring/prometheus/cluster-role.yaml")
+       "monitoring/prometheus/config.yaml" (rc/inline "monitoring/prometheus/config.yaml")
+       "monitoring/prometheus/deployment.yaml" (rc/inline "monitoring/prometheus/deployment.yaml")
+       "monitoring/prometheus/prometheus.yaml" (rc/inline "monitoring/prometheus/prometheus.yaml")
+       "monitoring/prometheus/service-account.yaml" (rc/inline "monitoring/prometheus/service-account.yaml")
+       "monitoring/prometheus/service.yaml" (rc/inline "monitoring/prometheus/service.yaml")
        (throw (js/Error. "Undefined Resource!")))))
 
 (defn-spec generate-stateful-set cp/map-or-seq?
@@ -79,20 +80,20 @@
   (let [{:keys [pvc-storage-class-name]
          :or {pvc-storage-class-name :manual}} config]
     (->
-     (yaml/from-string (yaml/load-resource "monitoring/stateful-set.yaml"))
+     (yaml/load-as-edn "monitoring/stateful-set.yaml")
      (assoc-in [:spec :volumeClaimTemplates 0 :spec :storageClassName] (name pvc-storage-class-name)))))
 
 (defn-spec generate-prometheus-config cp/map-or-seq?
   [config config?
    auth auth?]
-  (let [{:keys [grafana-cloud-url k3s-cluster-name k3s-cluster-stage]} config
+  (let [{:keys [grafana-cloud-url cluster-name cluster-stage]} config
         {:keys [grafana-cloud-user grafana-cloud-password]} auth]
     (->
-     (yaml/from-string (yaml/load-resource "monitoring/prometheus/prometheus.yaml"))
+     (yaml/load-as-edn "monitoring/prometheus/prometheus.yaml")
      (assoc-in [:global :external_labels :cluster]
-               k3s-cluster-name)
+               cluster-name)
      (assoc-in [:global :external_labels :stage]
-               k3s-cluster-stage)
+               cluster-stage)
      (assoc-in [:remote_write 0 :url]
                grafana-cloud-url)
      (assoc-in [:remote_write 0 :basic_auth :username]
@@ -105,7 +106,7 @@
   [config config?
    auth auth?]
   (->
-   (yaml/from-string (yaml/load-resource "monitoring/prometheus/config.yaml"))
+   (yaml/load-as-edn "monitoring/prometheus/config.yaml")
    (assoc-in [:stringData :prometheus.yaml]
              (yaml/to-string
               (generate-prometheus-config config auth)))))
@@ -113,20 +114,20 @@
 (defn-spec generate cp/map-or-seq?
   [config config?
    auth auth?]
-  [(yaml/from-string (yaml/load-resource "monitoring/namespace.yaml"))
-   (yaml/from-string (yaml/load-resource "monitoring/prometheus/cluster-role.yaml"))
-   (yaml/from-string (yaml/load-resource "monitoring/prometheus/cluster-role-binding.yaml"))
-   (yaml/from-string (yaml/load-resource "monitoring/prometheus/service.yaml"))
-   (yaml/from-string (yaml/load-resource "monitoring/prometheus/service-account.yaml"))
+  [(yaml/load-as-edn "monitoring/namespace.yaml")
+   (yaml/load-as-edn "monitoring/prometheus/cluster-role.yaml")
+   (yaml/load-as-edn "monitoring/prometheus/cluster-role-binding.yaml")
+   (yaml/load-as-edn "monitoring/prometheus/service.yaml")
+   (yaml/load-as-edn "monitoring/prometheus/service-account.yaml")
    (generate-config config auth)
-   (yaml/from-string (yaml/load-resource "monitoring/prometheus/deployment.yaml"))
-   (yaml/from-string (yaml/load-resource "monitoring/node-exporter/service-account.yaml"))
-   (yaml/from-string (yaml/load-resource "monitoring/node-exporter/cluster-role.yaml"))
-   (yaml/from-string (yaml/load-resource "monitoring/node-exporter/cluster-role-binding.yaml"))
-   (yaml/from-string (yaml/load-resource "monitoring/node-exporter/daemon-set.yaml"))
-   (yaml/from-string (yaml/load-resource "monitoring/node-exporter/service.yaml"))
-   (yaml/from-string (yaml/load-resource "monitoring/kube-state-metrics/cluster-role-binding.yaml"))
-   (yaml/from-string (yaml/load-resource "monitoring/kube-state-metrics/cluster-role.yaml"))
-   (yaml/from-string (yaml/load-resource "monitoring/kube-state-metrics/deployment.yaml"))
-   (yaml/from-string (yaml/load-resource "monitoring/kube-state-metrics/service-account.yaml"))
-   (yaml/from-string (yaml/load-resource "monitoring/kube-state-metrics/service.yaml"))])
+   (yaml/load-as-edn "monitoring/prometheus/deployment.yaml")
+   (yaml/load-as-edn "monitoring/node-exporter/service-account.yaml")
+   (yaml/load-as-edn "monitoring/node-exporter/cluster-role.yaml")
+   (yaml/load-as-edn "monitoring/node-exporter/cluster-role-binding.yaml")
+   (yaml/load-as-edn "monitoring/node-exporter/daemon-set.yaml")
+   (yaml/load-as-edn "monitoring/node-exporter/service.yaml")
+   (yaml/load-as-edn "monitoring/kube-state-metrics/cluster-role-binding.yaml")
+   (yaml/load-as-edn "monitoring/kube-state-metrics/cluster-role.yaml")
+   (yaml/load-as-edn "monitoring/kube-state-metrics/deployment.yaml")
+   (yaml/load-as-edn "monitoring/kube-state-metrics/service-account.yaml")
+   (yaml/load-as-edn "monitoring/kube-state-metrics/service.yaml")])

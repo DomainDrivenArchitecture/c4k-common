@@ -13,9 +13,9 @@
 (st/instrument `cut/generate-agent-config)
 (st/instrument `cut/generate-config)
 
-(def conf {:k3s-cluster-name "clustername"
-           :k3s-cluster-stage :test
-           :grafana-cloud-url "url"})
+(def conf {:cluster-name "clustername"
+           :cluster-stage :test
+           :grafana-cloud-url "https://some.url/with/path"})
 
 (def auth {:grafana-cloud-user "user"
            :grafana-cloud-password "password"

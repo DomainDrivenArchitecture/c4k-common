@@ -2,7 +2,7 @@
     "name": "c4k-common-cljs",
     "description": "Contains predicates and tools for c4k",
     "author": "meissa GmbH",
-    "version": "4.1.0-SNAPSHOT",
+    "version": "5.0.0",
     "homepage": "https://gitlab.com/domaindrivenarchitecture/c4k-common#readme",
     "repository": "https://www.npmjs.com/package/c4k-common",
     "license": "APACHE2",
