@@ -4,6 +4,7 @@
    [clojure.spec.alpha :as s]
    [clojure.string :as cs]
    [clojure.tools.reader.edn :as edn]
+   [dda.c4k-common.yaml :as yaml]
    [dda.c4k-common.common :as cm]
    [dda.c4k-common.core :as core]
    [expound.alpha :as expound]))
@@ -39,8 +40,10 @@
           :else
           (let [config-str (slurp config)
                 auth-str (slurp auth)
-                config-edn (edn/read-string config-str)
-                auth-edn (edn/read-string auth-str)
+                config-parse-fn (if (yaml/is-yaml? config) yaml/from-string edn/read-string)
+                auth-parse-fn (if (yaml/is-yaml? auth) yaml/from-string edn/read-string)
+                config-edn (config-parse-fn config-str)
+                auth-edn (auth-parse-fn auth-str)
                 config-valid? (s/valid? config-spec? config-edn)
                 auth-valid? (s/valid? auth-spec? auth-edn)]
             (if (and config-valid? auth-valid?)
