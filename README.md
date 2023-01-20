@@ -60,15 +60,14 @@ c4k-common provides the basic functionality for our c4k-modules.
 7. renamed test-helper
 8. common load-as-edn
 9. standardized uberjar
-10. standardized resources
-11. groups for webview
-12. use common ingress
+10. groups for webview
+11. use common ingress
 -->
 
 | Module           | Version | common postgres | frontend script | [backup as deployment][bak1] | [use common pred. ][com1] | [renamed test-helper][th1] | [common load-as-edn][edn1] | [standardized uberjar][ujar1] | [groups for webview][bgrp1] | [use common ingress][ing1] | [use common monitoring][mon1] | [validate examples][val1] |
 |------------------|---------|:---------------:|:---------------:|:----------------------------:|:-------------------------:|:--------------------------:|:--------------------------:|:-----------------------------:|:---------------------------:|:--------------------------:|:-----------------------------:|:-------------------------:|
 | c4k-mastodon-bot | 0.0     |        -        |                 |              -               |                           |                            |                            |                               |                             |                            |                               |                           |
-| c4k-keycloak     | 0.2     |                 |                 |                              |                           |                            |                            |                               |                             |                            |                               |                           |
+| c4k-keycloak     | 0.2     |        x        |        x        |              -               |             x             |             -              |             x              |               x               |              x              |             x              |               x               |             x             |
 | c4k-jira         | 1.1     |        x        |        x        |              x               |             x             |             -              |                            |                               |                             |                            |                               |                           |
 | c4k-nextcloud    | 4.0     |        x        |        x        |              x               |             x             |             -              |                            |                               |                             |                            |                               |                           |
 | c4k-jitsi        | 1.3     |        -        |        x        |              -               |             x             |             -              |             x              |               x               |              x              |             x              |               x               |             x             |
