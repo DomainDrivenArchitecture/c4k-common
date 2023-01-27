@@ -18,10 +18,10 @@
 (s/def ::node-regex string?)
 (s/def ::traefik-regex string?)
 (s/def ::kube-state-regex string?)
-(s/def ::config (s/keys :req-un [::grafana-cloud-url
+(s/def ::mon-cfg (s/keys :req-un [::grafana-cloud-url
                                  ::cluster-name
                                  ::cluster-stage]))
-(s/def ::auth (s/keys :req-un [::grafana-cloud-user 
+(s/def ::mon-auth (s/keys :req-un [::grafana-cloud-user 
                                ::grafana-cloud-password]))
 (s/def ::storage (s/keys :opt-un [::pvc-storage-class-name]))
 (s/def ::filter-regex (s/keys :req-un [::node-regex 
@@ -79,8 +79,8 @@
      (assoc-in [:spec :volumeClaimTemplates 0 :spec :storageClassName] (name pvc-storage-class-name)))))
 
 (defn-spec generate-prometheus-config cp/map-or-seq?
-  [config ::config
-   auth ::auth]
+  [config ::mon-cfg
+   auth ::mon-auth]
   (let [{:keys [grafana-cloud-url cluster-name cluster-stage]} config
         {:keys [grafana-cloud-user grafana-cloud-password]} auth]
     (->
@@ -98,8 +98,8 @@
      (cm/replace-all-matching-values-by-new-value "FILTER_REGEX" filter-regex-string))))
 
 (defn-spec generate-config cp/map-or-seq?
-  [config ::config
-   auth ::auth]
+  [config ::mon-cfg
+   auth ::mon-auth]
   (->
    (yaml/load-as-edn "monitoring/prometheus/config.yaml")
    (assoc-in [:stringData :prometheus.yaml]
@@ -107,8 +107,8 @@
               (generate-prometheus-config config auth)))))
 
 (defn-spec generate cp/map-or-seq?
-  [config ::config
-   auth ::auth]
+  [config ::mon-cfg
+   auth ::mon-auth]
   [(yaml/load-as-edn "monitoring/namespace.yaml")
    (yaml/load-as-edn "monitoring/prometheus/cluster-role.yaml")
    (yaml/load-as-edn "monitoring/prometheus/cluster-role-binding.yaml")
