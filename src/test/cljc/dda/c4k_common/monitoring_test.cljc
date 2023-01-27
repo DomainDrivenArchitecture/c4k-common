@@ -14,7 +14,7 @@
 (st/instrument `cut/generate-config)
 
 (def conf {:cluster-name "clustername"
-           :cluster-stage :test
+           :cluster-stage "test"
            :grafana-cloud-url "https://some.url/with/path"})
 
 (def auth {:grafana-cloud-user "user"
@@ -22,7 +22,7 @@
            :hetzner-cloud-ro-token "ro-token"})
 
 (def invalid-conf {:cluster-name "clustername"
-                   :cluster-stage :test
+                   :cluster-stage "test"
                    :grafana-clud-url "https://some.url/with/path"})
 
 (def invalid-auth {:grafana-cloud-user "user"
@@ -52,7 +52,7 @@
 
 (deftest should-generate-prometheus-external-labels
   (is (= {:cluster "clustername",
-          :stage :test}
+          :stage "test"}
          (get-in
           (cut/generate-prometheus-config conf auth)
           [:global :external_labels]))))

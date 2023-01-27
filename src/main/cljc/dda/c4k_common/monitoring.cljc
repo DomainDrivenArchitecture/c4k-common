@@ -18,16 +18,15 @@
 (s/def ::node-regex string?)
 (s/def ::traefik-regex string?)
 (s/def ::kube-state-regex string?)
-
-(def config? (s/keys :req-un [::grafana-cloud-url
-                              ::cluster-name
-                              ::cluster-stage]))
-
-(def auth? (s/keys :req-un [::grafana-cloud-user ::grafana-cloud-password]))
-
-(def storage? (s/keys :opt-un [::pvc-storage-class-name]))
-
-(def filter-regex? (s/keys :req-un [::node-regex ::traefik-regex ::kube-state-regex]))
+(s/def ::config (s/keys :req-un [::grafana-cloud-url
+                                 ::cluster-name
+                                 ::cluster-stage]))
+(s/def ::auth (s/keys :req-un [::grafana-cloud-user 
+                               ::grafana-cloud-password]))
+(s/def ::storage (s/keys :opt-un [::pvc-storage-class-name]))
+(s/def ::filter-regex (s/keys :req-un [::node-regex 
+                                       ::traefik-regex 
+                                       ::kube-state-regex]))
 
 (def metric-regex {:node-regex
                    (str "node_cpu_sec.+|node_load[0-9]+|node_memory_Buf.*|node_memory_Mem.*|"
@@ -72,7 +71,7 @@
        (throw (js/Error. "Undefined Resource!")))))
 
 (defn-spec generate-stateful-set cp/map-or-seq?
-  [config storage?]
+  [config ::storage]
   (let [{:keys [pvc-storage-class-name]
          :or {pvc-storage-class-name :manual}} config]
     (->
@@ -80,8 +79,8 @@
      (assoc-in [:spec :volumeClaimTemplates 0 :spec :storageClassName] (name pvc-storage-class-name)))))
 
 (defn-spec generate-prometheus-config cp/map-or-seq?
-  [config config?
-   auth auth?]
+  [config ::config
+   auth ::auth]
   (let [{:keys [grafana-cloud-url cluster-name cluster-stage]} config
         {:keys [grafana-cloud-user grafana-cloud-password]} auth]
     (->
@@ -99,8 +98,8 @@
      (cm/replace-all-matching-values-by-new-value "FILTER_REGEX" filter-regex-string))))
 
 (defn-spec generate-config cp/map-or-seq?
-  [config config?
-   auth auth?]
+  [config ::config
+   auth ::auth]
   (->
    (yaml/load-as-edn "monitoring/prometheus/config.yaml")
    (assoc-in [:stringData :prometheus.yaml]
@@ -108,8 +107,8 @@
               (generate-prometheus-config config auth)))))
 
 (defn-spec generate cp/map-or-seq?
-  [config config?
-   auth auth?]
+  [config ::config
+   auth ::auth]
   [(yaml/load-as-edn "monitoring/namespace.yaml")
    (yaml/load-as-edn "monitoring/prometheus/cluster-role.yaml")
    (yaml/load-as-edn "monitoring/prometheus/cluster-role-binding.yaml")
