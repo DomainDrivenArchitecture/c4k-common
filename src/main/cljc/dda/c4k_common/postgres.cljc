@@ -24,10 +24,11 @@
 (s/def ::db-name cp/bash-env-string?)
 (s/def ::pvc-storage-class-name cp/pvc-storage-class-name?)
 (s/def ::pv-storage-size-gb pos?)
-(defn pg-config? [input]
-  (s/keys :opt-un [::postgres-size ::db-name ::postgres-data-volume-path 
+
+(def pg-config?
+  (s/keys :opt-un [::postgres-size ::db-name ::postgres-data-volume-path
                    ::pvc-storage-class-name ::pv-storage-size-gb]))
-(defn pg-auth? [input]
+(def pg-auth?
   (s/keys :opt-un [::postgres-db-user ::postgres-db-password]))
 
 (def postgres-function (s/keys :opt-un [::deserializer ::optional]))
