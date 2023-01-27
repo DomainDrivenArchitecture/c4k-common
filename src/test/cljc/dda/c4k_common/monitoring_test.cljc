@@ -21,6 +21,24 @@
            :grafana-cloud-password "password"
            :hetzner-cloud-ro-token "ro-token"})
 
+(def invalid-conf {:cluster-name "clustername"
+                   :cluster-stage :test
+                   :grafana-clud-url "https://some.url/with/path"})
+
+(def invalid-auth {:grafana-cloud-user "user"
+                   :grafana-clod-password "password"
+                   :hetzner-cloud-ro-token "ro-token"})
+
+(deftest should-not-generate-config
+  (is (thrown?
+       Exception
+       (cut/generate-config invalid-conf auth))))
+
+(deftest should-not-generate-auth
+  (is (thrown?
+       Exception
+       (cut/generate-config conf invalid-auth))))
+
 (deftest should-generate
   (is (= 17
          (count (cut/generate conf auth)))))
