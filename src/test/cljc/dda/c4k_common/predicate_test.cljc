@@ -34,9 +34,9 @@
   (is (false? (cut/map-or-seq? "1,2,3"))))
 
 (deftest test-pvc-storage-class-name?
-  (is (true? (cut/pvc-storage-class-name? :manual)))
-  (is (true? (cut/pvc-storage-class-name? :local-path)))
-  (is (false? (cut/pvc-storage-class-name? :none))))
+  (is (true? (cut/pvc-storage-class-name? "manual")))
+  (is (true? (cut/pvc-storage-class-name? "local-path")))
+  (is (false? (cut/pvc-storage-class-name? "none"))))
 
 (deftest test-port-number?
   (is (true? (cut/port-number? 1)))

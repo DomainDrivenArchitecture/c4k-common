@@ -24,7 +24,7 @@
 
 (defn stage?
   [input]
-  (contains? #{:prod :acc :int :test :dev} input))
+  (contains? #{"prod" "acc" "int" "test" "dev"} input))
 
 (defn map-or-seq?
   [input]
@@ -33,7 +33,7 @@
 
 (defn pvc-storage-class-name?
   [input]
-  (contains? #{:manual :local-path} input))
+  (contains? #{"manual" "local-path"} input))
 
 (defn port-number?
   [input]
