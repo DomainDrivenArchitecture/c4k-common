@@ -19,19 +19,15 @@
 (s/def ::traefik-regex string?)
 (s/def ::kube-state-regex string?)
 
-(defn config? [input]
-  (s/keys :req-un [::grafana-cloud-url 
-                   ::cluster-name 
-                   ::cluster-stage]))
+(def config? (s/keys :req-un [::grafana-cloud-url
+                              ::cluster-name
+                              ::cluster-stage]))
 
-(defn auth? [input]
-  (s/keys :req-un [::grafana-cloud-user ::grafana-cloud-password]))
+(def auth? (s/keys :req-un [::grafana-cloud-user ::grafana-cloud-password]))
 
-(defn storage? [input]
-  (s/keys :opt-un [::pvc-storage-class-name]))
+(def storage? (s/keys :opt-un [::pvc-storage-class-name]))
 
-(defn filter-regex? [input]
-  (s/keys :req-un [::node-regex ::traefik-regex ::kube-state-regex]))
+(def filter-regex? (s/keys :req-un [::node-regex ::traefik-regex ::kube-state-regex]))
 
 (def metric-regex {:node-regex
                    (str "node_cpu_sec.+|node_load[0-9]+|node_memory_Buf.*|node_memory_Mem.*|"
