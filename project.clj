@@ -32,7 +32,9 @@
   :release-tasks [["test"]
                   ["vcs" "assert-committed"]
                   ["change" "version" "leiningen.release/bump-version" "release"]
-                  ["vcs" "tag" "v" "--no-sign"]]
+                  ["vcs" "commit"]
+                  ["vcs" "tag" "v" "--no-sign"]
+                  ["change" "version" "leiningen.release/bump-version"]]
   :aliases {"inst" ["shell"
                     "sh"
                     "-c"
