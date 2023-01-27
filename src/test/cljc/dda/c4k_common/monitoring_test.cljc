@@ -31,12 +31,12 @@
 
 (deftest should-not-generate-config
   (is (thrown?
-       Exception
+       #?(:clj Exception :cljs js/Error)
        (cut/generate-config invalid-conf auth))))
 
 (deftest should-not-generate-auth
   (is (thrown?
-       Exception
+       #?(:clj Exception :cljs js/Error)
        (cut/generate-config conf invalid-auth))))
 
 (deftest should-generate
