@@ -80,7 +80,7 @@
   [config pg-config?]
   (let [{:keys [pv-storage-size-gb pvc-storage-class-name] 
          :or {pv-storage-size-gb 10
-              pvc-storage-class-name :manual}} config]
+              pvc-storage-class-name "manual"}} config]
   (-> 
    (yaml/from-string (yaml/load-resource "postgres/pvc.yaml"))
    (assoc-in [:spec :resources :requests :storage] (str pv-storage-size-gb "Gi"))

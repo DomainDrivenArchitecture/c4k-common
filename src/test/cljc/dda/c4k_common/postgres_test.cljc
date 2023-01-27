@@ -84,14 +84,14 @@
            :accessModes ["ReadWriteOnce"]
            :resources {:requests {:storage "20Gi"}}}}
          (cut/generate-pvc {:pv-storage-size-gb 20
-                            :pvc-storage-class-name :local-path}))))
+                            :pvc-storage-class-name "local-path"}))))
 
 (deftest should-generate-persistent-volume-claim-diff
   (is (= {:storageClassName-c1 "manual", :storageClassName-c2 "local-path",
           :storage-c1 "10Gi", :storage-c2 "20Gi"}
          (ct/map-diff (cut/generate-pvc {}) 
                         (cut/generate-pvc {:pv-storage-size-gb 20
-                                           :pvc-storage-class-name :local-path})))))
+                                           :pvc-storage-class-name "local-path"})))))
 
 (deftest should-generate-secret
   (is (= {:apiVersion "v1"
