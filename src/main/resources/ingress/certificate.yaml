@@ -9,7 +9,7 @@ spec:
   secretName: c4k-common-cert
   commonName: FQDN
   duration: 2160h # 90d
-  renewBefore: 360h # 15d
+  renewBefore: 480h # 20d
   dnsNames:
   - FQDN
   issuerRef:
