@@ -66,7 +66,7 @@ c4k-common provides the basic functionality for our c4k-modules.
 | c4k-jira         | 1.1     |             -              |                            |                               |                             |                            |                               |                           |
 | c4k-nextcloud    | 4.0     |             -              |             x              |               x               |              x              |             x              |               x               |             x             |
 | c4k-jitsi        | 1.3     |             -              |             x              |               x               |              x              |             x              |               x               |             x             |
-| c4k-gittea       | 1.0     |             x              |                            |               x               |              x              |                            |                               |                           |
+| c4k-gittea       | 1.0     |             x              |             x              |               x               |              x              |             x              |               x               |             x             |
 | c4k-shynet       | 1.0     |             -              |                            |               x               |                             |                            |                               |                           |
 | c4k-website      | 1.1     |             x              |             x              |               x               |              x              |             x              |               x               |             x             |
 
