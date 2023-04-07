@@ -77,7 +77,7 @@
           {:secretName "test-io-cert",
            :commonName "test.de",
            :duration "2160h",
-           :renewBefore "360h",
+           :renewBefore "480h",
            :dnsNames ["test.de" "test.org" "www.test.de" "www.test.org"],
            :issuerRef {:name "prod", :kind "ClusterIssuer"}}}
          (cut/generate-certificate {:fqdns ["test.de" "test.org" "www.test.de" "www.test.org"]
@@ -96,7 +96,7 @@
            {:secretName "web",
             :commonName "test.jit.si",
             :duration "2160h",
-            :renewBefore "360h",
+            :renewBefore "480h",
             :dnsNames ["test.jit.si"],
             :issuerRef {:name "staging", :kind "ClusterIssuer"}}}
           {:apiVersion "networking.k8s.io/v1",
