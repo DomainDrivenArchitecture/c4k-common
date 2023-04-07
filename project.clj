@@ -26,9 +26,9 @@
                        :main dda.c4k-common.uberjar
                        :uberjar-name "c4k-common-standalone.jar"
                        :dependencies [[org.clojure/tools.cli "1.0.214"]
-                                      [ch.qos.logback/logback-classic "1.4.5"
+                                      [ch.qos.logback/logback-classic "1.4.6"
                                        :exclusions [com.sun.mail/javax.mail]]
-                                      [org.slf4j/jcl-over-slf4j "2.0.6"]]}}
+                                      [org.slf4j/jcl-over-slf4j "2.0.7"]]}}
   :release-tasks [["test"]
                   ["vcs" "assert-committed"]
                   ["change" "version" "leiningen.release/bump-version" "release"]
