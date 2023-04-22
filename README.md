@@ -60,15 +60,15 @@ c4k-common provides the basic functionality for our c4k-modules.
 7. use common ingress
 -->
 
-| Module        | Version | [renamed test-helper][th1] | [common load-as-edn][edn1] | [standardized uberjar][ujar1] | [groups for webview][bgrp1] | [use common ingress][ing1] | [use common monitoring][mon1] | [validate examples][val1] |
-|---------------|---------|:--------------------------:|:--------------------------:|:-----------------------------:|:---------------------------:|:--------------------------:|:-----------------------------:|:-------------------------:|
-| c4k-keycloak  | 0.2     |             -              |             x              |               x               |              x              |             x              |               x               |             x             |
-| c4k-jira      | 1.1     |             -              |                            |                               |                             |                            |                               |                           |
-| c4k-nextcloud | 4.0     |             -              |             x              |               x               |              x              |             x              |               x               |             x             |
-| c4k-jitsi     | 1.3     |             -              |             x              |               x               |              x              |             x              |               x               |             x             |
-| c4k-forgejo   | 1.1     |             x              |             x              |               x               |              x              |             x              |               x               |             x             |
-| c4k-shynet    | 1.0     |             -              |                            |               x               |                             |                            |                               |                           |
-| c4k-website   | 1.1     |             x              |             x              |               x               |              x              |             x              |               x               |             x             |
+| Module        | Version | [renamed test-helper][th1] | [common load-as-edn][edn1] | [standardized uberjar][ujar1] | [groups for webview][bgrp1] | [use common ingress][ing1] | [use common monitoring][mon1] | [validate examples][val1] | [repo model][repo1] |
+|---------------|---------|:--------------------------:|:--------------------------:|:-----------------------------:|:---------------------------:|:--------------------------:|:-----------------------------:|:-------------------------:|:-------------------:|
+| c4k-keycloak  | 0.2     |             -              |             x              |               x               |              x              |             x              |               x               |             x             |                     |
+| c4k-jira      | 1.1     |             -              |                            |                               |                             |                            |                               |                           |                     |
+| c4k-nextcloud | 4.0     |             -              |             x              |               x               |              x              |             x              |               x               |             x             |                     |
+| c4k-jitsi     | 1.3     |             -              |             x              |               x               |              x              |             x              |               x               |             x             |                     |
+| c4k-forgejo   | 2.0     |             x              |             x              |               x               |              x              |             x              |               x               |             x             |          x          |
+| c4k-shynet    | 1.0     |             -              |                            |               x               |                             |                            |                               |                           |                     |
+| c4k-website   | 1.1     |             x              |             x              |               x               |              x              |             x              |               x               |             x             |                     |
 
 [th1]: https://gitlab.com/domaindrivenarchitecture/c4k-gitea/-/merge_requests/1
 [edn1]: https://gitlab.com/domaindrivenarchitecture/c4k-website/-/merge_requests/1
@@ -77,6 +77,7 @@ c4k-common provides the basic functionality for our c4k-modules.
 [bgrp1]: https://repo.prod.meissa.de/meissa/c4k-jitsi/commit/7ea442adaef727d5b48b242fd0baaaf51902d06e
 [mon1]:  https://repo.prod.meissa.de/meissa/c4k-jitsi/commit/19e580188ea56ea26ff3a0bfb08ca428b881ad9a
 [val1]:  https://repo.prod.meissa.de/meissa/c4k-jitsi/commit/5f08a108072569473463fb8f19150a12e564e54f
+[repo1]:  https://repo.prod.meissa.de/meissa/c4k-forgejo/commit/e9ee6136f3347d5fccefa6b5b4a02d30c4dc42e1
 
 ## License
 
