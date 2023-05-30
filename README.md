@@ -68,7 +68,7 @@ c4k-common provides the basic functionality for our c4k-modules.
 | c4k-jitsi     | 1.3     |             -              |             x              |               x               |              x              |             x              |               x               |             x             |          x          |
 | c4k-forgejo   | 2.0     |             x              |             x              |               x               |              x              |             x              |               x               |             x             |          x          |
 | c4k-shynet    | 1.0     |             -              |                            |               x               |                             |                            |                               |                           |          x          |
-| c4k-website   | 1.1     |             x              |             x              |               x               |              x              |             x              |               x               |             x             |                     |
+| c4k-website   | 1.1     |             x              |             x              |               x               |              x              |             x              |               x               |             x             |          x          |
 
 [th1]: https://gitlab.com/domaindrivenarchitecture/c4k-gitea/-/merge_requests/1
 [edn1]: https://gitlab.com/domaindrivenarchitecture/c4k-website/-/merge_requests/1
