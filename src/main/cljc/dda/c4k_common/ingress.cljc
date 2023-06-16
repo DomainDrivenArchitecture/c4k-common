@@ -27,6 +27,7 @@
 (def certificate? (s/keys :req-un [::fqdns ::app-name ::cert-name]
                           :opt-un [::issuer]))
 
+; TODO: use this default consistently
 (def ingress-defaults {:issuer "staging"})
 
 #?(:cljs
