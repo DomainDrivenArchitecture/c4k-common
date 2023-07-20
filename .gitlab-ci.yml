@@ -5,7 +5,7 @@ stages:
   - upload
 
 .cljs-job: &cljs
-  image: domaindrivenarchitecture/shadow-cljs
+  image: "domaindrivenarchitecture/ddadevops-clojure:4.1.0"
   cache:
     key: ${CI_COMMIT_REF_SLUG}
     paths:
@@ -17,7 +17,7 @@ stages:
     - npm install
 
 .clj-job: &clj
-  image: domaindrivenarchitecture/lein
+  image: "domaindrivenarchitecture/ddadevops-clojure:4.1.0"
   cache:
     key: ${CI_COMMIT_REF_SLUG}
     paths:
@@ -26,33 +26,34 @@ stages:
     - mkdir -p /root/.lein
     - echo "{:auth {:repository-auth {#\"clojars\" {:username \"${CLOJARS_USER}\" :password \"${CLOJARS_TOKEN_DOMAINDRIVENARCHITECTURE}\" }}}}" > ~/.lein/profiles.clj
 
+.tag_only: &tag_only
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      when: never
+    - if: '$CI_COMMIT_TAG =~ /^[0-9]+\.[0-9]+\.[0-9]+$/'
+
 test-clj:
   <<: *clj
   stage: build_and_test
   script:
-    - lein test
+    - pyb test_clj
 
 test-cljs:
   <<: *cljs
   stage: build_and_test
   script:
-    - shadow-cljs compile test
-    - node target/node-tests.js
+    - pyb test_cljs
 
 upload-clj-release:
   <<: *clj
+  <<: *tag_only
   stage: upload
-  rules:
-    - if: '$CI_COMMIT_TAG != null'
   script:
-    - lein deploy
+    - pyb upload_clj
 
 upload-cljs-release:
   <<: *clj
+  <<: *tag_only
   stage: upload
-  rules:
-    - if: '$CI_COMMIT_TAG != null'
   script:
-    - mv project.clj project-clj.clj && mv project-cljs.clj project.clj
-    - lein deploy
-
+    - pyb upload_cljs
