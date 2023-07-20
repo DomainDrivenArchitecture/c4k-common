@@ -5,7 +5,7 @@ stages:
   - upload
 
 .cljs-job: &cljs
-  image: "domaindrivenarchitecture/ddadevops-clojure:4.1.0"
+  image: "domaindrivenarchitecture/ddadevops-clojure:4.2.0"
   cache:
     key: ${CI_COMMIT_REF_SLUG}
     paths:
@@ -17,7 +17,7 @@ stages:
     - npm install
 
 .clj-job: &clj
-  image: "domaindrivenarchitecture/ddadevops-clojure:4.1.0"
+  image: "domaindrivenarchitecture/ddadevops-clojure:4.2.0"
   cache:
     key: ${CI_COMMIT_REF_SLUG}
     paths:
