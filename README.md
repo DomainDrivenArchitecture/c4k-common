@@ -63,7 +63,7 @@ c4k-common provides the basic functionality for our c4k-modules.
 | Module        | Version | [common load-as-edn][edn1] | [groups for webview][bgrp1] | [use common ingress][ing1] | [use common monitoring][mon1] | [validate examples][val1] | [ci with pyb][cipyb] |
 |---------------|---------|:--------------------------:|:---------------------------:|:--------------------------:|:-----------------------------:|:-------------------------:|:--------------------:|
 | c4k-keycloak  | 0.2     |             x              |              x              |             x              |               x               |             x             |                      |
-| c4k-jira      | 1.1     |             -              |              -              |             -              |               -               |             -             |                      |
+| c4k-taiga     | 0.1     |                            |                             |                            |                               |                           |                      |
 | c4k-nextcloud | 4.0     |             x              |              x              |             x              |               x               |             x             |                      |
 | c4k-jitsi     | 1.3     |             x              |              x              |             x              |               x               |             x             |          x           |
 | c4k-forgejo   | 2.0     |             x              |              x              |             x              |               x               |             x             |                      |
