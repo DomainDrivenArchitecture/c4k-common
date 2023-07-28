@@ -78,6 +78,17 @@ c4k-common provides the basic functionality for our c4k-modules.
 [repo1]: https://repo.prod.meissa.de/meissa/c4k-forgejo/commit/e9ee6136f3347d5fccefa6b5b4a02d30c4dc42e1
 [cipyb]: https://gitlab.com/domaindrivenarchitecture/c4k-jitsi/-/merge_requests/1
 
+## Development & mirrors
+
+Development happens at: https://repo.prod.meissa.de/meissa/c4k-common
+
+Mirrors are:
+
+* https://gitlab.com/domaindrivenarchitecture/c4k-common (issues and PR)
+* https://github.com/DomainDrivenArchitecture/c4k-common
+
+For more details about our repository model see: https://repo.prod.meissa.de/meissa/federate-your-repos
+
 ## License
 
 Copyright © 2022 meissa GmbH
