@@ -28,21 +28,6 @@
   (let [content (-> (get-element-by-id name)
                     (.-value))]
     (cond
-      (and optional (some? deserializer))
-      (when-not (st/blank? content)
-        (apply deserializer [content]))
-      (and (false? optional) (some? deserializer))
-      (apply deserializer [content])
-      :else
-      content)))
-
-(defn-spec get-content-from-element-2 js-object?
-  [name string?
-   & {:keys [deserializer optional]
-      :or {deserializer nil optional false}} dom-function-parameter]
-  (let [content (-> (get-element-by-id name)
-                    (.-value))]
-    (cond
       (and optional (st/blank? content))
       nil
       (some? deserializer)
