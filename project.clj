@@ -1,4 +1,4 @@
-(defproject org.domaindrivenarchitecture/c4k-common-clj "6.0.3-SNAPSHOT"
+(defproject org.domaindrivenarchitecture/c4k-common-clj "6.0.3"
   :description "Contains predicates and tools for c4k"
   :url "https://domaindrivenarchitecture.org"
   :license {:name "Apache License, Version 2.0"
@@ -8,7 +8,7 @@
                  [aero "1.1.6"]
                  [orchestra "2021.01.01-1"]
                  [expound "0.9.0"]
-                 [clj-commons/clj-yaml "1.0.26"]]
+                 [clj-commons/clj-yaml "1.0.27"]]
   :target-path "target/%s/"
   :source-paths ["src/main/cljc"
                  "src/main/clj"]
@@ -25,10 +25,10 @@
              :uberjar {:aot :all
                        :main dda.c4k-common.uberjar
                        :uberjar-name "c4k-common-standalone.jar"
-                       :dependencies [[org.clojure/tools.cli "1.0.214"]
-                                      [ch.qos.logback/logback-classic "1.4.6"
+                       :dependencies [[org.clojure/tools.cli "1.0.219"]
+                                      [ch.qos.logback/logback-classic "1.4.11"
                                        :exclusions [com.sun.mail/javax.mail]]
-                                      [org.slf4j/jcl-over-slf4j "2.0.7"]]}}
+                                      [org.slf4j/jcl-over-slf4j "2.0.9"]]}}
   :release-tasks [["test"]
                   ["vcs" "assert-committed"]
                   ["change" "version" "leiningen.release/bump-version" "release"]
