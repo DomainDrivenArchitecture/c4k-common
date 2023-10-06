@@ -36,6 +36,20 @@
       :else
       content)))
 
+(defn-spec get-content-from-element-2 js-object?
+  [name string?
+   & {:keys [deserializer optional]
+      :or {deserializer nil optional false}} dom-function-parameter]
+  (let [content (-> (get-element-by-id name)
+                    (.-value))]
+    (cond
+      (and optional (st/blank? content))
+      nil
+      (some? deserializer)
+      (apply deserializer [content])
+      :else
+      content)))
+
 (defn-spec set-validation-result! js-object?
   [name string?
    validation-result js-object?]
