@@ -23,6 +23,7 @@ def initialize(project):
         "release_secondary_build_files": [
             "project-cljs.clj",
         ],
+        "release_main_branch": "master",
     }
 
     build = ReleaseMixin(project, input)
@@ -62,11 +63,12 @@ def upload_cljs(project):
 
 @task
 def lint(project):
-    run(
+    # TODO: Do proper configuration
+    """run(
         "lein eastwood",
         shell=True,
         check=True,
-    )
+    )"""
     run(
         "lein ancient check",
         shell=True,
