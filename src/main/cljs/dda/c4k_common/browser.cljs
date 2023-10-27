@@ -58,7 +58,7 @@
    spec js-object?
    & {:keys [deserializer optional]
       :or {deserializer identity optional false}} dom-function-parameter]
-  (let [content (get-deserialized-content name :optional optional :deserializer deserializer)]
+  (let [content (get-content-from-element name :optional optional :deserializer deserializer)]
     (if (or (and optional (st/blank? content)) 
             (s/valid? spec content))
       (set-validation-result! name "")
