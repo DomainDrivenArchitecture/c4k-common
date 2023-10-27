@@ -22,18 +22,26 @@
 (s/def ::optional boolean?)
 (def dom-function-parameter (s/keys :opt-un [::deserializer ::optional]))
 (defn-spec get-content-from-element js-object?
+  [name string?]
+  (-> (get-element-by-id name)
+      (.-value)))
+
+(defn-spec deserialize-content js-object?
+  [content string?
+   deserializer ::deserializer
+   optional ::optional]
+  (cond
+    (and optional (st/blank? content))
+    nil
+    :else
+    (apply deserializer [content])))
+
+(defn-spec get-deserialized-content js-object?
   [name string?
    & {:keys [deserializer optional]
-      :or {deserializer nil optional false}} dom-function-parameter]
-  (let [content (-> (get-element-by-id name)
-                    (.-value))]
-    (cond
-      (and optional (st/blank? content))
-      nil
-      (some? deserializer)
-      (apply deserializer [content])
-      :else
-      content)))
+      :or {deserializer identity optional false}} dom-function-parameter]
+  (-> (get-content-from-element name)
+      (deserialize-content deserializer optional)))
 
 (defn-spec set-validation-result! js-object?
   [name string?
@@ -49,8 +57,8 @@
   [name string?
    spec js-object?
    & {:keys [deserializer optional]
-      :or {deserializer nil optional false}} dom-function-parameter]
-  (let [content (get-content-from-element name :optional optional :deserializer deserializer)]
+      :or {deserializer identity optional false}} dom-function-parameter]
+  (let [content (get-deserialized-content name :optional optional :deserializer deserializer)]
     (if (or (and optional (st/blank? content)) 
             (s/valid? spec content))
       (set-validation-result! name "")
