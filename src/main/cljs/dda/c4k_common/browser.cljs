@@ -21,7 +21,7 @@
 (s/def ::deserializer fn?)
 (s/def ::optional boolean?)
 (def dom-function-parameter (s/keys :opt-un [::deserializer ::optional]))
-(defn-spec get-content-from-element js-object?
+(defn-spec get-content-value-from-element js-object?
   [name string?]
   (-> (get-element-by-id name)
       (.-value)))
@@ -36,11 +36,11 @@
     :else
     (apply deserializer [content])))
 
-(defn-spec get-deserialized-content js-object?
+(defn-spec get-content-from-element js-object?
   [name string?
    & {:keys [deserializer optional]
       :or {deserializer identity optional false}} dom-function-parameter]
-  (-> (get-content-from-element name)
+  (-> (get-content-value-from-element name)
       (deserialize-content deserializer optional)))
 
 (defn-spec set-validation-result! js-object?

@@ -8,7 +8,7 @@
 (st/instrument `cut/get-element-by-id)
 (st/instrument `cut/get-content-from-element)
 (st/instrument `cut/deserialize-content)
-(st/instrument `cut/get-deserialized-content)
+(st/instrument `cut/get-content-value-from-element)
 (st/instrument `cut/set-validation-result!)
 (st/instrument `cut/validate!)
 (st/instrument `cut/set-output!)
