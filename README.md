@@ -60,15 +60,15 @@ c4k-common provides the basic functionality for our c4k-modules.
 7. use common ingress
 -->
 
-| Module        | Version | [common load-as-edn][edn1] | [groups for webview][bgrp1] | [use common ingress][ing1] | [use common monitoring][mon1] | [validate examples][val1] | [ci with pyb][cipyb] |
-|---------------|---------|:--------------------------:|:---------------------------:|:--------------------------:|:-----------------------------:|:-------------------------:|:--------------------:|
-| c4k-keycloak  | 0.2     |             x              |              x              |             x              |               x               |             x             |                      |
-| c4k-taiga     | 0.1     |                            |                             |                            |                               |                           |                      |
-| c4k-nextcloud | 4.0     |             x              |              x              |             x              |               x               |             x             |                      |
-| c4k-jitsi     | 1.3     |             x              |              x              |             x              |               x               |             x             |          x           |
-| c4k-forgejo   | 2.0     |             x              |              x              |             x              |               x               |             x             |                      |
-| c4k-shynet    | 1.0     |                            |                             |                            |                               |                           |                      |
-| c4k-website   | 1.1     |             x              |              x              |             x              |               x               |             x             |                      |
+| Module        | Version | [common load-as-edn][edn1] | [groups for webview][bgrp1] | [use common ingress][ing1] | [use common monitoring][mon1] | [validate examples][val1] | [ci with pyb][cipyb] | [inline-macro to load resources][macro] |
+|---------------|---------|:--------------------------:|:---------------------------:|:--------------------------:|:-----------------------------:|:-------------------------:|:--------------------:|:---------------------------------------:|
+| c4k-keycloak  | 0.2     |             x              |              x              |             x              |               x               |             x             |                      |                                         |
+| c4k-taiga     | 0.1     |                            |                             |                            |                               |                           |                      |                                         |
+| c4k-nextcloud | 4.0     |             x              |              x              |             x              |               x               |             x             |                      |                                         |
+| c4k-jitsi     | 1.6     |             x              |              x              |             x              |               x               |             x             |          x           |                    x                    |
+| c4k-forgejo   | 2.0     |             x              |              x              |             x              |               x               |             x             |                      |                                         |
+| c4k-shynet    | 1.0     |                            |                             |                            |                               |                           |                      |                                         |
+| c4k-website   | 1.1     |             x              |              x              |             x              |               x               |             x             |                      |                                         |
 
 [edn1]: https://gitlab.com/domaindrivenarchitecture/c4k-website/-/merge_requests/1
 [ing1]:  https://repo.prod.meissa.de/meissa/c4k-jitsi/commit/214aa41c28662fbf7a49998e17404e7ac9216430
@@ -77,6 +77,7 @@ c4k-common provides the basic functionality for our c4k-modules.
 [val1]:  https://repo.prod.meissa.de/meissa/c4k-jitsi/commit/5f08a108072569473463fb8f19150a12e564e54f
 [repo1]: https://repo.prod.meissa.de/meissa/c4k-forgejo/commit/e9ee6136f3347d5fccefa6b5b4a02d30c4dc42e1
 [cipyb]: https://gitlab.com/domaindrivenarchitecture/c4k-jitsi/-/merge_requests/1
+[macro]: https://repo.prod.meissa.de/meissa/c4k-jitsi/commit/61d05ceedb6dcbc6bb96b96fe6f03598e2878195
 
 ## Development & mirrors
 
