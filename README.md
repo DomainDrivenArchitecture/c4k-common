@@ -66,7 +66,7 @@ c4k-common provides the basic functionality for our c4k-modules.
 | c4k-taiga     | 0.1     |                            |                             |                            |                               |                           |                      |                                         |
 | c4k-nextcloud | 4.0     |             x              |              x              |             x              |               x               |             x             |                      |                                         |
 | c4k-jitsi     | 1.6     |             x              |              x              |             x              |               x               |             x             |          x           |                    x                    |
-| c4k-forgejo   | 2.0     |             x              |              x              |             x              |               x               |             x             |                      |                                         |
+| c4k-forgejo   | 2.0     |             x              |              x              |             x              |               x               |             x             |                      |                 x                       |
 | c4k-shynet    | 1.0     |                            |                             |                            |                               |                           |                      |                                         |
 | c4k-website   | 1.1     |             x              |              x              |             x              |               x               |             x             |                      |                                         |
 
