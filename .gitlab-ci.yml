@@ -13,6 +13,7 @@ stages:
       - .shadow-cljs/
       - .m2
   before_script:
+    - export RELEASE_ARTIFACT_TOKEN=$MEISSA_REPO_BUERO_RW
     - echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/.npmrc
     - npm install
 
@@ -23,6 +24,7 @@ stages:
     paths:
       - .m2
   before_script:
+    - export RELEASE_ARTIFACT_TOKEN=$MEISSA_REPO_BUERO_RW
     - mkdir -p /root/.lein
     - echo "{:auth {:repository-auth {#\"clojars\" {:username \"${CLOJARS_USER}\" :password \"${CLOJARS_TOKEN_DOMAINDRIVENARCHITECTURE}\" }}}}" > ~/.lein/profiles.clj
 
