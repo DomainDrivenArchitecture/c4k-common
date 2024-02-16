@@ -8,10 +8,10 @@
   [input string?]
   (.encodeToString 
    (Base64/getEncoder) 
-   (.getBytes input "UTF-8"))) 
+   (.getBytes ^String input "UTF-8"))) 
 
 (defn-spec decode string?
   [input string?]
   (String. 
-   (.decode (Base64/getDecoder) input) 
+   (.decode (Base64/getDecoder) ^String input) 
    "UTF-8"))
