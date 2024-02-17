@@ -15,7 +15,7 @@
 
 (defn postgres-image?
   [input]
-  (contains? #{"postgres:13" "postgres:14"} input))
+  (contains? #{"postgres:13" "postgres:14" "postgres:15" "postgres:16"} input))
 
 (s/def ::postgres-db-user cp/bash-env-string?)
 (s/def ::postgres-db-password cp/bash-env-string?)

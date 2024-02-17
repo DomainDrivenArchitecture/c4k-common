@@ -77,9 +77,9 @@
   [simple-ingress-config simple-ingress?]
   (let [{:keys [service-name]} simple-ingress-config
         config (merge {:app-name service-name
-                               :ingress-name service-name
-                               :cert-name service-name}
-                              ingress-defaults
-                              simple-ingress-config)]
+                       :ingress-name service-name
+                       :cert-name service-name}
+                      ingress-defaults
+                      simple-ingress-config)]
     [(generate-certificate config)
      (generate-ingress config)]))
