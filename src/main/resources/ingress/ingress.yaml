@@ -1,10 +1,7 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: c4k-common-https-ingress
   namespace: default
-  labels:
-    app.kubernetes.part-of: c4k-common-app
   annotations:
     traefik.ingress.kubernetes.io/router.entrypoints: web, websecure
     traefik.ingress.kubernetes.io/router.middlewares: default-redirect-https@kubernetescrd
