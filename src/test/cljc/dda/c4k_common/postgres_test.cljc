@@ -39,6 +39,7 @@
            :resources {:requests {:storage "10Gi"}}}}
          (cut/generate-pvc {}))))
 
+
 (deftest should-generate-secret
   (is (= {:apiVersion "v1",
           :kind "Secret",
