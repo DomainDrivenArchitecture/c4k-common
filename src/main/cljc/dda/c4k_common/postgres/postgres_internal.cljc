@@ -8,8 +8,7 @@
    [dda.c4k-common.base64 :as b64]
    [dda.c4k-common.predicate :as cp]
    [dda.c4k-common.common :as cm]
-   [dda.c4k-common.namespace :as ns]
-   [dda.c4k-common.postgres.postgres-internal :as int]))
+   [dda.c4k-common.namespace :as ns]))
 
 (defn postgres-size?
   [input]
