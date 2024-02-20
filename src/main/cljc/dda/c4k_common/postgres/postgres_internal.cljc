@@ -30,7 +30,7 @@
   (s/keys :req-un [::postgres-size ::db-name ::postgres-data-volume-path
                    ::pvc-storage-class-name ::pv-storage-size-gb]))
 (def pg-auth?
-  (s/keys :opt-un [::postgres-db-user ::postgres-db-password]))
+  (s/keys :req-un [::postgres-db-user ::postgres-db-password]))
 
 (def postgres-function (s/keys :opt-un [::deserializer ::optional]))
 

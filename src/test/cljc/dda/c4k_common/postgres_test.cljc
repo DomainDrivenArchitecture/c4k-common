@@ -39,3 +39,10 @@
            :accessModes ["ReadWriteOnce"]
            :resources {:requests {:storage "10Gi"}}}}
          (cut/generate-pvc {}))))
+
+
+(deftest should-generate
+  (is (= 6
+         (count (cut/generate {} 
+                              {:postgres-db-user "user"
+                               :postgres-db-password "password"})))))

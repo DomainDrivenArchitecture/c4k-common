@@ -1,14 +1,8 @@
 (ns dda.c4k-common.postgres
   (:require
    [clojure.spec.alpha :as s]
-   #?(:cljs [shadow.resource :as rc])
    #?(:clj [orchestra.core :refer [defn-spec]]
       :cljs [orchestra.core :refer-macros [defn-spec]])
-   #?(:cljs [dda.c4k-common.macros :refer-macros [inline-resources]])
-   [dda.c4k-common.yaml :as yaml]
-   [dda.c4k-common.base64 :as b64]
-   [dda.c4k-common.predicate :as cp]
-   [dda.c4k-common.common :as cm]
    [dda.c4k-common.postgres.postgres-internal :as int]))
 
 (def postgres-size? int/postgres-size?)
@@ -75,3 +69,16 @@
 (defn-spec generate-service map?
   []
   (int/generate-service))
+
+
+(defn-spec generate seq?
+  [config pg-config? 
+   auth pg-auth?]
+  (let [final-config (merge default-config
+                            config)]
+    [(int/generate-secret auth)
+     (int/generate-persistent-volume final-config)
+     (int/generate-config final-config)
+     (int/generate-pvc final-config)
+     (int/generate-deployment final-config)
+     (int/generate-service)]))
