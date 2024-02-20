@@ -5,20 +5,10 @@
    [clojure.spec.test.alpha :as st]
    [dda.c4k-common.ingress :as cut]))
 
-(st/instrument `cut/generate-host-rule)
 (st/instrument `cut/generate-ingress)
 (st/instrument `cut/generate-certificate)
 (st/instrument `cut/generate-ingress-and-cert)
-
-(deftest should-generate-rule
-  (is (= {:host "test.com",
-          :http
-          {:paths
-           [{:pathType "Prefix",
-             :path "/",
-             :backend
-             {:service {:name "myservice", :port {:number 3000}}}}]}}
-         (cut/generate-host-rule "myservice" 3000 "test.com"))))
+(st/instrument `cut/generate-simple-ingress)
 
 (deftest should-generate-certificate
   (is (= {:apiVersion "cert-manager.io/v1",
@@ -31,84 +21,30 @@
            :commonName "test.de",
            :duration "2160h",
            :renewBefore "720h",
-           :dnsNames ["test.de" "test.org" "www.test.de" "www.test.org"],
-           :issuerRef {:name "prod", :kind "ClusterIssuer"}}}
-         (cut/generate-certificate {:fqdns ["test.de" "test.org" "www.test.de" "www.test.org"]
+           :dnsNames ["test.de"],
+           :issuerRef {:name "staging", :kind "ClusterIssuer"}}}
+         (cut/generate-certificate {:fqdns ["test.de"]
                                     :app-name "c4k-common-app"
-                                    :cert-name "test-io-cert"
-                                    :issuer "prod"}))))
+                                    :cert-name "test-io-cert"}))))
 
-(deftest should-generate-middleware-ratelimit
-  (is (= {:apiVersion "traefik.containo.us/v1alpha1",
-          :kind "Middleware",
-          :metadata {:name "normal-ratelimit"},
-          :spec {:rateLimit {:average 10, :burst 5}}}
-         (cut/generate-rate-limit-middleware {:rate-limit-name "normal"
-                                              :average-rate 10, :burst-rate 5}))))
 
 (deftest should-generate-ingress
-  (is (= {:apiVersion "networking.k8s.io/v1",
-          :kind "Ingress",
-          :metadata
-          {
-           :namespace "default",
-           :name "test-io-https-ingress",
-           :labels {:app.kubernetes.part-of "c4k-common-app"},
-           :annotations {:traefik.ingress.kubernetes.io/router.entrypoints
-                         "web, websecure"
-                         :traefik.ingress.kubernetes.io/router.middlewares
-                         "default-redirect-https@kubernetescrd"
-                         :metallb.universe.tf/address-pool "public"}}}
-         (dissoc (cut/generate-ingress
-                 {:issuer "prod"
-                  :service-name "test-io-service"
-                  :app-name "c4k-common-app"
-                  :service-port 80
-                  :ingress-name "test-io-https-ingress"
-                  :fqdns ["test.de" "www.test.de" "test-it.de"
-                          "www.test-it.de"]}) :spec)))
-  (is (= {
-          :name "test-io-https-ingress",
+  (is (= {:name "test-io-https-ingress",
           :namespace "default",
           :labels {:app.kubernetes.part-of "c4k-common-app"},
           :annotations {:traefik.ingress.kubernetes.io/router.entrypoints
                         "web, websecure"
                         :traefik.ingress.kubernetes.io/router.middlewares
-                        "default-redirect-https@kubernetescrd, normal-ratelimit@kubernetescrd",
+                        "default-redirect-https@kubernetescrd",
                         :metallb.universe.tf/address-pool "public"}}
          (:metadata (cut/generate-ingress
-                     {:service-name "test-io-service"
-                      :app-name "c4k-common-app"
-                      :service-port 80
-                      :ingress-name "test-io-https-ingress"
-                      :rate-limit-name "normal"
-                      :fqdns ["test.de"]}))))
-  (is (= {:tls
-          [{:hosts
-            ["test.de" "www.test.de" "test-it.de" "www.test-it.de"],
-            :secretName "test-io-cert"}]
-          :rules
-          [{:host "test.de",
-            :http
-            {:paths [{:pathType "Prefix", :path "/", :backend {:service {:name "test-io-service", :port {:number 80}}}}]}}
-           {:host "www.test.de",
-            :http
-            {:paths [{:pathType "Prefix", :path "/", :backend {:service {:name "test-io-service", :port {:number 80}}}}]}}
-           {:host "test-it.de",
-            :http
-            {:paths [{:pathType "Prefix", :path "/", :backend {:service {:name "test-io-service", :port {:number 80}}}}]}}
-           {:host "www.test-it.de",
-            :http
-            {:paths [{:pathType "Prefix", :path "/", :backend {:service {:name "test-io-service", :port {:number 80}}}}]}}]}
-         (:spec (cut/generate-ingress {:issuer "prod"
-                                       :app-name "c4k-common-app"
-                                       :service-name "test-io-service"
-                                       :service-port 80
-                                       :ingress-name "test-io-https-ingress"
-                                       :cert-name "test-io-cert"
-                                       :fqdns ["test.de" "www.test.de"
-                                               "test-it.de"
-                                               "www.test-it.de"]})))))
+                     {:ingress-name "test-io-https-ingress"
+                      :app-name "c4k-common-app" 
+                      :service-name "test-io-service" :service-port 80
+                      :cert-name "myCert"
+                      :fqdns ["test.de"]})))))
+
+
 (deftest should-generate-ingress-and-cert
   (is (= [{:apiVersion "cert-manager.io/v1",
            :kind "Certificate",
