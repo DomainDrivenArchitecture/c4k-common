@@ -1,8 +1,8 @@
-(ns dda.c4k-common.monitoring-regex-test
+(ns dda.c4k-common.monitoring.monitoring-regex-test
   (:require
    [clojure.test :refer [deftest is are testing run-tests]]
    [data-test :refer :all]
-   [dda.c4k-common.monitoring :as cut]))
+   [dda.c4k-common.monitoring.monitoring-internal :as cut]))
 
 (defn filter-by-regex
   [regex-str collection]

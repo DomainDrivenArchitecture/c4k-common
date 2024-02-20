@@ -49,3 +49,20 @@ C4Context
     Rel(app-backup, app-db-storage, "*dbc")
 
 ```
+
+# Layout of a component on example of namespace
+
+
+```mermaid
+classDiagram
+    
+    class namespace {
+        config? // the external representation
+        default-config // static defaults
+        generate(config, auth) seq
+    }
+    class namespace-internal {
+        config? // the internal representation
+        generate-namespace(config) map
+    }
+```
