@@ -3,6 +3,7 @@
    [clojure.spec.alpha :as s]
    #?(:clj [orchestra.core :refer [defn-spec]]
       :cljs [orchestra.core :refer-macros [defn-spec]])
+   [dda.c4k-common.namespace :as ns]
    [dda.c4k-common.postgres.postgres-internal :as int]))
 
 (def postgres-size? int/postgres-size?)
@@ -19,18 +20,19 @@
 
 (def pg-config?
   (s/keys :opt-un [::postgres-size ::db-name ::postgres-data-volume-path
-                   ::pvc-storage-class-name ::pv-storage-size-gb]))
+                   ::pvc-storage-class-name ::pv-storage-size-gb ::ns/namespace]))
 (def pg-auth?
   (s/keys :opt-un [::postgres-db-user ::postgres-db-password]))
 
 (def postgres-function (s/keys :opt-un [::deserializer ::optional]))
 
-(def default-config {:postgres-image "postgres:13"
-                     :postgres-size :2gb
-                     :db-name "postgres"
-                     :postgres-data-volume-path "/var/postgres"
-                     :pv-storage-size-gb 10
-                     :pvc-storage-class-name "manual"})
+(def default-config (merge ns/default-config
+                           {:postgres-image "postgres:13"
+                            :postgres-size :2gb
+                            :db-name "postgres"
+                            :postgres-data-volume-path "/var/postgres"
+                            :pv-storage-size-gb 10
+                            :pvc-storage-class-name "manual"}))
 
 
 (defn-spec generate-config map?
@@ -62,13 +64,16 @@
 
 
 (defn-spec generate-secret map?
-  [my-auth pg-auth?]
-  (int/generate-secret my-auth))
+  [config pg-config?
+   auth pg-auth?]
+  (int/generate-secret config auth))
 
 
 (defn-spec generate-service map?
-  []
-  (int/generate-service))
+  [config pg-config?]
+  (let [final-config (merge default-config
+                            config)]
+    (int/generate-service final-config)))
 
 
 (defn-spec generate seq?
@@ -76,9 +81,9 @@
    auth pg-auth?]
   (let [final-config (merge default-config
                             config)]
-    [(int/generate-secret auth)
+    [(int/generate-secret final-config auth)
      (int/generate-persistent-volume final-config)
      (int/generate-config final-config)
      (int/generate-pvc final-config)
      (int/generate-deployment final-config)
-     (int/generate-service)]))
+     (int/generate-service final-config)]))

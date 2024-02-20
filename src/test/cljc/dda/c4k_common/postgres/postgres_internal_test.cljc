@@ -3,7 +3,6 @@
    #?(:clj [clojure.test :refer [deftest is are testing run-tests]]
       :cljs [cljs.test :refer-macros [deftest is are testing run-tests]])
    [clojure.spec.test.alpha :as st]
-   [dda.c4k-common.test-helper :as ct]
    [dda.c4k-common.postgres.postgres-internal :as cut]))
 
 (st/instrument `cut/generate-config)
@@ -14,6 +13,26 @@
 (st/instrument `cut/generate-service)
 
 (deftest should-generate-config
+  (is (= {:name "postgres-config",
+          :namespace "default"
+          :labels {:app "postgres"}}
+         (:metadata (cut/generate-config {:postgres-image "postgres:13"
+                                          :postgres-size :2gb
+                                          :db-name "postgres"
+                                          :postgres-data-volume-path "/var/postgres"
+                                          :pv-storage-size-gb 10
+                                          :pvc-storage-class-name "manual"
+                                          :namespace "default"}))))
+  (is (= {:name "postgres-config",
+          :namespace "myapp"
+          :labels {:app "postgres"}}
+         (:metadata (cut/generate-config {:postgres-image "postgres:13"
+                                          :postgres-size :2gb
+                                          :db-name "postgres"
+                                          :postgres-data-volume-path "/var/postgres"
+                                          :pv-storage-size-gb 10
+                                          :pvc-storage-class-name "manual"
+                                          :namespace "myapp"}))))
   (is (= {:postgres-db "postgres"
           :postgresql.conf
           "max_connections = 100\nwork_mem = 4MB\nshared_buffers = 512MB\n"}
@@ -22,7 +41,8 @@
                                       :db-name "postgres"
                                       :postgres-data-volume-path "/var/postgres"
                                       :pv-storage-size-gb 10
-                                      :pvc-storage-class-name "manual"}))))
+                                      :pvc-storage-class-name "manual"
+                                      :namespace "default"}))))
   (is (= {:postgres-db "postgres"
           :postgresql.conf
           "max_connections = 700\nwork_mem = 3MB\nshared_buffers = 2048MB\n"}
@@ -31,7 +51,8 @@
                                       :db-name "postgres"
                                       :postgres-data-volume-path "/var/postgres"
                                       :pv-storage-size-gb 10
-                                      :pvc-storage-class-name "manual"}))))
+                                      :pvc-storage-class-name "manual"
+                                      :namespace "default"}))))
   (is (= {:postgres-db "test"
           :postgresql.conf
           "max_connections = 100\nwork_mem = 4MB\nshared_buffers = 512MB\n"}
@@ -40,7 +61,8 @@
                                       :db-name "test"
                                       :postgres-data-volume-path "/var/postgres"
                                       :pv-storage-size-gb 10
-                                      :pvc-storage-class-name "manual"}))))
+                                      :pvc-storage-class-name "manual"
+                                      :namespace "default"}))))
   )
 
 (deftest should-generate-deployment
@@ -72,8 +94,18 @@
                                            :db-name "test"
                                            :postgres-data-volume-path "/var/postgres"
                                            :pv-storage-size-gb 10
-                                           :pvc-storage-class-name "manual"})
-                 [:spec :template :spec :containers]))))
+                                           :pvc-storage-class-name "manual"
+                                           :namespace "default"})
+                 [:spec :template :spec :containers])))
+  (is (= {:name "postgresql", 
+          :namespace "myapp"}
+         (:metadata (cut/generate-deployment {:postgres-image "postgres:14"
+                                              :postgres-size :2gb
+                                              :db-name "test"
+                                              :postgres-data-volume-path "/var/postgres"
+                                              :pv-storage-size-gb 10
+                                              :pvc-storage-class-name "manual"
+                                              :namespace "myapp"})))))
 
 
 
@@ -81,7 +113,9 @@
   (is (= {:kind "PersistentVolume"
           :apiVersion "v1"
           :metadata
-          {:name "postgres-pv-volume", :labels {:type "local"}}
+          {:name "postgres-pv-volume", 
+           :namespace "default"
+           :labels {:type "local"}}
           :spec
           {:storageClassName "manual"
            :accessModes ["ReadWriteOnce"]
@@ -92,14 +126,17 @@
                                           :db-name "test"
                                           :pvc-storage-class-name "manual"
                                           :postgres-data-volume-path "xx"
-                                          :pv-storage-size-gb 20}))))
+                                          :pv-storage-size-gb 20
+                                          :namespace "default"}))))
 
 
 (deftest should-generate-persistent-volume-claim
   (is (= {:apiVersion "v1"
           :kind "PersistentVolumeClaim"
           :metadata
-          {:name "postgres-claim", :labels {:app "postgres"}}
+          {:name "postgres-claim", 
+           :namespace "default"
+           :labels {:app "postgres"}}
           :spec
           {:storageClassName "local-path"
            :accessModes ["ReadWriteOnce"]
@@ -109,14 +146,35 @@
                             :db-name "postgres"
                             :postgres-data-volume-path "/var/postgres"
                             :pv-storage-size-gb 20
-                            :pvc-storage-class-name "local-path"}))))
+                            :pvc-storage-class-name "local-path"
+                            :namespace "default"}))))
 
 
 (deftest should-generate-secret
   (is (= {:apiVersion "v1"
           :kind "Secret"
-          :metadata {:name "postgres-secret"}
+          :metadata {:name "postgres-secret" :namespace "default"}
           :type "Opaque"
           :data
           {:postgres-user "eHgtdXM=", :postgres-password "eHgtcHc="}}
-         (cut/generate-secret {:postgres-db-user "xx-us" :postgres-db-password "xx-pw"}))))
+         (cut/generate-secret {:postgres-image "postgres:13"
+                               :postgres-size :2gb
+                               :db-name "postgres"
+                               :postgres-data-volume-path "/var/postgres"
+                               :pv-storage-size-gb 20
+                               :pvc-storage-class-name "local-path"
+                               :namespace "default"}
+                              {:postgres-db-user "xx-us" :postgres-db-password "xx-pw"}))))
+
+
+(deftest should-generate-service
+  (is (= {:name "postgresql-service" :namespace "default"}          
+         (:metadata (cut/generate-service 
+                     {:postgres-image "postgres:13"
+                      :postgres-size :2gb
+                      :db-name "postgres"
+                      :postgres-data-volume-path "/var/postgres"
+                      :pv-storage-size-gb 20
+                      :pvc-storage-class-name "local-path"
+                      :namespace "default"})))))
+

@@ -3,12 +3,11 @@
    #?(:clj [clojure.test :refer [deftest is are testing run-tests]]
       :cljs [cljs.test :refer-macros [deftest is are testing run-tests]])
    [clojure.spec.test.alpha :as st]
-   [dda.c4k-common.test-helper :as ct]
    [dda.c4k-common.postgres :as cut]))
 
 (st/instrument `cut/generate-config)
 (st/instrument `cut/generate-persistent-volume)
-;;(st/instrument `cut/generate)
+(st/instrument `cut/generate)
 
 (deftest should-generate-config
   (is (= {:postgres-db "postgres"
@@ -20,7 +19,7 @@
   (is (= {:kind "PersistentVolume"
           :apiVersion "v1"
           :metadata
-          {:name "postgres-pv-volume", :labels {:type "local"}}
+          {:name "postgres-pv-volume", :namespace "default" :labels {:type "local"}}
           :spec
           {:storageClassName "manual"
            :accessModes ["ReadWriteOnce"]
@@ -33,7 +32,7 @@
   (is (= {:apiVersion "v1"
           :kind "PersistentVolumeClaim"
           :metadata
-          {:name "postgres-claim", :labels {:app "postgres"}}
+          {:name "postgres-claim", :namespace "default" :labels {:app "postgres"}}
           :spec
           {:storageClassName "manual"
            :accessModes ["ReadWriteOnce"]
