@@ -14,17 +14,11 @@
 (s/def ::grafana-cloud-url string?)
 (s/def ::cluster-name string?)
 (s/def ::cluster-stage cp/stage?)
-(s/def ::node-regex string?)
-(s/def ::traefik-regex string?)
-(s/def ::kube-state-regex string?)
 (s/def ::mon-cfg (s/keys :req-un [::grafana-cloud-url
                                  ::cluster-name
                                  ::cluster-stage]))
 (s/def ::mon-auth (s/keys :req-un [::grafana-cloud-user 
                                ::grafana-cloud-password]))
-(s/def ::filter-regex (s/keys :req-un [::node-regex 
-                                       ::traefik-regex 
-                                       ::kube-state-regex]))
 
 (def metric-regex {:node-regex
                    (str "node_cpu_sec.+|node_load[0-9]+|node_memory_Buf.*|node_memory_Mem.*|"
@@ -44,7 +38,7 @@
 (def filter-regex-string
   (str/join "|" (vals metric-regex)))
 
-(defn-spec generate-prometheus-config cp/map-or-seq?
+(defn-spec generate-prometheus-config map?
   [config ::mon-cfg
    auth ::mon-auth]
   (let [{:keys [grafana-cloud-url cluster-name cluster-stage]} config
@@ -63,7 +57,7 @@
                grafana-cloud-password)
      (cm/replace-all-matching-values-by-new-value "FILTER_REGEX" filter-regex-string))))
 
-(defn-spec generate-config cp/map-or-seq?
+(defn-spec generate-config map?
   [config ::mon-cfg
    auth ::mon-auth]
   (->
