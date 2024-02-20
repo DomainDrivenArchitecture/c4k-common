@@ -64,9 +64,14 @@
 
 
 (defn-spec generate-secret map?
-  [config pg-config?
-   auth pg-auth?]
-  (int/generate-secret config auth))
+  ([auth pg-auth?]
+   (let [final-config default-config]
+     (int/generate-secret final-config auth)))
+  ([config pg-config?
+    auth pg-auth?]
+   (let [final-config (merge default-config
+                             config)]
+     (int/generate-secret final-config auth))))
 
 
 (defn-spec generate-service map?

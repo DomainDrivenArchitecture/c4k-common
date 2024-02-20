@@ -39,6 +39,14 @@
            :resources {:requests {:storage "10Gi"}}}}
          (cut/generate-pvc {}))))
 
+(deftest should-generate-secret
+  (is (= {:apiVersion "v1",
+          :kind "Secret",
+          :metadata {:name "postgres-secret", :namespace "default"},
+          :type "Opaque",
+          :data {:postgres-user "eHgtdXM=", :postgres-password "eHgtcHc="}}
+         (cut/generate-secret {:postgres-db-user "xx-us" :postgres-db-password "xx-pw"}))))
+
 
 (deftest should-generate
   (is (= 6
