@@ -1,12 +1,13 @@
-(ns dda.c4k-common.monitoring
+(ns dda.c4k-common.monitoring.monitoring-internal
   (:require
    [clojure.spec.alpha :as s]
    #?(:clj [orchestra.core :refer [defn-spec]]
       :cljs [orchestra.core :refer-macros [defn-spec]])
-   [clojure.string :as str]
+   #?(:cljs [dda.c4k-common.macros :refer-macros [inline-resources]])
    [dda.c4k-common.yaml :as yaml]
    [dda.c4k-common.predicate :as cp]
-   [dda.c4k-common.monitoring.monitoring-internal :as int]))
+   [dda.c4k-common.common :as cm]
+   [clojure.string :as str]))
 
 (s/def ::grafana-cloud-user cp/bash-env-string?)
 (s/def ::grafana-cloud-password cp/bash-env-string?)
@@ -24,7 +25,6 @@
 (s/def ::filter-regex (s/keys :req-un [::node-regex 
                                        ::traefik-regex 
                                        ::kube-state-regex]))
-
 
 (def metric-regex {:node-regex
                    (str "node_cpu_sec.+|node_load[0-9]+|node_memory_Buf.*|node_memory_Mem.*|"
@@ -44,24 +44,34 @@
 (def filter-regex-string
   (str/join "|" (vals metric-regex)))
 
-
-(defn-spec generate seq?
+(defn-spec generate-prometheus-config cp/map-or-seq?
   [config ::mon-cfg
    auth ::mon-auth]
-  [(yaml/load-as-edn "monitoring/namespace.yaml")
-   (yaml/load-as-edn "monitoring/prometheus-cluster-role.yaml")
-   (yaml/load-as-edn "monitoring/prometheus-cluster-role-binding.yaml")
-   (yaml/load-as-edn "monitoring/prometheus-service.yaml")
-   (yaml/load-as-edn "monitoring/prometheus-service-account.yaml")
-   (int/generate-config config auth)
-   (yaml/load-as-edn "monitoring/prometheus-deployment.yaml")
-   (yaml/load-as-edn "monitoring/node-exporter-service-account.yaml")
-   (yaml/load-as-edn "monitoring/node-exporter-cluster-role.yaml")
-   (yaml/load-as-edn "monitoring/node-exporter-cluster-role-binding.yaml")
-   (yaml/load-as-edn "monitoring/node-exporter-daemon-set.yaml")
-   (yaml/load-as-edn "monitoring/node-exporter-service.yaml")
-   (yaml/load-as-edn "monitoring/kube-state-metrics-cluster-role-binding.yaml")
-   (yaml/load-as-edn "monitoring/kube-state-metrics-cluster-role.yaml")
-   (yaml/load-as-edn "monitoring/kube-state-metrics-deployment.yaml")
-   (yaml/load-as-edn "monitoring/kube-state-metrics-service-account.yaml")
-   (yaml/load-as-edn "monitoring/kube-state-metrics-service.yaml")])
+  (let [{:keys [grafana-cloud-url cluster-name cluster-stage]} config
+        {:keys [grafana-cloud-user grafana-cloud-password]} auth]
+    (->
+     (yaml/load-as-edn "monitoring/prometheus-prometheus.yaml")
+     (assoc-in [:global :external_labels :cluster]
+               cluster-name)
+     (assoc-in [:global :external_labels :stage]
+               cluster-stage)
+     (assoc-in [:remote_write 0 :url]
+               grafana-cloud-url)
+     (assoc-in [:remote_write 0 :basic_auth :username]
+               grafana-cloud-user)
+     (assoc-in [:remote_write 0 :basic_auth :password]
+               grafana-cloud-password)
+     (cm/replace-all-matching-values-by-new-value "FILTER_REGEX" filter-regex-string))))
+
+(defn-spec generate-config cp/map-or-seq?
+  [config ::mon-cfg
+   auth ::mon-auth]
+  (->
+   (yaml/load-as-edn "monitoring/prometheus-config.yaml")
+   (assoc-in [:stringData :prometheus.yaml]
+             (yaml/to-string
+              (generate-prometheus-config config auth)))))
+
+#?(:cljs
+   (defmethod yaml/load-resource :monitoring [resource-name]
+     (get (inline-resources "monitoring") resource-name)))
