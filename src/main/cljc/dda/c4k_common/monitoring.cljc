@@ -48,27 +48,7 @@
 
 #?(:cljs
    (defmethod yaml/load-resource :monitoring [resource-name]
-     (case resource-name
-       "monitoring/namespace.yaml" (rc/inline "monitoring/namespace.yaml")
-
-       "monitoring/kube-state-metrics/cluster-role-binding.yaml" (rc/inline "monitoring/kube-state-metrics/cluster-role-binding.yaml")
-       "monitoring/kube-state-metrics/cluster-role.yaml" (rc/inline "monitoring/kube-state-metrics/cluster-role.yaml")
-       "monitoring/kube-state-metrics/deployment.yaml" (rc/inline "monitoring/kube-state-metrics/deployment.yaml")
-       "monitoring/kube-state-metrics/service-account.yaml" (rc/inline "monitoring/kube-state-metrics/service-account.yaml")
-       "monitoring/kube-state-metrics/service.yaml" (rc/inline "monitoring/kube-state-metrics/service.yaml")
-       "monitoring/node-exporter/cluster-role-binding.yaml" (rc/inline "monitoring/node-exporter/cluster-role-binding.yaml")
-       "monitoring/node-exporter/cluster-role.yaml" (rc/inline "monitoring/node-exporter/cluster-role.yaml")
-       "monitoring/node-exporter/daemon-set.yaml" (rc/inline "monitoring/node-exporter/daemon-set.yaml")
-       "monitoring/node-exporter/service-account.yaml" (rc/inline "monitoring/node-exporter/service-account.yaml")
-       "monitoring/node-exporter/service.yaml" (rc/inline "monitoring/node-exporter/service.yaml")
-       "monitoring/prometheus/cluster-role-binding.yaml" (rc/inline "monitoring/prometheus/cluster-role-binding.yaml")
-       "monitoring/prometheus/cluster-role.yaml" (rc/inline "monitoring/prometheus/cluster-role.yaml")
-       "monitoring/prometheus/config.yaml" (rc/inline "monitoring/prometheus/config.yaml")
-       "monitoring/prometheus/deployment.yaml" (rc/inline "monitoring/prometheus/deployment.yaml")
-       "monitoring/prometheus/prometheus.yaml" (rc/inline "monitoring/prometheus/prometheus.yaml")
-       "monitoring/prometheus/service-account.yaml" (rc/inline "monitoring/prometheus/service-account.yaml")
-       "monitoring/prometheus/service.yaml" (rc/inline "monitoring/prometheus/service.yaml")
-       (throw (js/Error. "Undefined Resource!")))))
+      (get (inline-resources "monitoring") resource-name)))
 
 (defn-spec generate-stateful-set cp/map-or-seq?
   [config ::storage]
