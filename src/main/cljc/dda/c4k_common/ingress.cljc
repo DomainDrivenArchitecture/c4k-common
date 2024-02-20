@@ -1,11 +1,8 @@
 (ns dda.c4k-common.ingress
   (:require
    [clojure.spec.alpha :as s]
-   #?(:cljs [shadow.resource :as rc])
    #?(:clj [orchestra.core :refer [defn-spec]]
       :cljs [orchestra.core :refer-macros [defn-spec]])
-   #?(:clj [clojure.edn :as edn]
-      :cljs [cljs.reader :as edn])
    #?(:cljs [dda.c4k-common.macros :refer-macros [inline-resources]])
    [dda.c4k-common.yaml :as yaml]
    [dda.c4k-common.common :as cm]
