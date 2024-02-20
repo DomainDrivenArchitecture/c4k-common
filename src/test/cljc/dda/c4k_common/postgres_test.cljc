@@ -7,6 +7,7 @@
 
 (st/instrument `cut/generate-config)
 (st/instrument `cut/generate-persistent-volume)
+(st/instrument `cut/generate-secret)
 (st/instrument `cut/generate)
 
 (deftest should-generate-config
