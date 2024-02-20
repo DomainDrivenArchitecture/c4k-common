@@ -25,6 +25,23 @@ By the way, c4k means "convention for kubernetes".
 
 c4k-common supports the following use cases:
 
+- [convention 4 kubernetes: c4k-common](#convention-4-kubernetes-c4k-common)
+  - [Rationale](#rationale)
+    - [Features](#features)
+      - [Target Cli and Web Frontend](#target-cli-and-web-frontend)
+      - [Separate Configuration from Credentials](#separate-configuration-from-credentials)
+      - [Input as EDN or Yaml](#input-as-edn-or-yaml)
+      - [Inline k8s resources for versioning \& dependencies](#inline-k8s-resources-for-versioning--dependencies)
+      - [Work on structured Data instead flat Templating](#work-on-structured-data-instead-flat-templating)
+      - [Validate your inputs](#validate-your-inputs)
+      - [Namespaces](#namespaces)
+      - [Ingress](#ingress)
+      - [Postgres Database](#postgres-database)
+      - [Monitoring with Grafana Cloud](#monitoring-with-grafana-cloud)
+  - [Refactoring \& Module Overview](#refactoring--module-overview)
+  - [Development \& mirrors](#development--mirrors)
+  - [License](#license)
+
 #### Target Cli and Web Frontend
 
 Set up your cli as follows
@@ -152,6 +169,18 @@ Have you recognized the `defn-spec` marco? We use allover validation, e.g.
     ...)
 ```
 
+#### Namespaces
+
+We support namespaces for ingress & postgres (monitoring lives in it's own namespace `monitoring`).
+
+```clojure
+(deftest should-generate-simple-ingress
+  (is (= [{:apiVersion "v1"
+           :kind "Namespace"
+           :metadata {:name "myapp"}}]
+         (cut/generate {:namespace "myapp"}))))
+```
+
 #### Ingress
 
 In most cases we use 'generate-ingress-and-cert' which generates an ingres in combination with letsencrypt cert for a named service.
@@ -218,15 +247,15 @@ You can attach your application to grafana cloud.
 
 ## Refactoring & Module Overview
 
-| Module        | Version | [common load-as-edn][edn1] | [groups for webview][bgrp1] | [use common ingress][ing1] | [use common monitoring][mon1] | [validate examples][val1] | [ci with pyb][cipyb] | [inline-macro to load resources][macro] |[native build][native] |
-| ------------- |---------| :------------------------: | :-------------------------: | :------------------------: | :---------------------------: | :-----------------------: |:--------------------:| :-------------------------------------: |:---------------------:|
-| c4k-keycloak  | 0.2     |             x              |              x              |             x              |               x               |             x             |                      |                                         |                       |
-| c4k-taiga     | 0.1     |                            |                             |                            |                               |                           |                      |                                         |                       |
-| c4k-nextcloud | 4.0     |             x              |              x              |             x              |               x               |             x             |                      |                                         |                       |
-| c4k-jitsi     | 1.6     |             x              |              x              |             x              |               x               |             x             |          x           |                    x                    |                       |
-| c4k-forgejo   | 3.0     |             x              |              x              |             x              |               x               |             x             |          x           |                    x                    |           x           |
-| c4k-shynet    | 1.0     |                            |                             |                            |                               |                           |                      |                                         |                       |
-| c4k-website   | 1.1     |             x              |              x              |             x              |               x               |             x             |                      |                                         |                       |
+| Module        | Version | [common load-as-edn][edn1] | [groups for webview][bgrp1] | [use common ingress][ing1] | [use common monitoring][mon1] | [validate examples][val1] | [ci with pyb][cipyb] | [inline-macro to load resources][macro] |[native build][native] | namespaces |
+| ------------- |---------| :------------------------: | :-------------------------: | :------------------------: | :---------------------------: | :-----------------------: |:--------------------:| :-------------------------------------: |:---------------------:|:----------:|
+| c4k-keycloak  | 0.2     |             x              |              x              |             x              |               x               |             x             |                      |                                         |                       |            |
+| c4k-taiga     | 0.1     |                            |                             |                            |                               |                           |                      |                                         |                       |            |
+| c4k-nextcloud | 4.0     |             x              |              x              |             x              |               x               |             x             |                      |                                         |                       |            |
+| c4k-jitsi     | 1.6     |             x              |              x              |             x              |               x               |             x             |          x           |                    x                    |                       |            |
+| c4k-forgejo   | 3.0     |             x              |              x              |             x              |               x               |             x             |          x           |                    x                    |           x           |            |
+| c4k-shynet    | 1.0     |                            |                             |                            |                               |                           |                      |                                         |                       |            |
+| c4k-website   | 1.1     |             x              |              x              |             x              |               x               |             x             |                      |                                         |                       |            |
 
 [edn1]: https://gitlab.com/domaindrivenarchitecture/c4k-website/-/merge_requests/1
 [ing1]:  https://repo.prod.meissa.de/meissa/c4k-jitsi/commit/214aa41c28662fbf7a49998e17404e7ac9216430
