@@ -11,13 +11,13 @@ There are many comparable solutions for creating c4k deployments like `helm` or 
 
 Why do we need another one? Why do you continue the reading here?
 
-We combine the simplicity of `kustomize` with the ability for doing real programming as software developers would do.
+We combine the simplicity of `kustomize` with the ability to do real programming like software developers would do.
 
 Following the principle
 
     "Use programming language for programming" 
 
-we are clearly enjoy writing kubernetes manifests with clojure. In comparison with helms templating, things such as business logic, conventions, input validation, versions, dependencies and reuse are much easier and much more reliable to implement.
+we clearly enjoy writing Kubernetes manifests with Clojure. In comparison to helms templating, things such as business logic, conventions, input validation, versions, dependencies and reuse are much easier and much more reliable to implement with c4k.
 
 By the way, c4k means "convention for kubernetes".
 
@@ -64,7 +64,7 @@ The full example can be found here: https://repo.prod.meissa.de/meissa/c4k-forge
 You can create your manifest as web-application also (using page local js without server interaction)
 
 ```html
-html>
+<html>
 
 <head>
   <meta charset="utf-8" />
@@ -91,7 +91,7 @@ and: https://repo.prod.meissa.de/meissa/c4k-forgejo/src/branch/main/src/main/clj
 
 #### Separate Configuration from Credentials
 
-We think it is an good idea to have credentials separated from configuration. All our functions, cli and frontend are following this principle.
+We think it is an good idea to have credentials separated from configuration. All our functions, cli and frontend are following this principle. Thus, for executing separated config and authentication infos have to be provided.
 
 ```bash
 c4k-common config.edn auth.edn > k8s-manifest.yaml
@@ -99,8 +99,8 @@ c4k-common config.edn auth.edn > k8s-manifest.yaml
 
 #### Input as EDN or Yaml
 
-c4k-common supports all its resources, input and output as yaml and as edn.
-The following command line will work also:
+c4k-common supports yaml and edn as format for all of its resources (input and output).
+Hence, the following command line will also work:
 
 ```bash
 c4k-common config.yaml auth.yaml > k8s-manifest.yaml
@@ -113,11 +113,11 @@ We inline all resources used in our libraries & applications. You can generate k
 In case of
 * java: Resources are included in the jar-file out of the box (see https://repo.prod.meissa.de/meissa/c4k-forgejo/src/branch/main/project.clj#L13).
 * js: With a slim macro call we inline resources to the resulting js file (see https://repo.prod.meissa.de/meissa/c4k-forgejo/src/branch/main/src/main/cljc/dda/c4k_forgejo/forgejo.cljc#L72-L74)
-* native: On native builds we inline resources also (see https://repo.prod.meissa.de/meissa/c4k-forgejo/src/branch/main/build.py#L126)
+* native: On native builds we also inline resources (see https://repo.prod.meissa.de/meissa/c4k-forgejo/src/branch/main/build.py#L126)
 
-#### Work on structured Data instead flat Templating
+#### Work on structured Data instead of flat templating
 
-To keep things simple, we do also templating. But we convert given k8s resources to structured data.
+To keep things simple, we also do templating. But we convert given k8s resources to structured data.
 This allows us to have more control and do unit tests:
 
 k8s-resource:
@@ -158,7 +158,7 @@ Have a unit-test:
 
 #### Validate your inputs
 
-Have you recognized the `defn-spec` marco? We use allover validation, e.g.
+Have you recognized the `defn-spec` macro above? We use allover validation, e.g.
 
 ```clojure
 (def rate-limit-config? (s/keys :req-un [::max-rate
@@ -183,7 +183,7 @@ We support namespaces for ingress & postgres (monitoring lives in it's own names
 
 #### Ingress
 
-In most cases we use 'generate-ingress-and-cert' which generates an ingres in combination with letsencrypt cert for a named service.
+In most cases we use `generate-ingress-and-cert` which generates an ingress in combination with letsencrypt cert for a named service.
 
 ```clojure
 (deftest should-generate-ingress-and-cert
@@ -243,7 +243,7 @@ With minimal config of
  (monitoring/generate conf auth)
 ```
 
-You can attach your application to grafana cloud.
+You can connect your application to grafana cloud.
 
 ## Refactoring & Module Overview
 
