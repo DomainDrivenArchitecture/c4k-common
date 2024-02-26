@@ -67,12 +67,7 @@ You can create your manifest as web-application also (using page local js withou
 <html>
 
 <head>
-  <meta charset="utf-8" />
-  <title>c4k-forgejo</title>
-  <link href="https://domaindrivenarchitecture.org/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
-  <link href="https://domaindrivenarchitecture.org/css/fonts/fontawesome/fontawesome.css" rel="stylesheet"
-    type="text/css" />
-  <link href="https://domaindrivenarchitecture.org/css/custom.css" rel="stylesheet" type="text/css" />
+  <link href="bootstrap.min.css" rel="stylesheet" type="text/css" />
 </head>
 
 <body>
