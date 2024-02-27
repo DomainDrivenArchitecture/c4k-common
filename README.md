@@ -28,21 +28,21 @@ c4k-common supports the following use cases:
 - [convention 4 kubernetes: c4k-common](#convention-4-kubernetes-c4k-common)
   - [Rationale](#rationale)
     - [Features](#features)
-      - [Target Cli and Web Frontend](#target-cli-and-web-frontend)
-      - [Separate Configuration from Credentials](#separate-configuration-from-credentials)
+      - [Target CLI and Web Frontend](#target-cli-and-web-frontend)
+      - [Separate Configuration From Credentials](#separate-configuration-from-credentials)
       - [Input as EDN or Yaml](#input-as-edn-or-yaml)
-      - [Inline k8s resources for versioning \& dependencies](#inline-k8s-resources-for-versioning--dependencies)
-      - [Work on structured Data instead flat Templating](#work-on-structured-data-instead-flat-templating)
-      - [Validate your inputs](#validate-your-inputs)
+      - [Inline k8s Resources for Versioning \& Dependencies](#inline-k8s-resources-for-versioning--dependencies)
+      - [Work on Structured Data Instead of Flat Templating](#work-on-structured-data-instead-flat-templating)
+      - [Validate Your Inputs](#validate-your-inputs)
       - [Namespaces](#namespaces)
       - [Ingress](#ingress)
       - [Postgres Database](#postgres-database)
-      - [Monitoring with Grafana Cloud](#monitoring-with-grafana-cloud)
+      - [Monitoring With Grafana Cloud](#monitoring-with-grafana-cloud)
   - [Refactoring \& Module Overview](#refactoring--module-overview)
-  - [Development \& mirrors](#development--mirrors)
+  - [Development \& Mirrors](#development--mirrors)
   - [License](#license)
 
-#### Target Cli and Web Frontend
+#### Target CLI and Web Frontend
 
 Set up your cli as follows
 
@@ -84,10 +84,16 @@ See: https://repo.prod.meissa.de/meissa/c4k-forgejo/src/branch/main/public/index
 
 and: https://repo.prod.meissa.de/meissa/c4k-forgejo/src/branch/main/src/main/cljs/dda/c4k_forgejo/browser.cljs
 
-#### Separate Configuration from Credentials
+#### Separate Configuration From Credentials
 
 We think it is an good idea to have credentials separated from configuration. All our functions, cli and frontend are following this principle. Thus, for executing separated config and authentication infos have to be provided.
 
+The following command line yields the resulting k8s manifests in `k8s-manifest.yaml`:
+```bash
+java -jar c4k-common.jar config.edn auth.edn > k8s-manifest.yaml
+```
+
+Using the tool `jarwrapper` the command line can even be shortened to:
 ```bash
 c4k-common config.edn auth.edn > k8s-manifest.yaml
 ```
@@ -101,7 +107,7 @@ Hence, the following command line will also work:
 c4k-common config.yaml auth.yaml > k8s-manifest.yaml
 ```
 
-#### Inline k8s resources for versioning & dependencies
+#### Inline k8s Resources for Versioning & Dependencies
 
 We inline all resources used in our libraries & applications. You can generate k8s manifests everywhere without additional external dependencies.
 
@@ -110,7 +116,7 @@ In case of
 * js: With a slim macro call we inline resources to the resulting js file (see https://repo.prod.meissa.de/meissa/c4k-forgejo/src/branch/main/src/main/cljc/dda/c4k_forgejo/forgejo.cljc#L72-L74)
 * native: On native builds we also inline resources (see https://repo.prod.meissa.de/meissa/c4k-forgejo/src/branch/main/build.py#L126)
 
-#### Work on structured Data instead of flat templating
+#### Work on Structured Data Instead of Flat Templating
 
 To keep things simple, we also do templating. But we convert given k8s resources to structured data.
 This allows us to have more control and do unit tests:
@@ -151,7 +157,7 @@ Have a unit-test:
          (cut/generate-rate-limit-middleware {:max-rate 10, :max-concurrent-requests 5}))))
 ```
 
-#### Validate your inputs
+#### Validate Your Inputs
 
 Have you recognized the `defn-spec` macro above? We use allover validation, e.g.
 
@@ -221,7 +227,7 @@ If your application needs a database, we often use postgres:
 
 We optimized our db installation to run between 2Gb anf 16Gb Ram usage.
 
-#### Monitoring with Grafana Cloud
+#### Monitoring With Grafana Cloud
 
 With minimal config of
 
@@ -262,7 +268,7 @@ You can connect your application to grafana cloud.
 [macro]: https://repo.prod.meissa.de/meissa/c4k-jitsi/commit/61d05ceedb6dcbc6bb96b96fe6f03598e2878195
 [native]: https://repo.prod.meissa.de/meissa/c4k-forgejo/pulls/4/files
 
-## Development & mirrors
+## Development & Mirrors
 
 Development happens at: https://repo.prod.meissa.de/meissa/c4k-common
 
