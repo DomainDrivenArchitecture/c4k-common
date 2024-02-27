@@ -175,11 +175,24 @@ Have you recognized the `defn-spec` macro above? We use allover validation, e.g.
 We support namespaces for ingress & postgres (monitoring lives in it's own namespace `monitoring`).
 
 ```clojure
-(deftest should-generate-simple-ingress
-  (is (= [{:apiVersion "v1"
-           :kind "Namespace"
-           :metadata {:name "myapp"}}]
-         (cut/generate {:namespace "myapp"}))))
+(dda.c4k-common.namespace/generate {:namespace "myapp"})
+```
+
+yields:
+
+```clojure
+[{:apiVersion "v1"
+  :kind "Namespace"
+  :metadata {:name "myapp"}}]
+```
+
+which can be rendered to:
+
+```yaml
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: myapp
 ```
 
 #### Ingress
@@ -187,24 +200,77 @@ We support namespaces for ingress & postgres (monitoring lives in it's own names
 In most cases we use `generate-ingress-and-cert` which generates an ingress in combination with letsencrypt cert for a named service.
 
 ```clojure
-(deftest should-generate-ingress-and-cert
-  (is (= [{:apiVersion "cert-manager.io/v1",
-          ...}
-          {:apiVersion "networking.k8s.io/v1",
-           :kind "Ingress",
-           ...
-           :spec
-           {:tls [{:hosts ["test.jit.si"], :secretName "web"}],
-            :rules
-            [{:host "test.jit.si",
-              :http {:paths [{:path "/",
-                              :pathType "Prefix",
-                              :backend
-                              {:service {:name "web",
-                                         :port {:number 80}}}}]}}]}}]
-         (cut/generate-ingress-and-cert {:fqdns ["test.jit.si"]
-                                          :service-name "web"
-                                          :service-port 80}))))
+(dda.c4k-common.ingress/generate-ingress-and-cert 
+  {:fqdns ["test.jit.si"]
+   :service-name "web"
+   :service-port 80})
+```
+
+yields:
+
+```clojure
+[{:apiVersion "cert-manager.io/v1",
+  :kind "Certificate",
+  ...
+  :spec
+  {:secretName "web",
+   :commonName "test.jit.si",
+   :duration "2160h",
+   :renewBefore "720h",
+   :dnsNames ["test.jit.si"],
+   :issuerRef {:name "staging", :kind "ClusterIssuer"}}}
+ {:apiVersion "networking.k8s.io/v1",
+  :kind "Ingress",
+  ...
+  :spec
+  {:tls [{:hosts ["test.jit.si"], :secretName "web"}],
+   :rules
+    [{:host "test.jit.si",
+      :http {:paths [{:path "/",
+                      :pathType "Prefix",
+                      :backend
+                      {:service {:name "web",
+                                  :port {:number 80}}}}]}}]}}]
+```
+
+which can be rendered to:
+
+```yaml
+apiVersion: cert-manager.io/v1
+kind: Certificate
+...
+spec:
+  secretName: web
+  commonName: test.jit.si
+  duration: 2160h
+  renewBefore: 720h
+  dnsNames:
+    - test.jit.si
+  issuerRef:
+    name: staging
+    kind: ClusterIssuer
+
+---
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+...
+spec:
+  tls:
+    - hosts:
+        - test.jit.si
+      secretName: web
+  rules:
+    - host: test.jit.si
+      http:
+        paths:
+          - pathType: Prefix
+            path: /
+            backend:
+              service:
+                name: web
+                port:
+                  number: 80
 ```
 
 #### Postgres Database
