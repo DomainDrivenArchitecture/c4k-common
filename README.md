@@ -278,17 +278,78 @@ spec:
 If your application needs a database, we often use postgres:
 
 ```clojure
-(deftest should-generate-deployment
-  (is (= [{:image "postgres:16"
-           :name "postgresql"
-           :env
-           [{:name "POSTGRES_USER" ...}
-            {:name "POSTGRES_PASSWORD" ...}
-            {:name "POSTGRES_DB" ...}]
-           :volumeMounts [{:name "postgre-data-volume" ...}]}]
-         (get-in (cut/generate-deployment 
-                    {:postgres-image "postgres:16"})
-                    [:spec :template :spec :containers]))))
+(cut/generate-deployment {:postgres-image "postgres:16"})
+```
+
+yields:
+
+```clojure
+{:apiVersion "apps/v1",
+ :kind "Deployment",
+ ...
+ :spec
+ {:selector {:matchLabels {:app "postgresql"}},
+  :strategy {:type "Recreate"},
+  :template
+  {:metadata {:labels {:app "postgresql"}},
+   :spec
+   {:containers
+    [{:image "postgres:16",
+      :name "postgresql",
+      :env
+      [{:name "POSTGRES_USER", :valueFrom {:secretKeyRef {:name "postgres-secret", :key "postgres-user"}}}
+       {:name "POSTGRES_PASSWORD", :valueFrom {:secretKeyRef {:name "postgres-secret", :key "postgres-password"}}}
+       {:name "POSTGRES_DB", :valueFrom {:configMapKeyRef {:name "postgres-config", :key "postgres-db"}}}],
+      :ports [{:containerPort 5432, :name "postgresql"}],
+      :volumeMounts
+      [...],
+    :volumes
+    [...]}}}}
+```
+
+which can be rendered to:
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+...
+spec:
+  selector:
+    matchLabels:
+      app: postgresql
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: postgresql
+    spec:
+      containers:
+        - image: postgres:16
+          name: postgresql
+          env:
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: postgres-user
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: postgres-password
+            - name: POSTGRES_DB
+              valueFrom:
+                configMapKeyRef:
+                  name: postgres-config
+                  key: postgres-db
+          ports:
+            - containerPort: 5432
+              name: postgresql
+          volumeMounts:
+            ...
+      volumes:
+        ...
 ```
 
 We optimized our db installation to run between 2Gb anf 16Gb Ram usage.
