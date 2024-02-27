@@ -44,7 +44,7 @@ c4k-common supports the following use cases:
 
 #### Target CLI and Web Frontend
 
-Set up your cli as follows
+To create your own c4k module set up your cli analogous to the following:
 
 ```clojure
 (defn -main [& cmd-args]
@@ -60,8 +60,7 @@ Set up your cli as follows
 
 The full example can be found here: https://repo.prod.meissa.de/meissa/c4k-forgejo/src/branch/main/src/main/clj/dda/c4k_forgejo/uberjar.clj
 
-
-You can create your manifest as web-application also (using page local js without server interaction)
+With c4k instead of using cli to generate manifests, you can also generate your manifests via web-application (using page local js without server interaction)
 
 ```html
 <html>
@@ -86,7 +85,7 @@ and: https://repo.prod.meissa.de/meissa/c4k-forgejo/src/branch/main/src/main/clj
 
 #### Separate Configuration From Credentials
 
-We think it is an good idea to have credentials separated from configuration. All our functions, cli and frontend are following this principle. Thus, for executing separated config and authentication infos have to be provided.
+We think it is a good idea to have credentials separated from configuration. All our functions, cli and frontend are following this principle. Thus, for executing separated config and authentication infos have to be provided.
 
 The following command line yields the resulting k8s manifests in `k8s-manifest.yaml`:
 ```bash
