@@ -186,7 +186,7 @@ yields:
   :metadata {:name "myapp"}}]
 ```
 
-which can be rendered to:
+which renders to:
 
 ```yaml
 apiVersion: v1
@@ -233,7 +233,7 @@ yields:
                                   :port {:number 80}}}}]}}]}}]
 ```
 
-which can be rendered to:
+which renders to:
 
 ```yaml
 apiVersion: cert-manager.io/v1
@@ -307,7 +307,7 @@ yields:
     [...]}}}}
 ```
 
-which can be rendered to:
+which renders to:
 
 ```yaml
 apiVersion: apps/v1
