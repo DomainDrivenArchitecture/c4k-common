@@ -4,7 +4,7 @@
    [dda.c4k-common.macros :refer [inline-resources]]))
 
 (deftest should-count-inline-resources
-  (is (= 4 (count (inline-resources "ingress")))))
+  (is (= 3 (count (inline-resources "dda/c4k_common/inline_resources_test")))))
 
 (deftest should-inline-resources
   (let [resource-path (fn [name] (str "dda/c4k_common/inline_resources_test/" name))]

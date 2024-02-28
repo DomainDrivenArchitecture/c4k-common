@@ -3,7 +3,6 @@
    ["js-yaml" :as yaml]
    [clojure.string :as st]
    [orchestra.core :refer-macros [defn-spec]]
-   [shadow.resource :as rc]
    [dda.c4k-common.predicate :as cp]))
 
 (defn string-or-keyword? [input]
