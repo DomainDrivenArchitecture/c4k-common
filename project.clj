@@ -26,7 +26,7 @@
                        :main dda.c4k-common.uberjar
                        :uberjar-name "c4k-common-standalone.jar"
                        :dependencies [[org.clojure/tools.cli "1.1.230"]
-                                      [ch.qos.logback/logback-classic "1.5.0"
+                                      [ch.qos.logback/logback-classic "1.5.1"
                                        :exclusions [com.sun.mail/javax.mail]]
                                       [org.slf4j/jcl-over-slf4j "2.0.12"]]}}
   :release-tasks [["test"]
@@ -34,8 +34,4 @@
                   ["change" "version" "leiningen.release/bump-version" "release"]
                   ["vcs" "commit"]
                   ["vcs" "tag" "v" "--no-sign"]
-                  ["change" "version" "leiningen.release/bump-version"]]
-  :aliases {"inst" ["shell"
-                    "sh"
-                    "-c"
-                    "lein uberjar && sudo install -m=755 target/uberjar/c4k-common-standalone.jar /usr/local/bin/c4k-common-standalone.jar"]})
+                  ["change" "version" "leiningen.release/bump-version"]])

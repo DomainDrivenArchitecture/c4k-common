@@ -62,9 +62,11 @@
 (deftest should-generate-middleware-ratelimit
   (is (= {:apiVersion "traefik.containo.us/v1alpha1",
           :kind "Middleware",
-          :metadata {:name "normal-ratelimit"},
+          :metadata {:name "normal-ratelimit"
+                     :namespace "myapp",},
           :spec {:rateLimit {:average 10, :burst 5}}}
          (cut/generate-rate-limit-middleware {:rate-limit-name "normal"
+                                              :namespace "myapp"
                                               :average-rate 10, :burst-rate 5}))))
 
 
@@ -94,7 +96,7 @@
           :annotations {:traefik.ingress.kubernetes.io/router.entrypoints
                         "web, websecure"
                         :traefik.ingress.kubernetes.io/router.middlewares
-                        "default-redirect-https@kubernetescrd, normal-ratelimit@kubernetescrd",
+                        "default-redirect-https@kubernetescrd, default-normal-ratelimit@kubernetescrd",
                         :metallb.universe.tf/address-pool "public"}}
          (:metadata (cut/generate-ingress
                      {

@@ -73,6 +73,7 @@
         {:keys [average-rate]} final-config]
     [(int/generate-certificate final-config)
      (int/generate-rate-limit-middleware {:rate-limit-name service-name
+                                          :namespace (:namespace final-config)
                                           :average-rate average-rate
                                           :burst-rate average-rate})
      (int/generate-ingress final-config)]))

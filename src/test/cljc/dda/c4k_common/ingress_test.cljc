@@ -99,7 +99,8 @@
             :issuerRef {:name "staging", :kind "ClusterIssuer"}}}
           {:apiVersion "traefik.containo.us/v1alpha1",
            :kind "Middleware",
-           :metadata {:name "web-ratelimit"},
+           :metadata {:name "web-ratelimit"
+                      :namespace "default"},
            :spec {:rateLimit {:average 10, :burst 10}}}
           {:apiVersion "networking.k8s.io/v1",
            :kind "Ingress",
@@ -110,7 +111,7 @@
             :annotations
             {:traefik.ingress.kubernetes.io/router.entrypoints "web, websecure",
              :traefik.ingress.kubernetes.io/router.middlewares
-             "default-redirect-https@kubernetescrd, web-ratelimit@kubernetescrd",
+             "default-redirect-https@kubernetescrd, default-web-ratelimit@kubernetescrd",
              :metallb.universe.tf/address-pool "public"}},
            :spec
            {:tls [{:hosts ["test.jit.si"], :secretName "web"}],

@@ -41,7 +41,10 @@
 (def certificate? (s/keys :req-un [::fqdns ::app-name ::cert-name ::issuer ::ns/namespace]))
 
 
-(def rate-limit-config? (s/keys :req-un [::rate-limit-name ::average-rate ::burst-rate]))
+(def rate-limit-config? (s/keys :req-un [::rate-limit-name
+                                         ::ns/namespace
+                                         ::average-rate 
+                                         ::burst-rate]))
 
 
 (defn-spec generate-host-rule map?
@@ -72,10 +75,11 @@
 
 (defn-spec generate-rate-limit-middleware map?
   [config rate-limit-config?]
-  (let [{:keys [rate-limit-name average-rate burst-rate]} config]
+  (let [{:keys [rate-limit-name average-rate burst-rate namespace]} config]
     (->
      (yaml/load-as-edn "ingress/middleware-ratelimit.yaml")
      (assoc-in [:metadata :name] (str rate-limit-name "-ratelimit"))
+     (assoc-in [:metadata :namespace] namespace)
      (assoc-in [:spec :rateLimit :average] average-rate)
      (assoc-in [:spec :rateLimit :burst] burst-rate))))
 
@@ -94,7 +98,8 @@
                 "web, websecure"
                 :traefik.ingress.kubernetes.io/router.middlewares
                 (if rate-limit-name
-                  (str "default-redirect-https@kubernetescrd, " rate-limit-name "-ratelimit@kubernetescrd")
+                  (str "default-redirect-https@kubernetescrd, " 
+                       namespace "-" rate-limit-name "-ratelimit@kubernetescrd")
                   "default-redirect-https@kubernetescrd")
                 :metallb.universe.tf/address-pool "public"})
      (assoc-in [:spec :tls 0 :secretName] cert-name)
