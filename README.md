@@ -32,7 +32,7 @@ c4k-common supports the following use cases:
       - [Separate Configuration From Credentials](#separate-configuration-from-credentials)
       - [Input as EDN or Yaml](#input-as-edn-or-yaml)
       - [Inline k8s Resources for Versioning \& Dependencies](#inline-k8s-resources-for-versioning--dependencies)
-      - [Work on Structured Data Instead of Flat Templating](#work-on-structured-data-instead-flat-templating)
+      - [Work on Structured Data Instead of Flat Templating](#work-on-structured-data-instead-of-flat-templating)
       - [Validate Your Inputs](#validate-your-inputs)
       - [Namespaces](#namespaces)
       - [Ingress](#ingress)
@@ -382,7 +382,7 @@ You can connect your application to grafana cloud.
 | c4k-jitsi     | 1.6     |             x              |              x              |             x              |               x               |             x             |          x           |                    x                    |                        |            |
 | c4k-forgejo   | 3.0     |             x              |              x              |             x              |               x               |             x             |          x           |                    x                    |           x            |            |
 | c4k-shynet    | 1.0     |                            |                             |                            |                               |                           |                      |                                         |                        |            |
-| c4k-website   | 1.1     |             x              |              x              |             x              |               x               |             x             |          x           |                    x                    |           x            |            |
+| c4k-website   | 2.0     |             x              |              x              |             x              |               x               |             x             |          x           |                    x                    |           x            |            |
 
 [edn1]: https://gitlab.com/domaindrivenarchitecture/c4k-website/-/merge_requests/1
 [ing1]:  https://repo.prod.meissa.de/meissa/c4k-jitsi/commit/214aa41c28662fbf7a49998e17404e7ac9216430
