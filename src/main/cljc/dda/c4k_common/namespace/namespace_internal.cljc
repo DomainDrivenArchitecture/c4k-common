@@ -1,18 +1,14 @@
 (ns dda.c4k-common.namespace.namespace-internal
   (:require 
    [clojure.spec.alpha :as s]
-   #?(:cljs [shadow.resource :as rc])
    #?(:clj [orchestra.core :refer [defn-spec]]
       :cljs [orchestra.core :refer-macros [defn-spec]])
-   [dda.c4k-common.yaml :as yaml]))
-
+   [dda.c4k-common.yaml :as yaml]
+   #?(:cljs [dda.c4k-common.macros :refer-macros [inline-resources]])))
 
 #?(:cljs
    (defmethod yaml/load-resource :namespace [resource-name]
-     (case resource-name
-       "namespace/namespace.yaml" (rc/inline "namespace/namespace.yaml")
-       (throw (js/Error. (str "Undefined Resource: " resource-name))))))
-
+     (get (inline-resources "namespace") resource-name)))
 
 (s/def ::namespace string?)
 
