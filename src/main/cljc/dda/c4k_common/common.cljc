@@ -42,15 +42,23 @@
                             %)
                          coll))
 
-(defn-spec replace-all-matching-values-by-new-value cp/map-or-seq?
+(defn-spec replace-all-matching cp/map-or-seq?
+  [coll cp/map-or-seq?
+   match-value string?
+   replace-value cp/str-or-number?]
+   (clojure.walk/postwalk #(if (and (= (type value-to-match) (type %))
+                                   (= value-to-match %))
+                            value-to-replace
+                            %)
+                         coll))
+
+
+(defn-spec ^{:deprecated "6.2.4"} replace-all-matching-values-by-new-value cp/map-or-seq?
+  "Use replace-all-matching instead"
   [coll cp/map-or-seq?
    value-to-match string?
    value-to-replace cp/str-or-number?]
-  (clojure.walk/postwalk #(if (and (= (type value-to-match) (type %))
-                                   (= value-to-match %))
-                            value-to-replace
-                            %) 
-                         coll))
+  (replace-all-matching coll value-to-match value-to-replace))
 
 (defn-spec concat-vec vector?
   [& vs (s/* cp/string-sequence?)]
