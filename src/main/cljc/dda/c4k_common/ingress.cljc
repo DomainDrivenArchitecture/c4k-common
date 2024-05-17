@@ -17,7 +17,7 @@
 (s/def ::burst-rate ::int/burst-rate)
 
 (def simple-ingress? (s/keys :req-un [::fqdns ::service-name ::service-port]
-                             :opt-un [::issuer ::average-rate ::ns/namespace]))
+                             :opt-un [::issuer ::average-rate ::burst-rate ::ns/namespace]))
 
 (def ingress? (s/keys :req-un [::fqdns ::app-name ::ingress-name ::service-name ::service-port]
                       :opt-un [::issuer ::cert-name ::rate-limit-name ::ns/namespace]))
@@ -32,7 +32,8 @@
 (def default-config
   (merge ns/default-config
          {:issuer "staging"
-          :average-rate 10}))
+          :average-rate 10
+          :burst-rate 20}))
 
 
 (defn-spec generate-certificate map?
@@ -70,10 +71,10 @@
                              :rate-limit-name service-name}
                             default-config
                             config)
-        {:keys [average-rate]} final-config]
+        {:keys [average-rate burst-rate]} final-config]
     [(int/generate-certificate final-config)
      (int/generate-rate-limit-middleware {:rate-limit-name service-name
                                           :namespace (:namespace final-config)
                                           :average-rate average-rate
-                                          :burst-rate average-rate})
+                                          :burst-rate burst-rate})
      (int/generate-ingress final-config)]))

@@ -101,7 +101,7 @@
            :kind "Middleware",
            :metadata {:name "web-ratelimit"
                       :namespace "default"},
-           :spec {:rateLimit {:average 10, :burst 10}}}
+           :spec {:rateLimit {:average 10, :burst 20}}}
           {:apiVersion "networking.k8s.io/v1",
            :kind "Ingress",
            :metadata
