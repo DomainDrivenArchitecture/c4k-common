@@ -33,7 +33,7 @@
 
 (defn pvc-storage-class-name?
   [input]
-  (contains? #{"manual" "local-path"} input))
+  (contains? #{"manual" "local-path" "hcloud-volumes" "hcloud-volumes-encrypted"} input))
 
 (defn port-number?
   [input]
