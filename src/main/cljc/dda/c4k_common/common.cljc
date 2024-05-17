@@ -31,9 +31,9 @@
   [coll cp/map-or-seq?
    match-value string?
    replace-value cp/str-or-number?]
-   (clojure.walk/postwalk #(if (and (= (type value-to-match) (type %))
-                                   (= value-to-match %))
-                            value-to-replace
+   (clojure.walk/postwalk #(if (and (= (type match-value) (type %))
+                                   (= match-value %))
+                            replace-value
                             %)
                          coll))
 
