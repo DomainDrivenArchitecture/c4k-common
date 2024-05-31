@@ -23,7 +23,7 @@ def initialize(project):
         "release_secondary_build_files": [
             "project-cljs.clj",
         ],
-        "release_main_branch": "master",
+        "release_main_branch": "main",
     }
 
     build = ReleaseMixin(project, input)
