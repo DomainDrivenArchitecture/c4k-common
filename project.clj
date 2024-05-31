@@ -3,8 +3,8 @@
   :url "https://domaindrivenarchitecture.org"
   :license {:name "Apache License, Version 2.0"
             :url "https://www.apache.org/licenses/LICENSE-2.0.html"}
-  :dependencies [[org.clojure/clojure "1.11.2"]
-                 [org.clojure/tools.reader "1.4.1"]
+  :dependencies [[org.clojure/clojure "1.11.3"]
+                 [org.clojure/tools.reader "1.4.2"]
                  [aero "1.1.6"]
                  [orchestra "2021.01.01-1"]
                  [expound "0.9.0"]
@@ -26,9 +26,9 @@
                        :main dda.c4k-common.uberjar
                        :uberjar-name "c4k-common-standalone.jar"
                        :dependencies [[org.clojure/tools.cli "1.1.230"]
-                                      [ch.qos.logback/logback-classic "1.5.3"
+                                      [ch.qos.logback/logback-classic "1.5.6"
                                        :exclusions [com.sun.mail/javax.mail]]
-                                      [org.slf4j/jcl-over-slf4j "2.0.12"]]}}
+                                      [org.slf4j/jcl-over-slf4j "2.0.13"]]}}
   :release-tasks [["test"]
                   ["vcs" "assert-committed"]
                   ["change" "version" "leiningen.release/bump-version" "release"]
