@@ -80,7 +80,7 @@
                grafana-cloud-user)
      (assoc-in [:remote_write 0 :basic_auth :password]
                grafana-cloud-password)
-     (cm/replace-all-matching-values-by-new-value "FILTER_REGEX" filter-regex-string))))
+     (cm/replace-all-matching "FILTER_REGEX" filter-regex-string))))
 
 (defn-spec generate-config map?
   [config ::mon-cfg

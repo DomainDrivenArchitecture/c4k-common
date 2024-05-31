@@ -53,9 +53,9 @@
    fqdn pred/fqdn-string?]
   (->
    (yaml/load-as-edn "ingress/host-rule.yaml")
-   (cm/replace-all-matching-values-by-new-value "FQDN" fqdn)
-   (cm/replace-all-matching-values-by-new-value "SERVICE_PORT" service-port)
-   (cm/replace-all-matching-values-by-new-value "SERVICE_NAME" service-name)))
+   (cm/replace-all-matching "FQDN" fqdn)
+   (cm/replace-all-matching "SERVICE_PORT" service-port)
+   (cm/replace-all-matching "SERVICE_NAME" service-name)))
 
 
 (defn-spec generate-certificate map?
