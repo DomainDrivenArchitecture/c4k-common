@@ -4,6 +4,7 @@
    [clojure.spec.alpha :as s]
    [clojure.string :as cs]
    [clojure.tools.reader.edn :as edn]
+   [clojure.java.io :as io]
    [dda.c4k-common.yaml :as yaml]
    [dda.c4k-common.common :as cm]
    [dda.c4k-common.core :as core]
@@ -15,7 +16,7 @@
         
    " name " {your configuraton file} {your authorization file}"))
 
-(s/def ::options (s/* #{"-h"}))
+(s/def ::options (s/* #{"-h" "-v" "--version"}))
 (s/def ::filename (s/and string?
                          #(not (cs/starts-with? % "-"))))
 (s/def ::cmd-args (s/cat :options ::options
@@ -37,6 +38,8 @@
         (cond
           (some #(= "-h" %) options)
           (println (usage name))
+          (some #(or (= "-v" %) (= "--version" %)) options)
+          (println (some-> (io/resource "project.clj") slurp edn/read-string (nth 2)))
           :else
           (let [config-str (slurp config)
                 auth-str (slurp auth)
