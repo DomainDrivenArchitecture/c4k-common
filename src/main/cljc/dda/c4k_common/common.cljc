@@ -50,6 +50,24 @@
   (into []
         (apply concat vs)))
 
+(defn generate-cm
+  [my-config
+   my-auth
+   config-defaults
+   config-objects
+   auth-objects
+   only-config
+   only-auth]
+  (let [resulting-config (merge config-defaults my-config)
+        both (not (or only-config only-auth))
+        res-vec (cond
+                  both (concat-vec (config-objects resulting-config) (auth-objects my-auth))
+                  only-config (config-objects my-config)
+                  only-auth (auth-objects my-auth))]
+    (cs/join
+     "\n---\n"
+     res-vec)))
+
 (defn generate-common 
   [my-config 
    my-auth 

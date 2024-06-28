@@ -16,11 +16,17 @@
 
   -v | --version : Shows project version
   -h             : Shows help 
+    
+  The following options require the use of main-cm instead of main-common
+  -c | --config  : Only generate the config
+  -a | --auth    : Only generate the auth
 
    " name " {your configuraton file} {your authorization file}"))
 
 (s/def ::options (s/* #{"-h" 
-                        "-v" "--version"}))
+                        "-v" "--version"
+                        "-c" "--config"
+                        "-a" "--auth"}))
 (s/def ::filename (s/and string?
                          #(not (cs/starts-with? % "-"))))
 (s/def ::cmd-args (s/cat :options ::options
@@ -33,7 +39,39 @@
   (s/explain spec args)
   (println (str "Bad commandline arguments\n" (usage name))))
 
-(defn main-common [name config-spec? auth-spec? config-defaults k8s-objects cmd-args]
+(defn main-cm [name config-spec? auth-spec? config-defaults config-objects auth-objects cmd-args]
+  (let [parsed-args-cmd (s/conform ::cmd-args cmd-args)]
+    (if (= ::s/invalid parsed-args-cmd)
+      (invalid-args-msg name ::cmd-args cmd-args)
+      (let [{:keys [options args]} parsed-args-cmd
+            {:keys [config auth]} args]
+        (cond
+          (some #(= "-h" %) options)
+          (println (usage name))
+          (some #(or (= "-v" %) (= "--version" %)) options)
+          (println (some-> (io/resource "project.clj") slurp edn/read-string (nth 2)))
+          :else
+          (let [config-str (slurp config)
+                auth-str (slurp auth)
+                config-parse-fn (if (yaml/is-yaml? config) yaml/from-string edn/read-string)
+                auth-parse-fn (if (yaml/is-yaml? auth) yaml/from-string edn/read-string)
+                config-edn (config-parse-fn config-str)
+                auth-edn (auth-parse-fn auth-str)
+                config-valid? (s/valid? config-spec? config-edn)
+                auth-valid? (s/valid? auth-spec? auth-edn)
+                only-config (some #(or (= "-c" %) (= "--config" %)) options)
+                only-auth (some #(or (= "-a" %) (= "--auth" %)) options)]
+            (if (and config-valid? auth-valid?)
+              (println (cm/generate-cm config-edn auth-edn config-defaults config-objects auth-objects only-config only-auth))
+              (do
+                (when (not config-valid?)
+                  (println
+                   (expound/expound-str config-spec? config-edn {:print-specs? false})))
+                (when (not auth-valid?)
+                  (println
+                   (expound/expound-str auth-spec? auth-edn {:print-specs? false})))))))))))
+
+(defn ^{:deprecated "6.3.1"} main-common [name config-spec? auth-spec? config-defaults k8s-objects cmd-args]
   (let [parsed-args-cmd (s/conform ::cmd-args cmd-args)]
     (if (= ::s/invalid parsed-args-cmd)
       (invalid-args-msg name ::cmd-args cmd-args)
@@ -53,15 +91,15 @@
                 auth-edn (auth-parse-fn auth-str)
                 config-valid? (s/valid? config-spec? config-edn)
                 auth-valid? (s/valid? auth-spec? auth-edn)]
-            (if (and config-valid? auth-valid?)
-              (println (cm/generate-common config-edn auth-edn config-defaults k8s-objects))
-              (do
-                (when (not config-valid?)
-                  (println
-                   (expound/expound-str config-spec? config-edn {:print-specs? false})))
-                (when (not auth-valid?)
-                  (println
-                   (expound/expound-str auth-spec? auth-edn {:print-specs? false})))))))))))
+              (if (and config-valid? auth-valid?)
+                (println (cm/generate-common config-edn auth-edn config-defaults k8s-objects))
+                (do
+                  (when (not config-valid?)
+                    (println
+                     (expound/expound-str config-spec? config-edn {:print-specs? false})))
+                  (when (not auth-valid?)
+                    (println
+                     (expound/expound-str auth-spec? auth-edn {:print-specs? false})))))))))))
 
 (defn -main [& cmd-args]
   (main-common "c4k-common"
