@@ -13,10 +13,14 @@
 (defn usage [name]
   (str
    "usage:
-        
+
+  -v | --version : Shows project version
+  -h             : Shows help 
+
    " name " {your configuraton file} {your authorization file}"))
 
-(s/def ::options (s/* #{"-h" "-v" "--version"}))
+(s/def ::options (s/* #{"-h" 
+                        "-v" "--version"}))
 (s/def ::filename (s/and string?
                          #(not (cs/starts-with? % "-"))))
 (s/def ::cmd-args (s/cat :options ::options
