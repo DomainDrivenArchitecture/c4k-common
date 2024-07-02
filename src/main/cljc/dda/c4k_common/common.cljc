@@ -59,7 +59,7 @@
    only-config
    only-auth]
   (let [resulting-config (merge config-defaults my-config)
-        both (not (or only-config only-auth))
+        both (or (and only-config only-auth) (and (not only-config) (not only-auth)))
         res-vec (cond
                   both (concat-vec (config-objects resulting-config) (auth-objects my-auth))
                   only-config (config-objects my-config)
