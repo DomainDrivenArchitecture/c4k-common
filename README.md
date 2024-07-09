@@ -376,7 +376,7 @@ You can connect your application to grafana cloud.
 
 | Module        | Version | [inline-macro to load resources][macro] | [native build][native] | [namespaces][ns] | [split config and auth][split] |
 |---------------|---------|:---------------------------------------:|:----------------------:|:----------------:|:------------------------------:|
-| c4k-keycloak  | 0.3     |                    x                    |           x            |     x            |                                |
+| c4k-keycloak  | 1.2.1   |                    x                    |           x            |     x            |                                |
 | c4k-taiga     | 1.1.1   |                    x                    |           x            |                  |                                |
 | c4k-nextcloud | 10.2    |                    x                    |           x            |     x            |                                |
 | c4k-jitsi     | 2.1     |                    x                    |           x            |                  |                                |
