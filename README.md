@@ -380,7 +380,7 @@ You can connect your application to grafana cloud.
 | c4k-taiga     | 1.1.1   |                    x                    |           x            |                  |                                |
 | c4k-nextcloud | 10.2    |                    x                    |           x            |     x            |                                |
 | c4k-jitsi     | 2.1     |                    x                    |           x            |                  |                                |
-| c4k-forgejo   | 3.0     |                    x                    |           x            |                  |                                |
+| c4k-forgejo   | 3.4-0   |                    x                    |           x            |     x            |                                |
 | c4k-shynet    | 1.0     |                    x                    |           x            |                  |               x                |
 | c4k-website   | 2.0     |                    x                    |           x            |                  |                                |
 
