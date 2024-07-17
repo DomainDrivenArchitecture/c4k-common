@@ -82,11 +82,21 @@
                grafana-cloud-password)
      (cm/replace-all-matching "FILTER_REGEX" filter-regex-string))))
 
-(defn-spec generate-config map?
+(defn-spec generate-config-secret map?
   [config ::mon-cfg
    auth ::mon-auth]
   (->
-   (yaml/load-as-edn "monitoring/prometheus-config.yaml")
+   (yaml/load-as-edn "monitoring/prometheus-config-secret.yaml")
+   (assoc-in [:stringData :prometheus.yaml]
+             (yaml/to-string
+              (generate-prometheus-config config auth)))))
+
+(defn-spec ^{:deprecated "6.4.1"} generate-config map?
+  "Use generate-config-secret instead"
+  [config ::mon-cfg
+   auth ::mon-auth]
+  (->
+   (yaml/load-as-edn "monitoring/prometheus-config-secret.yaml")
    (assoc-in [:stringData :prometheus.yaml]
              (yaml/to-string
               (generate-prometheus-config config auth)))))

@@ -101,6 +101,7 @@
                     (println
                      (expound/expound-str auth-spec? auth-edn {:print-specs? false})))))))))))
 
+; REVIEW gec: should this also be changed to main-cm? This would mean a breaking change. 
 (defn -main [& cmd-args]
   (main-common "c4k-common"
                core/config?
