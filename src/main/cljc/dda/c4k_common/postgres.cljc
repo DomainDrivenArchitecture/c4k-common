@@ -34,12 +34,12 @@
                             :pv-storage-size-gb 10
                             :pvc-storage-class-name "manual"}))
 
-
-(defn-spec generate-config map?
+; REVIEW gec: This breaking change means, every call from outside to generate-config will mean something completely different.
+(defn-spec generate-config-configmap map?
   [& config (s/? pg-config?)]
   (let [final-config (merge default-config
                             (first config))]
-    (int/generate-config final-config)))
+    (int/generate-config-configmap final-config)))
 
 
 (defn-spec generate-deployment map?
@@ -56,11 +56,11 @@
     (int/generate-persistent-volume final-config)))
 
 
-(defn-spec generate-pvc map? 
+(defn-spec generate-pvc map?
   [config pg-config?]
   (let [final-config (merge default-config
-                             config)]
-     (int/generate-pvc final-config)))
+                            config)]
+    (int/generate-pvc final-config)))
 
 
 (defn-spec generate-secret map?
@@ -81,14 +81,32 @@
     (int/generate-service final-config)))
 
 
-(defn-spec generate seq?
-  [config pg-config? 
+(defn-spec ^{:deprecated "6.4.1"} generate seq?
+  "use generate-config and generate-auth instead"
+  [config pg-config?
    auth pg-auth?]
   (let [final-config (merge default-config
                             config)]
     [(int/generate-secret final-config auth)
      (int/generate-persistent-volume final-config)
-     (int/generate-config final-config)
+     (int/generate-config-configmap final-config)
      (int/generate-pvc final-config)
      (int/generate-deployment final-config)
      (int/generate-service final-config)]))
+
+(defn-spec generate-config seq?
+  [config pg-config?]
+  (let [final-config (merge default-config
+                            config)]
+    [(int/generate-persistent-volume final-config)
+     (int/generate-config-configmap final-config)
+     (int/generate-pvc final-config)
+     (int/generate-deployment final-config)
+     (int/generate-service final-config)]))
+
+(defn-spec generate-auth seq?
+  [config pg-config?
+   auth pg-auth?]
+  (let [final-config (merge default-config
+                            config)]
+    [(int/generate-secret final-config auth)]))
