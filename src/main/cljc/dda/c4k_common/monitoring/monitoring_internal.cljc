@@ -26,7 +26,7 @@
        "monitoring/node-exporter-service.yaml"                   (rc/inline "monitoring/node-exporter-service.yaml")
        "monitoring/prometheus-cluster-role-binding.yaml"         (rc/inline "monitoring/prometheus-cluster-role-binding.yaml")
        "monitoring/prometheus-cluster-role.yaml"                 (rc/inline "monitoring/prometheus-cluster-role.yaml")
-       "monitoring/prometheus-config.yaml"                       (rc/inline "monitoring/prometheus-config.yaml")
+       "monitoring/prometheus-config-secret.yaml"                (rc/inline "monitoring/prometheus-config-secret.yaml")
        "monitoring/prometheus-deployment.yaml"                   (rc/inline "monitoring/prometheus-deployment.yaml")
        "monitoring/prometheus-prometheus.yaml"                   (rc/inline "monitoring/prometheus-prometheus.yaml")
        "monitoring/prometheus-service-account.yaml"              (rc/inline "monitoring/prometheus-service-account.yaml")
