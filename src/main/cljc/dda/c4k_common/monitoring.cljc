@@ -44,8 +44,7 @@
    (yaml/load-as-edn "monitoring/kube-state-metrics-service.yaml")])
 
 (defn-spec generate-config seq?
-  [config ::mon-cfg
-   auth ::mon-auth]
+  []
   [(yaml/load-as-edn "monitoring/namespace.yaml")
    (yaml/load-as-edn "monitoring/prometheus-cluster-role.yaml")
    (yaml/load-as-edn "monitoring/prometheus-cluster-role-binding.yaml")
