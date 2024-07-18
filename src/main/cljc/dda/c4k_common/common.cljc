@@ -63,7 +63,7 @@
         res-vec (cond
                   both (concat-vec (config-objects resulting-config) (auth-objects my-auth))
                   only-config (config-objects my-config)
-                  only-auth (auth-objects my-auth))]
+                  only-auth (auth-objects my-config my-auth))]
     (cs/join
      "\n---\n"
      res-vec)))
