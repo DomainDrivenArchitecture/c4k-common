@@ -5,18 +5,18 @@
    [clojure.spec.test.alpha :as st]
    [dda.c4k-common.postgres :as cut]))
 
-(st/instrument `cut/generate-config-configmap)
+(st/instrument `cut/generate-configmap)
 (st/instrument `cut/generate-persistent-volume)
 (st/instrument `cut/generate-secret)
 (st/instrument `cut/generate)
 (st/instrument `cut/generate-config)
 (st/instrument `cut/generate-auth)
 
-(deftest should-generate-config-configmap
+(deftest should-generate-configmap
   (is (= {:postgres-db "postgres"
           :postgresql.conf
           "max_connections = 100\nwork_mem = 4MB\nshared_buffers = 512MB\n"}
-         (:data (cut/generate-config-configmap)))))
+         (:data (cut/generate-configmap)))))
 
 (deftest should-generate-persistent-volume
   (is (= {:kind "PersistentVolume"

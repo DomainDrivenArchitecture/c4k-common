@@ -34,12 +34,11 @@
                             :pv-storage-size-gb 10
                             :pvc-storage-class-name "manual"}))
 
-; REVIEW gec: This breaking change means, every call from outside to generate-config will mean something completely different.
-(defn-spec generate-config-configmap map?
+(defn-spec generate-configmap map?
   [& config (s/? pg-config?)]
   (let [final-config (merge default-config
                             (first config))]
-    (int/generate-config-configmap final-config)))
+    (int/generate-configmap final-config)))
 
 
 (defn-spec generate-deployment map?
@@ -89,7 +88,7 @@
                             config)]
     [(int/generate-secret final-config auth)
      (int/generate-persistent-volume final-config)
-     (int/generate-config-configmap final-config)
+     (int/generate-configmap final-config)
      (int/generate-pvc final-config)
      (int/generate-deployment final-config)
      (int/generate-service final-config)]))
@@ -99,7 +98,7 @@
   (let [final-config (merge default-config
                             config)]
     [(int/generate-persistent-volume final-config)
-     (int/generate-config-configmap final-config)
+     (int/generate-configmap final-config)
      (int/generate-pvc final-config)
      (int/generate-deployment final-config)
      (int/generate-service final-config)]))

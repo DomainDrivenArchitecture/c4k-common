@@ -52,7 +52,7 @@
 (def postgres-function (s/keys :opt-un [::deserializer ::optional]))
 
 
-(defn-spec generate-config-configmap map?
+(defn-spec generate-configmap map?
   [config pg-config?]
   (let [{:keys [postgres-size db-name namespace]} config]
     (->
@@ -62,7 +62,7 @@
      (assoc-in [:data :postgres-db] db-name))))
 
 (defn-spec ^{:deprecated "6.4.1"} generate-config map?
-  "use generate-config-configmap instead"
+  "use generate-configmap instead"
   [config pg-config?]
   (let [{:keys [postgres-size db-name namespace]} config]
     (->
