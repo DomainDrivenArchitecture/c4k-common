@@ -26,7 +26,7 @@
        "monitoring/node-exporter-service.yaml"                   (rc/inline "monitoring/node-exporter-service.yaml")
        "monitoring/prometheus-cluster-role-binding.yaml"         (rc/inline "monitoring/prometheus-cluster-role-binding.yaml")
        "monitoring/prometheus-cluster-role.yaml"                 (rc/inline "monitoring/prometheus-cluster-role.yaml")
-       "monitoring/prometheus-config.yaml"                       (rc/inline "monitoring/prometheus-config.yaml")
+       "monitoring/prometheus-config-secret.yaml"                (rc/inline "monitoring/prometheus-config-secret.yaml")
        "monitoring/prometheus-deployment.yaml"                   (rc/inline "monitoring/prometheus-deployment.yaml")
        "monitoring/prometheus-prometheus.yaml"                   (rc/inline "monitoring/prometheus-prometheus.yaml")
        "monitoring/prometheus-service-account.yaml"              (rc/inline "monitoring/prometheus-service-account.yaml")
@@ -82,11 +82,21 @@
                grafana-cloud-password)
      (cm/replace-all-matching "FILTER_REGEX" filter-regex-string))))
 
-(defn-spec generate-config map?
+(defn-spec generate-config-secret map?
   [config ::mon-cfg
    auth ::mon-auth]
   (->
-   (yaml/load-as-edn "monitoring/prometheus-config.yaml")
+   (yaml/load-as-edn "monitoring/prometheus-config-secret.yaml")
+   (assoc-in [:stringData :prometheus.yaml]
+             (yaml/to-string
+              (generate-prometheus-config config auth)))))
+
+(defn-spec ^{:deprecated "6.4.1"} generate-config map?
+  "Use generate-config-secret instead"
+  [config ::mon-cfg
+   auth ::mon-auth]
+  (->
+   (yaml/load-as-edn "monitoring/prometheus-config-secret.yaml")
    (assoc-in [:stringData :prometheus.yaml]
              (yaml/to-string
               (generate-prometheus-config config auth)))))

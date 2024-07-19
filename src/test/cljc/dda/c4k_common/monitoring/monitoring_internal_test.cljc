@@ -8,7 +8,7 @@
 
 (st/instrument `cut/generate-stateful-set)
 (st/instrument `cut/generate-agent-config)
-(st/instrument `cut/generate-config)
+(st/instrument `cut/generate-config-secret)
 
 (def conf {:cluster-name "clustername"
            :cluster-stage "test"
@@ -29,12 +29,12 @@
 (deftest should-not-generate-config
   (is (thrown?
        #?(:clj Exception :cljs js/Error)
-       (cut/generate-config invalid-conf auth))))
+       (cut/generate-config-secret invalid-conf auth))))
 
 (deftest should-not-generate-auth
   (is (thrown?
        #?(:clj Exception :cljs js/Error)
-       (cut/generate-config conf invalid-auth))))
+       (cut/generate-config-secret conf invalid-auth))))
 
 
 (deftest should-generate-prometheus-remote-write-auth
@@ -54,6 +54,6 @@
 (deftest should-generate-config
   (is (str/starts-with?
        (get-in
-        (cut/generate-config conf auth)
+        (cut/generate-config-secret conf auth)
         [:stringData :prometheus.yaml])
        "global:\n  scrape_interval:")))

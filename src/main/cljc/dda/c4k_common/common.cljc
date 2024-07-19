@@ -61,9 +61,9 @@
   (let [resulting-config (merge config-defaults my-config)
         both (or (and only-config only-auth) (and (not only-config) (not only-auth)))
         res-vec (cond
-                  both (concat-vec (config-objects resulting-config) (auth-objects my-auth))
-                  only-config (config-objects my-config)
-                  only-auth (auth-objects my-auth))]
+                  both (concat-vec (config-objects resulting-config) (auth-objects resulting-config my-auth))
+                  only-config (config-objects resulting-config)
+                  only-auth (auth-objects resulting-config my-auth))]
     (cs/join
      "\n---\n"
      res-vec)))

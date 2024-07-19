@@ -1,0 +1,4 @@
+mon-cfg:
+  grafana-cloud-url: "url-for-your-prom-remote-write-endpoint"
+  cluster-name: "forgejo"
+  cluster-stage: "test"
