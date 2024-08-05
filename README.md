@@ -395,7 +395,8 @@ Development happens at: https://repo.prod.meissa.de/meissa/c4k-common
 
 Mirrors are:
 
-* https://gitlab.com/domaindrivenarchitecture/c4k-common (issues and PR)
+* https://codeberg.org/meissa/c4k-common (Issues and PR)
+* https://gitlab.com/domaindrivenarchitecture/c4k-common (CI)
 * https://github.com/DomainDrivenArchitecture/c4k-common
 
 For more details about our repository model see: https://repo.prod.meissa.de/meissa/federate-your-repos
