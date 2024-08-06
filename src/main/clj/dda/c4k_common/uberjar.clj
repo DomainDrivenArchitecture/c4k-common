@@ -23,7 +23,7 @@
 
    " name " {your configuraton file} {your authorization file}"))
 
-(s/def ::options (s/* #{"-h" 
+(s/def ::options (s/* #{"-h"
                         "-v" "--version"
                         "-c" "--config"
                         "-a" "--auth"}))
@@ -91,20 +91,22 @@
                 auth-edn (auth-parse-fn auth-str)
                 config-valid? (s/valid? config-spec? config-edn)
                 auth-valid? (s/valid? auth-spec? auth-edn)]
-              (if (and config-valid? auth-valid?)
-                (println (cm/generate-common config-edn auth-edn config-defaults k8s-objects))
-                (do
-                  (when (not config-valid?)
-                    (println
-                     (expound/expound-str config-spec? config-edn {:print-specs? false})))
-                  (when (not auth-valid?)
-                    (println
-                     (expound/expound-str auth-spec? auth-edn {:print-specs? false})))))))))))
+            (if (and config-valid? auth-valid?)
+              (println (cm/generate-common config-edn auth-edn config-defaults k8s-objects))
+              (do
+                (when (not config-valid?)
+                  (println
+                   (expound/expound-str config-spec? config-edn {:print-specs? false})))
+                (when (not auth-valid?)
+                  (println
+                   (expound/expound-str auth-spec? auth-edn {:print-specs? false})))))))))))
 
 (defn -main [& cmd-args]
-  (main-common "c4k-common"
-               core/config?
-               core/auth?
-               core/config-defaults
-               core/k8s-objects
-               cmd-args))
+  (main-cm
+   "c4k-common"
+   core/config?
+   core/auth?
+   core/config-defaults
+   core/config-objects
+   core/auth-objects
+   cmd-args))

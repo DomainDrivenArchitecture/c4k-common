@@ -6,6 +6,8 @@
    [dda.c4k-common.monitoring :as cut]))
 
 (st/instrument `cut/generate)
+(st/instrument `cut/generate-config)
+(st/instrument `cut/generate-auth)
 
 (def conf {:cluster-name "clustername"
            :cluster-stage "test"
@@ -18,4 +20,8 @@
 
 (deftest should-generate
   (is (= 17
-         (count (cut/generate conf auth)))))
+         (count (cut/generate conf auth))))
+  (is (= 16
+         (count (cut/generate-config))))
+  (is (= 1
+         (count (cut/generate-auth conf auth)))))

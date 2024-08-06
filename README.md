@@ -379,14 +379,14 @@ You can connect your application to grafana cloud.
 | c4k-keycloak  | 1.2.1   |                    x                    |           x            |     x            |                                |
 | c4k-taiga     | 1.1.1   |                    x                    |           x            |                  |                                |
 | c4k-nextcloud | 10.2    |                    x                    |           x            |     x            |                                |
-| c4k-jitsi     | 2.1     |                    x                    |           x            |                  |                                |
-| c4k-forgejo   | 3.4.0   |                    x                    |           x            |     x            |                                |
+| c4k-jitsi     | 2.1     |                    x                    |           x            |     x            |               x                |
+| c4k-forgejo   | 3.5.0   |                    x                    |           x            |     x            |               x                |
 | c4k-shynet    | 1.0     |                    x                    |           x            |                  |               x                |
 | c4k-website   | 2.0     |                    x                    |           x            |                  |                                |
 
 [macro]: https://repo.prod.meissa.de/meissa/c4k-jitsi/commit/61d05ceedb6dcbc6bb96b96fe6f03598e2878195
 [native]: https://repo.prod.meissa.de/meissa/c4k-forgejo/pulls/4/files
-[split]: https://repo.prod.meissa.de/meissa/c4k-shynet/pulls/1
+[split]: https://repo.prod.meissa.de/meissa/c4k-jitsi/commit/d4fb8ca9e2ab44f9f9923d2e09c81a61e44b39b2
 [ns]: https://repo.prod.meissa.de/meissa/c4k-keycloak/commit/3639f3d5e6d5b364822a05b3d5d569bbc556a68b
 
 ## Development & Mirrors
@@ -395,7 +395,8 @@ Development happens at: https://repo.prod.meissa.de/meissa/c4k-common
 
 Mirrors are:
 
-* https://gitlab.com/domaindrivenarchitecture/c4k-common (issues and PR)
+* https://codeberg.org/meissa/c4k-common (Issues and PR)
+* https://gitlab.com/domaindrivenarchitecture/c4k-common (CI)
 * https://github.com/DomainDrivenArchitecture/c4k-common
 
 For more details about our repository model see: https://repo.prod.meissa.de/meissa/federate-your-repos

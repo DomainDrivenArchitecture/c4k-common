@@ -7,15 +7,22 @@
 
 (def config-defaults {})
 
-(def config? (s/keys :req-un []
+(def config? (s/keys :req-un [::monitoring/mon-cfg]
                      :opt-un []))
 
-(def auth? (s/keys :req-un []
+(def auth? (s/keys :req-un [::monitoring/mon-auth]
                    :opt-un []))
 
-(defn k8s-objects [config auth]
+(defn config-objects [config]
   (let []
     (map yaml/to-string
          (filter #(not (nil? %))
                  (cm/concat-vec
-                  (monitoring/generate config auth))))))
+                  (monitoring/generate-config))))))
+
+(defn auth-objects [config auth]
+  (let []
+    (map yaml/to-string
+         (filter #(not (nil? %))
+                 (cm/concat-vec
+                  (monitoring/generate-auth (:mon-cfg config) (:mon-auth auth)))))))

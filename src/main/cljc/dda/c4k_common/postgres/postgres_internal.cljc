@@ -52,7 +52,17 @@
 (def postgres-function (s/keys :opt-un [::deserializer ::optional]))
 
 
-(defn-spec generate-config map?
+(defn-spec generate-configmap map?
+  [config pg-config?]
+  (let [{:keys [postgres-size db-name namespace]} config]
+    (->
+     (yaml/from-string (yaml/load-resource
+                        (str "postgres/config-" (name postgres-size) ".yaml")))
+     (assoc-in [:metadata :namespace] namespace)
+     (assoc-in [:data :postgres-db] db-name))))
+
+(defn-spec ^{:deprecated "6.4.1"} generate-config map?
+  "use generate-configmap instead"
   [config pg-config?]
   (let [{:keys [postgres-size db-name namespace]} config]
     (->

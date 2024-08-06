@@ -5,18 +5,18 @@
    [clojure.spec.test.alpha :as st]
    [dda.c4k-common.postgres.postgres-internal :as cut]))
 
-(st/instrument `cut/generate-config)
+(st/instrument `cut/generate-configmap)
 (st/instrument `cut/generate-deployment)
 (st/instrument `cut/generate-persistent-volume)
 (st/instrument `cut/generate-pvc)
 (st/instrument `cut/generate-secret)
 (st/instrument `cut/generate-service)
 
-(deftest should-generate-config
+(deftest should-generate-configmap
   (is (= {:name "postgres-config",
           :namespace "default"
           :labels {:app "postgres"}}
-         (:metadata (cut/generate-config {:postgres-image "postgres:13"
+         (:metadata (cut/generate-configmap {:postgres-image "postgres:13"
                                           :postgres-size :2gb
                                           :db-name "postgres"
                                           :postgres-data-volume-path "/var/postgres"
@@ -26,7 +26,7 @@
   (is (= {:name "postgres-config",
           :namespace "myapp"
           :labels {:app "postgres"}}
-         (:metadata (cut/generate-config {:postgres-image "postgres:13"
+         (:metadata (cut/generate-configmap {:postgres-image "postgres:13"
                                           :postgres-size :2gb
                                           :db-name "postgres"
                                           :postgres-data-volume-path "/var/postgres"
@@ -36,7 +36,7 @@
   (is (= {:postgres-db "postgres"
           :postgresql.conf
           "max_connections = 100\nwork_mem = 4MB\nshared_buffers = 512MB\n"}
-         (:data (cut/generate-config {:postgres-image "postgres:13"
+         (:data (cut/generate-configmap {:postgres-image "postgres:13"
                                       :postgres-size :2gb
                                       :db-name "postgres"
                                       :postgres-data-volume-path "/var/postgres"
@@ -46,7 +46,7 @@
   (is (= {:postgres-db "postgres"
           :postgresql.conf
           "max_connections = 700\nwork_mem = 3MB\nshared_buffers = 2048MB\n"}
-         (:data (cut/generate-config {:postgres-image "postgres:13"
+         (:data (cut/generate-configmap {:postgres-image "postgres:13"
                                       :postgres-size :8gb
                                       :db-name "postgres"
                                       :postgres-data-volume-path "/var/postgres"
@@ -56,7 +56,7 @@
   (is (= {:postgres-db "test"
           :postgresql.conf
           "max_connections = 100\nwork_mem = 4MB\nshared_buffers = 512MB\n"}
-         (:data (cut/generate-config {:postgres-image "postgres:13"
+         (:data (cut/generate-configmap {:postgres-image "postgres:13"
                                       :postgres-size :2gb
                                       :db-name "test"
                                       :postgres-data-volume-path "/var/postgres"
