@@ -16,6 +16,18 @@
   (is (false? (cut/fqdn-string? "123.456.789")))
   (is (false? (cut/fqdn-string? "test&test.de"))))
 
+(deftest test-ipv4-string?
+  (is (true? (cut/ipv4-string? "127.0.0.1")))
+  (is (true? (cut/ipv4-string? "192.168.192.168")))
+  (is (true? (cut/ipv4-string? "1.2.3.4")))
+  (is (false? (cut/ipv4-string? "1.a.2.b")))
+  (is (false? (cut/ipv4-string? "f::f::f::f"))))
+
+(deftest test-ipv6-string?
+  (is (true? (cut/ipv6-string? "2a01:4f8:c012:cb41::1")))
+  (is (false? (cut/ipv6-string? "1.a.2.b")))
+  (is (false? (cut/ipv6-string? "f::f::f::f"))))
+
 (deftest test-string-of-separated-by?
   (is (true? (cut/string-of-separated-by? cut/bash-env-string? #":" "abcd")))
   (is (true? (cut/string-of-separated-by? cut/bash-env-string? #":" "abcd:efgh")))
