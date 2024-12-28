@@ -374,18 +374,16 @@ You can connect your application to grafana cloud.
 
 ## Refactoring & Module Overview
 
-| Module        | Version | [inline-macro to load resources][macro] | [native build][native] | [namespaces][ns] | [split config and auth][split] |
-| ------------- | ------- | :-------------------------------------: | :--------------------: | :--------------: | :----------------------------: |
-| c4k-keycloak  | 1.2.1   |                    x                    |           x            |        x         |                                |
-| c4k-taiga     | 1.1.1   |                    x                    |           x            |                  |                                |
-| c4k-nextcloud | 11.0    |                    x                    |           x            |        x         |               x                |
-| c4k-jitsi     | 2.1     |                    x                    |           x            |        x         |               x                |
-| c4k-forgejo   | 3.5.0   |                    x                    |           x            |        x         |               x                |
-| c4k-shynet    | 1.0     |                    x                    |           x            |                  |               x                |
-| c4k-website   | 2.0     |                    x                    |           x            |                  |                                |
+| Module        | Version | [namespaces][ns] | [split config and auth][split] |
+| ------------- | ------- | :--------------: | :----------------------------: |
+| c4k-keycloak  | 1.2.1   |        x         |                                |
+| c4k-taiga     | 1.1.1   |                  |                                |
+| c4k-nextcloud | 11.0    |        x         |               x                |
+| c4k-jitsi     | 2.1     |        x         |               x                |
+| c4k-forgejo   | 3.5.0   |        x         |               x                |
+| c4k-shynet    | 1.0     |                  |               x                |
+| c4k-website   | 2.0     |                  |                                |
 
-[macro]: https://repo.prod.meissa.de/meissa/c4k-jitsi/commit/61d05ceedb6dcbc6bb96b96fe6f03598e2878195
-[native]: https://repo.prod.meissa.de/meissa/c4k-forgejo/pulls/4/files
 [split]: https://repo.prod.meissa.de/meissa/c4k-jitsi/commit/d4fb8ca9e2ab44f9f9923d2e09c81a61e44b39b2
 [ns]: https://repo.prod.meissa.de/meissa/c4k-keycloak/commit/3639f3d5e6d5b364822a05b3d5d569bbc556a68b
 
