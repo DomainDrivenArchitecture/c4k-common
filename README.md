@@ -375,12 +375,12 @@ You can connect your application to grafana cloud.
 ## Refactoring & Module Overview
 
 | Module        | Version | [inline-macro to load resources][macro] | [native build][native] | [namespaces][ns] | [split config and auth][split] |
-|---------------|---------|:---------------------------------------:|:----------------------:|:----------------:|:------------------------------:|
-| c4k-keycloak  | 1.2.1   |                    x                    |           x            |     x            |                                |
+| ------------- | ------- | :-------------------------------------: | :--------------------: | :--------------: | :----------------------------: |
+| c4k-keycloak  | 1.2.1   |                    x                    |           x            |        x         |                                |
 | c4k-taiga     | 1.1.1   |                    x                    |           x            |                  |                                |
-| c4k-nextcloud | 10.2    |                    x                    |           x            |     x            |                                |
-| c4k-jitsi     | 2.1     |                    x                    |           x            |     x            |               x                |
-| c4k-forgejo   | 3.5.0   |                    x                    |           x            |     x            |               x                |
+| c4k-nextcloud | 11.0    |                    x                    |           x            |        x         |               x                |
+| c4k-jitsi     | 2.1     |                    x                    |           x            |        x         |               x                |
+| c4k-forgejo   | 3.5.0   |                    x                    |           x            |        x         |               x                |
 | c4k-shynet    | 1.0     |                    x                    |           x            |                  |               x                |
 | c4k-website   | 2.0     |                    x                    |           x            |                  |                                |
 
