@@ -374,18 +374,19 @@ You can connect your application to grafana cloud.
 
 ## Refactoring & Module Overview
 
-| Module        | Version | [namespaces][ns] | [split config and auth][split] |
-| ------------- | ------- | :--------------: | :----------------------------: |
-| c4k-keycloak  | 1.2.1   |        x         |                                |
-| c4k-taiga     | 1.1.1   |                  |                                |
-| c4k-nextcloud | 11.0    |        x         |               x                |
-| c4k-jitsi     | 2.1     |        x         |               x                |
-| c4k-forgejo   | 3.5.0   |        x         |               x                |
-| c4k-shynet    | 1.0     |                  |               x                |
-| c4k-website   | 2.0     |                  |                                |
+| Module        | Version | [namespaces][ns] | [split config and auth][split] | [new backup][bak] |
+| ------------- | ------- | :--------------: | :----------------------------: | :---------------: |
+| c4k-keycloak  | 1.2.1   |        x         |                                |                   |
+| c4k-taiga     | 1.1.1   |                  |                                |                   |
+| c4k-nextcloud | 11.0    |        x         |               x                |         x         |
+| c4k-jitsi     | 2.1     |        x         |               x                |         -         |
+| c4k-forgejo   | 3.5.0   |        x         |               x                |         x         |
+| c4k-shynet    | 1.0     |                  |               x                |         -         |
+| c4k-website   | 2.0     |                  |                                |         -         |
 
 [split]: https://repo.prod.meissa.de/meissa/c4k-jitsi/commit/d4fb8ca9e2ab44f9f9923d2e09c81a61e44b39b2
 [ns]: https://repo.prod.meissa.de/meissa/c4k-keycloak/commit/3639f3d5e6d5b364822a05b3d5d569bbc556a68b
+[back]: https://repo.prod.meissa.de/meissa/c4k-nextcloud/pulls/1
 
 ## Development & Mirrors
 
