@@ -2,7 +2,7 @@
     "name": "c4k-common-cljs",
     "description": "Contains predicates and tools for c4k",
     "author": "meissa GmbH",
-    "version": "5.0.1",
+    "version": "8.0.1",
     "homepage": "https://gitlab.com/domaindrivenarchitecture/c4k-common#readme",
     "repository": "https://www.npmjs.com/package/c4k-common",
     "license": "APACHE2",
@@ -22,11 +22,11 @@
         "url": "https://repo.prod.meissa.de/meissa/c4k-common/issues"
     },
     "dependencies": {
-        "js-base64": "^3.7.2",
-        "js-yaml": "^4.0.0"
+        "js-base64": "^3.7.7",
+        "js-yaml": "^4.1.0"
     },
     "devDependencies": {
-        "shadow-cljs": "^2.11.18",
-        "source-map-support": "^0.5.19"
+        "shadow-cljs": "^2.28.20",
+        "source-map-support": "^0.5.21"
     }
 }
