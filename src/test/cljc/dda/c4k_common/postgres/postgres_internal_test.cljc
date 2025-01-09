@@ -80,7 +80,8 @@
             {:name "POSTGRES_DB"
              :valueFrom
              {:configMapKeyRef
-              {:name "postgres-config", :key "postgres-db"}}}]
+              {:name "postgres-config", :key "postgres-db"}}}
+            {:name "PGDATA", :value "/var/lib/postgresql/data/db/"}]
            :ports [{:containerPort 5432, :name "postgresql"}]
            :volumeMounts
            [{:name "postgres-config-volume"
