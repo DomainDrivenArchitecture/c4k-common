@@ -17,53 +17,52 @@
           :namespace "default"
           :labels {:app "postgres"}}
          (:metadata (cut/generate-configmap {:postgres-image "postgres:13"
-                                          :postgres-size :2gb
-                                          :db-name "postgres"
-                                          :postgres-data-volume-path "/var/postgres"
-                                          :pv-storage-size-gb 10
-                                          :pvc-storage-class-name "manual"
-                                          :namespace "default"}))))
+                                             :postgres-size :2gb
+                                             :db-name "postgres"
+                                             :postgres-data-volume-path "/var/postgres"
+                                             :pv-storage-size-gb 10
+                                             :pvc-storage-class-name "manual"
+                                             :namespace "default"}))))
   (is (= {:name "postgres-config",
           :namespace "myapp"
           :labels {:app "postgres"}}
          (:metadata (cut/generate-configmap {:postgres-image "postgres:13"
-                                          :postgres-size :2gb
-                                          :db-name "postgres"
-                                          :postgres-data-volume-path "/var/postgres"
-                                          :pv-storage-size-gb 10
-                                          :pvc-storage-class-name "manual"
-                                          :namespace "myapp"}))))
+                                             :postgres-size :2gb
+                                             :db-name "postgres"
+                                             :postgres-data-volume-path "/var/postgres"
+                                             :pv-storage-size-gb 10
+                                             :pvc-storage-class-name "manual"
+                                             :namespace "myapp"}))))
   (is (= {:postgres-db "postgres"
           :postgresql.conf
           "max_connections = 100\nwork_mem = 4MB\nshared_buffers = 512MB\n"}
          (:data (cut/generate-configmap {:postgres-image "postgres:13"
-                                      :postgres-size :2gb
-                                      :db-name "postgres"
-                                      :postgres-data-volume-path "/var/postgres"
-                                      :pv-storage-size-gb 10
-                                      :pvc-storage-class-name "manual"
-                                      :namespace "default"}))))
+                                         :postgres-size :2gb
+                                         :db-name "postgres"
+                                         :postgres-data-volume-path "/var/postgres"
+                                         :pv-storage-size-gb 10
+                                         :pvc-storage-class-name "manual"
+                                         :namespace "default"}))))
   (is (= {:postgres-db "postgres"
           :postgresql.conf
           "max_connections = 700\nwork_mem = 3MB\nshared_buffers = 2048MB\n"}
          (:data (cut/generate-configmap {:postgres-image "postgres:13"
-                                      :postgres-size :8gb
-                                      :db-name "postgres"
-                                      :postgres-data-volume-path "/var/postgres"
-                                      :pv-storage-size-gb 10
-                                      :pvc-storage-class-name "manual"
-                                      :namespace "default"}))))
+                                         :postgres-size :8gb
+                                         :db-name "postgres"
+                                         :postgres-data-volume-path "/var/postgres"
+                                         :pv-storage-size-gb 10
+                                         :pvc-storage-class-name "manual"
+                                         :namespace "default"}))))
   (is (= {:postgres-db "test"
           :postgresql.conf
           "max_connections = 100\nwork_mem = 4MB\nshared_buffers = 512MB\n"}
          (:data (cut/generate-configmap {:postgres-image "postgres:13"
-                                      :postgres-size :2gb
-                                      :db-name "test"
-                                      :postgres-data-volume-path "/var/postgres"
-                                      :pv-storage-size-gb 10
-                                      :pvc-storage-class-name "manual"
-                                      :namespace "default"}))))
-  )
+                                         :postgres-size :2gb
+                                         :db-name "test"
+                                         :postgres-data-volume-path "/var/postgres"
+                                         :pv-storage-size-gb 10
+                                         :pvc-storage-class-name "manual"
+                                         :namespace "default"})))))
 
 (deftest should-generate-deployment
   (is (= [{:image "postgres:14"
@@ -98,7 +97,7 @@
                                            :pvc-storage-class-name "manual"
                                            :namespace "default"})
                  [:spec :template :spec :containers])))
-  (is (= {:name "postgresql", 
+  (is (= {:name "postgresql",
           :namespace "myapp"}
          (:metadata (cut/generate-deployment {:postgres-image "postgres:14"
                                               :postgres-size :2gb
@@ -114,7 +113,7 @@
   (is (= {:kind "PersistentVolume"
           :apiVersion "v1"
           :metadata
-          {:name "postgres-pv-volume", 
+          {:name "postgres-pv-volume",
            :namespace "default"
            :labels {:type "local"}}
           :spec
@@ -135,7 +134,7 @@
   (is (= {:apiVersion "v1"
           :kind "PersistentVolumeClaim"
           :metadata
-          {:name "postgres-claim", 
+          {:name "postgres-claim",
            :namespace "default"
            :labels {:app "postgres"}}
           :spec
@@ -165,12 +164,26 @@
                                :pv-storage-size-gb 20
                                :pvc-storage-class-name "local-path"
                                :namespace "default"}
+                              {:postgres-db-user "xx-us" :postgres-db-password "xx-pw"})))
+  (is (= {:apiVersion "v1"
+          :kind "Secret"
+          :metadata {:name "postgres-secret" :namespace "app"}
+          :type "Opaque"
+          :data
+          {:postgres-user "eHgtdXM=", :postgres-password "eHgtcHc="}}
+         (cut/generate-secret {:postgres-image "postgres:13"
+                               :postgres-size :2gb
+                               :db-name "postgres"
+                               :postgres-data-volume-path "/var/postgres"
+                               :pv-storage-size-gb 20
+                               :pvc-storage-class-name "local-path"
+                               :namespace "app"}
                               {:postgres-db-user "xx-us" :postgres-db-password "xx-pw"}))))
 
 
 (deftest should-generate-service
-  (is (= {:name "postgresql-service" :namespace "default"}          
-         (:metadata (cut/generate-service 
+  (is (= {:name "postgresql-service" :namespace "default"}
+         (:metadata (cut/generate-service
                      {:postgres-image "postgres:13"
                       :postgres-size :2gb
                       :db-name "postgres"

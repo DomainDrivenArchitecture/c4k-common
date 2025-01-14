@@ -49,7 +49,15 @@
           :metadata {:name "postgres-secret", :namespace "default"},
           :type "Opaque",
           :data {:postgres-user "eHgtdXM=", :postgres-password "eHgtcHc="}}
-         (cut/generate-secret {:postgres-db-user "xx-us" :postgres-db-password "xx-pw"}))))
+         (cut/generate-secret {:postgres-db-user "xx-us" :postgres-db-password "xx-pw"})))
+  (is (= {:apiVersion "v1",
+          :kind "Secret",
+          :metadata {:name "postgres-secret", :namespace "app"},
+          :type "Opaque",
+          :data {:postgres-user "eHgtdXM=", :postgres-password "eHgtcHc="}}
+         (cut/generate-secret {:namespace "app"}
+                              {:postgres-db-user "xx-us"
+                               :postgres-db-password "xx-pw"}))))
 
 
 (deftest should-generate
