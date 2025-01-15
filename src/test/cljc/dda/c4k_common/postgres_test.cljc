@@ -59,6 +59,18 @@
                               {:postgres-db-user "xx-us"
                                :postgres-db-password "xx-pw"}))))
 
+(deftest should-generate-auth
+
+  (is (= [{:apiVersion "v1",
+           :kind "Secret",
+           :metadata {:name "postgres-secret", :namespace "app"},
+           :type "Opaque",
+           :data {:postgres-user "eHgtdXM=", :postgres-password "eHgtcHc="}}]
+         (cut/generate-auth {:namespace "app"}
+                            {:postgres-db-user "xx-us"
+                             :postgres-db-password "xx-pw"}))))
+
+
 
 (deftest should-generate
   (is (= 6
