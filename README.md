@@ -379,7 +379,7 @@ You can connect your application to grafana cloud.
 | c4k-keycloak  | 1.2.1   |        x         |                                |                   |
 | c4k-taiga     | 2.0     |        x         |               x                |         x         |
 | c4k-nextcloud | 11.0    |        x         |               x                |         x         |
-| c4k-jitsi     | 2.1     |        x         |               x                |         -         |
+| c4k-jitsi     | 3.0     |        x         |               x                |         -         |
 | c4k-forgejo   | 3.5     |        x         |               x                |         x         |
 | c4k-shynet    | 1.0     |                  |               x                |         -         |
 | c4k-website   | 2.0     |                  |                                |         -         |
