@@ -31,6 +31,9 @@
        "monitoring/prometheus-prometheus.yaml"                   (rc/inline "monitoring/prometheus-prometheus.yaml")
        "monitoring/prometheus-service-account.yaml"              (rc/inline "monitoring/prometheus-service-account.yaml")
        "monitoring/prometheus-service.yaml"                      (rc/inline "monitoring/prometheus-service.yaml")
+       "monitoring/push-gw-deployment.yaml"                      (rc/inline "monitoring/push-gw-deployment.yaml")
+       "monitoring/push-gw-service-account.yaml"                 (rc/inline "monitoring/push-gw-service-account.yaml")
+       "monitoring/push-gw-service.yaml"                         (rc/inline "monitoring/push-gw-service.yaml")
        (throw (js/Error. (str "Undefined Resource: " resource-name))))))
 
 

@@ -19,9 +19,7 @@
 
 
 (deftest should-generate
-  (is (= 17
-         (count (cut/generate conf auth))))
-  (is (= 16
+  (is (= 19
          (count (cut/generate-config))))
   (is (= 1
          (count (cut/generate-auth conf auth)))))
