@@ -4,6 +4,7 @@
       :cljs [cljs.test :refer-macros [deftest is are testing run-tests]])
    #?(:cljs [shadow.resource :as rc])
    [clojure.spec.test.alpha :as st]
+   [dda.c4k-common.yaml :as yaml]
    [dda.c4k-common.namespace :as cut]))
 
 (st/instrument `cut/generate)
