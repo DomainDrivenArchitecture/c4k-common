@@ -31,6 +31,9 @@
        "monitoring/prometheus-prometheus.yaml"                   (rc/inline "monitoring/prometheus-prometheus.yaml")
        "monitoring/prometheus-service-account.yaml"              (rc/inline "monitoring/prometheus-service-account.yaml")
        "monitoring/prometheus-service.yaml"                      (rc/inline "monitoring/prometheus-service.yaml")
+       "monitoring/push-gw-deployment.yaml"                      (rc/inline "monitoring/push-gw-deployment.yaml")
+       "monitoring/push-gw-service-account.yaml"                 (rc/inline "monitoring/push-gw-service-account.yaml")
+       "monitoring/push-gw-service.yaml"                         (rc/inline "monitoring/push-gw-service.yaml")
        (throw (js/Error. (str "Undefined Resource: " resource-name))))))
 
 
@@ -58,7 +61,7 @@
                                        "traefik_tls_certs_not_after")
                    :kube-state-regex (str "kube_pod_container_status_restarts_total|"
                                           "kube_pod_status_reason|kube_node_status_capacity|kube_node_status_allocatable|"
-                                          "kube_cronjob_status_active|kube_job_status_failed")})
+                                          "kube_cronjob_status_active|kube_job_.*")})
 
 (def filter-regex-string
   (str/join "|" (vals metric-regex)))

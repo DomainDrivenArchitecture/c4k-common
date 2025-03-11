@@ -20,29 +20,6 @@
 
 (def filter-regex-string int/filter-regex-string)
 
-
-(defn-spec ^{:deprecated "6.4.1"} generate seq?
-  "use generate-config and generate-auth instead"
-  [config ::mon-cfg
-   auth ::mon-auth]
-  [(yaml/load-as-edn "monitoring/namespace.yaml")
-   (yaml/load-as-edn "monitoring/prometheus-cluster-role.yaml")
-   (yaml/load-as-edn "monitoring/prometheus-cluster-role-binding.yaml")
-   (yaml/load-as-edn "monitoring/prometheus-service.yaml")
-   (yaml/load-as-edn "monitoring/prometheus-service-account.yaml")
-   (int/generate-config-secret config auth)
-   (yaml/load-as-edn "monitoring/prometheus-deployment.yaml")
-   (yaml/load-as-edn "monitoring/node-exporter-service-account.yaml")
-   (yaml/load-as-edn "monitoring/node-exporter-cluster-role.yaml")
-   (yaml/load-as-edn "monitoring/node-exporter-cluster-role-binding.yaml")
-   (yaml/load-as-edn "monitoring/node-exporter-daemon-set.yaml")
-   (yaml/load-as-edn "monitoring/node-exporter-service.yaml")
-   (yaml/load-as-edn "monitoring/kube-state-metrics-cluster-role-binding.yaml")
-   (yaml/load-as-edn "monitoring/kube-state-metrics-cluster-role.yaml")
-   (yaml/load-as-edn "monitoring/kube-state-metrics-deployment.yaml")
-   (yaml/load-as-edn "monitoring/kube-state-metrics-service-account.yaml")
-   (yaml/load-as-edn "monitoring/kube-state-metrics-service.yaml")])
-
 (defn-spec generate-config seq?
   []
   [(yaml/load-as-edn "monitoring/namespace.yaml")
@@ -60,7 +37,10 @@
    (yaml/load-as-edn "monitoring/kube-state-metrics-cluster-role.yaml")
    (yaml/load-as-edn "monitoring/kube-state-metrics-deployment.yaml")
    (yaml/load-as-edn "monitoring/kube-state-metrics-service-account.yaml")
-   (yaml/load-as-edn "monitoring/kube-state-metrics-service.yaml")])
+   (yaml/load-as-edn "monitoring/kube-state-metrics-service.yaml")   
+   (yaml/load-as-edn "monitoring/push-gw-deployment.yaml")
+   (yaml/load-as-edn "monitoring/push-gw-service-account.yaml")
+   (yaml/load-as-edn "monitoring/push-gw-service.yaml")])
 
 (defn-spec generate-auth seq?
   [config ::mon-cfg

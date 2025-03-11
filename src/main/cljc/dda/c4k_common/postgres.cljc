@@ -79,20 +79,6 @@
                             config)]
     (int/generate-service final-config)))
 
-
-(defn-spec ^{:deprecated "6.4.1"} generate seq?
-  "use generate-config and generate-auth instead"
-  [config pg-config?
-   auth pg-auth?]
-  (let [final-config (merge default-config
-                            config)]
-    [(int/generate-secret final-config auth)
-     (int/generate-persistent-volume final-config)
-     (int/generate-configmap final-config)
-     (int/generate-pvc final-config)
-     (int/generate-deployment final-config)
-     (int/generate-service final-config)]))
-
 (defn-spec generate-config seq?
   [config pg-config?]
   (let [final-config (merge default-config
