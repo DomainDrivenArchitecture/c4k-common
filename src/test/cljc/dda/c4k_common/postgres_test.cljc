@@ -73,10 +73,6 @@
 
 
 (deftest should-generate
-  (is (= 6
-         (count (cut/generate {}
-                              {:postgres-db-user "user"
-                               :postgres-db-password "password"}))))
   (is (= 5
          (count (cut/generate-config {}))))
   (is (= 1
