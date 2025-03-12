@@ -370,7 +370,7 @@ With minimal config of
  (monitoring/generate conf auth)
 ```
 
-This provides a cluster local node-exporter, kube-state-metrics, pushgateway & prometheus writing important metrics to grafana cloud.
+You can get a cluster local node-exporter, kube-state-metrics, pushgateway & prometheus writing important metrics to grafana cloud.
 
 ## Refactoring & Module Overview
 
