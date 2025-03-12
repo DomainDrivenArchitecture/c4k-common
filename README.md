@@ -370,13 +370,13 @@ With minimal config of
  (monitoring/generate conf auth)
 ```
 
-You can connect your application to grafana cloud.
+This provides a cluster local node-exporter, kube-state-metrics, pushgateway & prometheus writing important metrics to grafana cloud.
 
 ## Refactoring & Module Overview
 
 | Module        | Version | [namespaces][ns] | [split config and auth][split] | [new backup][bak] |
 | ------------- | ------- | :--------------: | :----------------------------: | :---------------: |
-| c4k-keycloak  | 1.3     |        x         |               x                |         -         |
+| c4k-keycloak  | 1.4     |        x         |               x                |         x         |
 | c4k-taiga     | 2.0     |        x         |               x                |         x         |
 | c4k-nextcloud | 11.0    |        x         |               x                |         x         |
 | c4k-jitsi     | 3.0     |        x         |               x                |         -         |
