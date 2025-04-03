@@ -380,7 +380,7 @@ You can get a cluster local node-exporter, kube-state-metrics, pushgateway & pro
 | c4k-taiga     | 2.0     |        x         |               x                |                          |
 | c4k-nextcloud | 11.0    |        x         |               x                |                          |
 | c4k-jitsi     | 3.0     |        x         |               x                |            -             |
-| c4k-forgejo   | 4.1     |        x         |               x                |                          |
+| c4k-forgejo   | 5.0     |        x         |               x                |            x             |
 | c4k-shynet    | 1.0     |                  |               x                |            -             |
 | c4k-website   | 2.0     |                  |                                |            -             |
 
