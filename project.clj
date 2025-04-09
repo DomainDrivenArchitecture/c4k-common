@@ -27,7 +27,7 @@
                        :main dda.c4k-common.uberjar
                        :uberjar-name "c4k-common-standalone.jar"
                        :dependencies [[org.clojure/tools.cli "1.1.230"]
-                                      [ch.qos.logback/logback-classic "1.5.17"
+                                      [ch.qos.logback/logback-classic "1.5.18"
                                        :exclusions [com.sun.mail/javax.mail]]
                                       [org.slf4j/jcl-over-slf4j "2.0.17"]]}}
   :release-tasks [["test"]
