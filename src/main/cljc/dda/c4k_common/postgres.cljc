@@ -27,12 +27,12 @@
 (def postgres-function (s/keys :opt-un [::deserializer ::optional]))
 
 (def default-config (merge ns/default-config
-                           {:postgres-image "postgres:13"
+                           {:postgres-image "postgres:16"
                             :postgres-size :2gb
                             :db-name "postgres"
                             :postgres-data-volume-path "/var/postgres"
-                            :pv-storage-size-gb 10
-                            :pvc-storage-class-name "manual"}))
+                            :pv-storage-size-gb 20
+                            :pvc-storage-class-name :local-path}))
 
 (defn-spec generate-configmap map?
   [& config (s/? pg-config?)]
