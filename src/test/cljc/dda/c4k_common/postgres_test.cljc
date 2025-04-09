@@ -26,7 +26,7 @@
           :spec
           {:storageClassName "manual"
            :accessModes ["ReadWriteOnce"]
-           :capacity {:storage "10Gi"}
+           :capacity {:storage "20Gi"}
            :hostPath {:path "xx"}}}
          (cut/generate-persistent-volume {:postgres-data-volume-path "xx"}))))
 
@@ -37,9 +37,9 @@
           :metadata
           {:name "postgres-claim", :namespace "default" :labels {:app "postgres"}}
           :spec
-          {:storageClassName "manual"
+          {:storageClassName "local-path"
            :accessModes ["ReadWriteOnce"]
-           :resources {:requests {:storage "10Gi"}}}}
+           :resources {:requests {:storage "20Gi"}}}}
          (cut/generate-pvc {}))))
 
 
@@ -66,16 +66,16 @@
            :metadata {:name "postgres-secret", :namespace "app"},
            :type "Opaque",
            :data {:postgres-user "eHgtdXM=", :postgres-password "eHgtcHc="}}]
-         (cut/generate-auth {:namespace "app"}
-                            {:postgres-db-user "xx-us"
-                             :postgres-db-password "xx-pw"}))))
+         (cut/auth-objects {:namespace "app"}
+                           {:postgres-db-user "xx-us"
+                            :postgres-db-password "xx-pw"}))))
 
 
 
 (deftest should-generate
   (is (= 5
-         (count (cut/generate-config {}))))
+         (count (cut/config-objects {}))))
   (is (= 1
-         (count (cut/generate-auth {}
-                                   {:postgres-db-user "user"
-                                    :postgres-db-password "password"})))))
+         (count (cut/auth-objects {}
+                                  {:postgres-db-user "user"
+                                   :postgres-db-password "password"})))))

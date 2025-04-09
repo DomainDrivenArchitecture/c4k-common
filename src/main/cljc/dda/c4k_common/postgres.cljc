@@ -24,7 +24,8 @@
 (def pg-auth?
   (s/keys :opt-un [::postgres-db-user ::postgres-db-password]))
 
-(def postgres-function (s/keys :opt-un [::deserializer ::optional]))
+(def ^{:deprecated "11.0.0"} postgres-function
+  (s/keys :opt-un [::deserializer ::optional]))
 
 (def default-config (merge ns/default-config
                            {:postgres-image "postgres:16"
@@ -32,7 +33,7 @@
                             :db-name "postgres"
                             :postgres-data-volume-path "/var/postgres"
                             :pv-storage-size-gb 20
-                            :pvc-storage-class-name :local-path}))
+                            :pvc-storage-class-name "local-path"}))
 
 (defn-spec generate-configmap map?
   [& config (s/? pg-config?)]
@@ -79,19 +80,32 @@
                             config)]
     (int/generate-service final-config)))
 
-(defn-spec generate-config seq?
+(defn-spec config-objects seq?
   [config pg-config?]
-  (let [final-config (merge default-config
-                            config)]
-    [(int/generate-persistent-volume final-config)
-     (int/generate-configmap final-config)
-     (int/generate-pvc final-config)
-     (int/generate-deployment final-config)
-     (int/generate-service final-config)]))
+  (let [resolved-config (merge default-config
+                               config)]
+  [(generate-configmap resolved-config)
+   (when (contains? resolved-config :postgres-data-volume-path)
+     (generate-persistent-volume
+      (select-keys resolved-config [:postgres-data-volume-path :pv-storage-size-gb])))
+   (generate-pvc resolved-config)
+   (generate-deployment resolved-config)
+   (generate-service resolved-config)]))
 
-(defn-spec generate-auth seq?
+(defn-spec auth-objects seq?
   [config pg-config?
    auth pg-auth?]
-  (let [final-config (merge default-config
+  (let [resolved-config (merge default-config
                             config)]
-    [(int/generate-secret final-config auth)]))
+    [(int/generate-secret resolved-config auth)]))
+
+(defn-spec ^{:deprecated "11.0.0"} generate-config seq?
+  "use config-objects instead"
+  [config pg-config?]
+  (config-objects config))
+
+(defn-spec ^{:deprecated "11.0.0"} generate-auth seq?
+  "use config-auth instead"
+  [config pg-config?
+   auth pg-auth?]
+  (auth-objects config auth))
