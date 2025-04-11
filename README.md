@@ -381,7 +381,7 @@ You can get a cluster local node-exporter, kube-state-metrics, pushgateway & pro
 | c4k-nextcloud | 11.0    |        x         |               x                |                          |
 | c4k-jitsi     | 3.0     |        x         |               x                |            -             |
 | c4k-forgejo   | 6.0     |        x         |               x                |            x             |
-| c4k-shynet    | 1.0     |                  |               x                |            -             |
+| c4k-stats     | 1.0     |        x         |               x                |            x             |
 | c4k-website   | 2.0     |                  |                                |            -             |
 
 [split]: https://repo.prod.meissa.de/meissa/c4k-jitsi/commit/d4fb8ca9e2ab44f9f9923d2e09c81a61e44b39b2
