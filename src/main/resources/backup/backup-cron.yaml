@@ -1,11 +1,11 @@
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-    name: backup-cron
-    namespace: REPLACE_ME
-    labels:
-      app.kubernetes.io/name: backup-cron
-      app.kubernetes.io/part-of: REPLACE_ME
+  name: backup-cron
+  namespace: REPLACE_ME
+  labels:
+    app.kubernetes.io/name: backup-cron
+    app.kubernetes.io/part-of: REPLACE_ME
 spec:
   schedule: "10 23 * * *"
   successfulJobsHistoryLimit: 1

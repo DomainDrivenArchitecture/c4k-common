@@ -111,11 +111,10 @@
     (->
      (ns/load-and-adjust-namespace "backup/backup-cron.yaml" namespace)
      (assoc-in [:metadata :labels :app.kubernetes.io/part-of] app-name)
-     (assoc-in [:spec :template :metadata :labels :app.kubernetes.io/part-of] app-name)
-     (assoc-in [:spec :template :spec :containers 0 :image] image)
-     (assoc-in [:spec :template :spec :containers 0 :env] (backup-env config))
-     (assoc-in [:spec :template :spec :containers 0 :volumeMounts] (backup-volume-mounts config))
-     (assoc-in [:spec :template :spec :volumes] (backup-volumes config)))))
+     (assoc-in [:spec :jobTemplate :spec :template :spec :containers 0 :image] image)
+     (assoc-in [:spec :jobTemplate :spec :template :spec :containers 0 :env] (backup-env config))
+     (assoc-in [:spec :jobTemplate :spec :template :spec :containers 0 :volumeMounts] (backup-volume-mounts config))
+     (assoc-in [:spec :jobTemplate :spec :template :spec :volumes] (backup-volumes config)))))
 
 (defn-spec config map?
   [config config?]
