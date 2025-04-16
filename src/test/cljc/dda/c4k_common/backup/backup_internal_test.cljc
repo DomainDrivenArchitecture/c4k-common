@@ -12,7 +12,7 @@
 
 (def config {:namespace "ns"
              :app-name "app-name"
-             :image "image"
+             :backup-image "image"
              :backup-postgres false
              :restic-repository "repo"})
 

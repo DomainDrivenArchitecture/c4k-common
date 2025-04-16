@@ -10,7 +10,7 @@
 
 (def config {:namespace "ns"
              :app-name "app-name"
-             :image "image"
+             :backup-image "image"
              :backup-postgres true
              :restic-repository "repo"
              :backup-volume-mount

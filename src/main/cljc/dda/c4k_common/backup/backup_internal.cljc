@@ -15,7 +15,7 @@
 (s/def ::mount-path string?)
 
 (s/def ::app-name string?)
-(s/def ::image string?)
+(s/def ::backup-image string?)
 (s/def ::backup-postgres boolean?)
 (s/def ::backup-volume-mount (s/keys :req-un [::mount-name ::pvc-name ::mount-path]))
 (s/def ::aws-access-key-id p/bash-env-string?)
@@ -26,7 +26,7 @@
 
 (def config? (s/keys :req-un [::ns/namespace
                               ::app-name
-                              ::image
+                              ::backup-image
                               ::backup-postgres
                               ::restic-repository]
                      :opt-un [::backup-volume-mount]))
@@ -95,23 +95,23 @@
 
 (defn-spec backup-restore-deployment map?
   [config config?]
-  (let [{:keys [namespace app-name image]} config]
+  (let [{:keys [namespace app-name backup-image]} config]
     (->
      (ns/load-and-adjust-namespace "backup/backup-restore-deployment.yaml" namespace)
      (assoc-in [:metadata :labels :app.kubernetes.io/part-of] app-name)
      (assoc-in [:spec :template :metadata :labels :app.kubernetes.io/part-of] app-name)
-     (assoc-in [:spec :template :spec :containers 0 :image] image)     
+     (assoc-in [:spec :template :spec :containers 0 :image] backup-image)     
      (assoc-in [:spec :template :spec :containers 0 :env] (backup-env config))
      (assoc-in [:spec :template :spec :containers 0 :volumeMounts] (backup-volume-mounts config))
      (assoc-in [:spec :template :spec :volumes] (backup-volumes config)))))
 
 (defn-spec backup-cron map?
   [config config?]
-  (let [{:keys [namespace app-name image]} config]
+  (let [{:keys [namespace app-name backup-image]} config]
     (->
      (ns/load-and-adjust-namespace "backup/backup-cron.yaml" namespace)
      (assoc-in [:metadata :labels :app.kubernetes.io/part-of] app-name)
-     (assoc-in [:spec :jobTemplate :spec :template :spec :containers 0 :image] image)
+     (assoc-in [:spec :jobTemplate :spec :template :spec :containers 0 :image] backup-image)
      (assoc-in [:spec :jobTemplate :spec :template :spec :containers 0 :env] (backup-env config))
      (assoc-in [:spec :jobTemplate :spec :template :spec :containers 0 :volumeMounts] (backup-volume-mounts config))
      (assoc-in [:spec :jobTemplate :spec :template :spec :volumes] (backup-volumes config)))))

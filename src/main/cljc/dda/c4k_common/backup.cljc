@@ -11,7 +11,7 @@
 (s/def ::mount-path ::int/mount-path)
 
 (s/def ::app-name ::int/app-name)
-(s/def ::image ::int/image)
+(s/def ::backup-image ::int/backup-image)
 (s/def ::backup-postgres ::int/backup-postgres)
 (s/def ::backup-volume-mount ::int/backup-volume-mount)
 (s/def ::aws-access-key-id ::int/aws-access-key-id)
