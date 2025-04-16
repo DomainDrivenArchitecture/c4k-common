@@ -8,12 +8,100 @@
 (st/instrument `cut/secret)
 (st/instrument `cut/config)
 (st/instrument `cut/backup-restore-deployment)
+(st/instrument `cut/backup-cron)
 
 (def config {:namespace "ns"
              :app-name "app-name"
              :image "image"
              :backup-postgres false
              :restic-repository "repo"})
+
+(deftest should-generate-backup-cron
+  (is (= {:name "backup-cron",
+          :namespace "ns",
+          :labels #:app.kubernetes.io{:name "backup-cron"
+                                      :part-of "app-name"}}
+         (:metadata (cut/backup-cron config))))
+  (is (= "image"
+         (get-in (cut/backup-cron config)
+                 [:spec :jobTemplate :spec :template :spec :containers 0 :image]))))
+
+(deftest should-generate-backup-cron-env
+  (is (= [{:name "AWS_DEFAULT_REGION", :value "eu-central-1"}
+          {:name "AWS_ACCESS_KEY_ID_FILE",
+           :value "/var/run/secrets/backup-secrets/aws-access-key-id"}
+          {:name "AWS_SECRET_ACCESS_KEY_FILE",
+           :value "/var/run/secrets/backup-secrets/aws-secret-access-key"}
+          {:name "RESTIC_REPOSITORY",
+           :valueFrom
+           {:configMapKeyRef {:name "backup-config", :key "restic-repository"}}}
+          {:name "RESTIC_PASSWORD_FILE",
+           :value "/var/run/secrets/backup-secrets/restic-password"}
+          {:name "RESTIC_NEW_PASSWORD_FILE",
+           :value "/var/run/secrets/backup-secrets/restic-new-password"}]
+         (get-in (cut/backup-cron config)
+                 [:spec :jobTemplate :spec :template :spec :containers 0 :env])))
+  (is (= [{:name "POSTGRES_USER",
+           :valueFrom
+           {:secretKeyRef {:name "postgres-secret", :key "postgres-user"}}}
+          {:name "POSTGRES_PASSWORD",
+           :valueFrom
+           {:secretKeyRef {:name "postgres-secret", :key "postgres-password"}}}
+          {:name "POSTGRES_DB",
+           :valueFrom
+           {:configMapKeyRef {:name "postgres-config", :key "postgres-db"}}}
+          {:name "POSTGRES_HOST", :value "postgresql-service:5432"}
+          {:name "POSTGRES_SERVICE", :value "postgresql-service"}
+          {:name "POSTGRES_PORT", :value "5432"}
+          {:name "AWS_DEFAULT_REGION", :value "eu-central-1"}
+          {:name "AWS_ACCESS_KEY_ID_FILE",
+           :value "/var/run/secrets/backup-secrets/aws-access-key-id"}
+          {:name "AWS_SECRET_ACCESS_KEY_FILE",
+           :value "/var/run/secrets/backup-secrets/aws-secret-access-key"}
+          {:name "RESTIC_REPOSITORY",
+           :valueFrom
+           {:configMapKeyRef {:name "backup-config", :key "restic-repository"}}}
+          {:name "RESTIC_PASSWORD_FILE",
+           :value "/var/run/secrets/backup-secrets/restic-password"}
+          {:name "RESTIC_NEW_PASSWORD_FILE",
+           :value "/var/run/secrets/backup-secrets/restic-new-password"}]
+         (get-in (cut/backup-cron (merge config
+                                         {:backup-postgres true}))
+                 [:spec :jobTemplate :spec :template :spec :containers 0 :env]))))
+
+(deftest should-generate-backup-cron-volume-mounts
+  (is (= [{:name "backup-secret-volume",
+           :mountPath "/var/run/secrets/backup-secrets",
+           :readOnly true}]
+         (get-in (cut/backup-cron config)
+                 [:spec :jobTemplate :spec :template :spec :containers 0 :volumeMounts])))
+  (is (= [{:name "backup-secret-volume",
+           :mountPath "/var/run/secrets/backup-secrets",
+           :readOnly true}
+          {:name "forgejo-data-volume",
+           :mountPath "/var/backups"}]
+         (get-in (cut/backup-cron (merge config
+                                                       {:backup-volume-mount
+                                                        {:mount-name "forgejo-data-volume"
+                                                         :pvc-name "forgejo-data-pvc"
+                                                         :mount-path "/var/backups"}}))
+                 [:spec :jobTemplate :spec :template :spec :containers 0 :volumeMounts]))))
+
+(deftest should-generate-backup-cron-volumes
+  (is (= [{:name "backup-secret-volume",
+           :secret {:secretName "backup-secret"}}]
+         (get-in (cut/backup-cron config)
+                 [:spec :jobTemplate :spec :template :spec :volumes])))
+  (is (= [{:name "backup-secret-volume",
+           :secret {:secretName "backup-secret"}}
+          {:name "forgejo-data-volume",
+           :persistentVolumeClaim {:claimName "forgejo-data-pvc"}}]
+         (get-in (cut/backup-cron (merge config
+                                         {:backup-volume-mount
+                                          {:mount-name "forgejo-data-volume"
+                                           :pvc-name "forgejo-data-pvc"
+                                           :mount-path "/var/backups"}}))
+                 [:spec :jobTemplate :spec :template :spec :volumes]))))
 
 (deftest should-generate-backup-restore-deployment
   (is (= {:name "backup-restore",
