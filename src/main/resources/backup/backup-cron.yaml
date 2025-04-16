@@ -1,0 +1,25 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: backup-cron
+  namespace: REPLACE_ME
+  labels:
+    app.kubernetes.io/name: backup-cron
+    app.kubernetes.io/part-of: REPLACE_ME
+spec:
+  schedule: "10 23 * * *"
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: backup-cron-job
+            image: REPLACE_ME
+            imagePullPolicy: IfNotPresent
+            command: ["backup.bb"]
+            env: []
+            volumeMounts: []
+          volumes: []
+          restartPolicy: OnFailure
