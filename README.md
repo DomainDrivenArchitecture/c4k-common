@@ -374,18 +374,16 @@ You can get a cluster local node-exporter, kube-state-metrics, pushgateway & pro
 
 ## Refactoring & Module Overview
 
-| Module        | Version | [namespaces][ns] | [split config and auth][split] | [backup monitoring][bak] | [commons backup][back-common] |
-| ------------- | ------- | :--------------: | :----------------------------: | :----------------------: | :---------------------------: |
-| c4k-keycloak  | 1.4     |        x         |               x                |            x             |                               |
-| c4k-taiga     | 2.0     |        x         |               x                |                          |                               |
-| c4k-nextcloud | 11.0    |        x         |               x                |                          |                               |
-| c4k-jitsi     | 3.0     |        x         |               x                |            -             |               -               |
-| c4k-forgejo   | 6.0     |        x         |               x                |            x             |               x               |
-| c4k-stats     | 1.0     |        x         |               x                |            x             |               x               |
-| c4k-website   | 2.0     |                  |                                |            -             |               -               |
+| Module        | Version | [backup monitoring][bak] | [commons backup][back-common] |
+| ------------- | ------- | :----------------------: | :---------------------------: |
+| c4k-keycloak  | 1.4     |            x             |                               |
+| c4k-taiga     | 2.0     |                          |                               |
+| c4k-nextcloud | 11.0    |                          |                               |
+| c4k-jitsi     | 3.0     |            -             |               -               |
+| c4k-forgejo   | 6.0     |            x             |               x               |
+| c4k-stats     | 1.0     |            x             |               x               |
+| c4k-website   | 2.1     |            -             |               -               |
 
-[split]: https://repo.prod.meissa.de/meissa/c4k-jitsi/commit/d4fb8ca9e2ab44f9f9923d2e09c81a61e44b39b2
-[ns]: https://repo.prod.meissa.de/meissa/c4k-keycloak/commit/3639f3d5e6d5b364822a05b3d5d569bbc556a68b
 [bak]: https://repo.prod.meissa.de/meissa/c4k-keycloak/pulls/5/files
 [bak-common]: https://repo.prod.meissa.de/meissa/c4k-forgejo/pulls/10/files
 
@@ -403,6 +401,6 @@ For more details about our repository model see: https://repo.prod.meissa.de/mei
 
 ## License
 
-Copyright © 2022, 2023, 2024 meissa GmbH
+Copyright © 2022 - 2025 meissa GmbH
 Licensed under the [Apache License, Version 2.0](LICENSE) (the "License")
 Pls. find licenses of our subcomponents [here](doc/SUBCOMPONENT_LICENSE)
