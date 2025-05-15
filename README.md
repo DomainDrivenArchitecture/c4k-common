@@ -374,7 +374,7 @@ You can get a cluster local node-exporter, kube-state-metrics, pushgateway & pro
 
 ## Refactoring & Module Overview
 
-| Module        | Version | [backup monitoring][bak] | [commons backup][back-common] |
+| Module        | Version | [backup monitoring][bakMon] | [commons backup][bakCommon] |
 | ------------- | ------- | :----------------------: | :---------------------------: |
 | c4k-keycloak  | 1.4     |            x             |                               |
 | c4k-taiga     | 2.0     |                          |                               |
@@ -384,8 +384,8 @@ You can get a cluster local node-exporter, kube-state-metrics, pushgateway & pro
 | c4k-stats     | 1.0     |            x             |               x               |
 | c4k-website   | 2.1     |            -             |               -               |
 
-[bak]: https://repo.prod.meissa.de/meissa/c4k-keycloak/pulls/5/files
-[bak-common]: https://repo.prod.meissa.de/meissa/c4k-forgejo/pulls/10/files
+[bakMon]: https://repo.prod.meissa.de/meissa/c4k-keycloak/pulls/5/files
+[bakCommon]: https://repo.prod.meissa.de/meissa/c4k-forgejo/pulls/10/files
 
 ## Development & Mirrors
 
