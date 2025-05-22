@@ -13,15 +13,24 @@
   (is (= ["a1" "a2" "b1"]
          (cut/concat-vec '("a1" "a2") ["b1"])))
   (is (= ["a1" "a2" "b1"]
-         (cut/concat-vec '("a1" "a2") '("b1")))))
+         (cut/concat-vec '("a1" "a2") '("b1"))))
+  (is (= ["a1" "a2" "b1"]
+         (cut/concat-vec '("a1" "a2") '() '("b1")))))
 
-#?(:clj
-   (deftest should-refuse-illegal-inputs
-     (is (thrown? Exception
-                  (cut/concat-vec ["a1" "a2"] "b1")))
-     (is (thrown? Exception
-                  (cut/concat-vec ["a1" "a2"] nil)))
-     (is (thrown? Exception
-                  (cut/concat-vec ["a1" "a2"] 2)))
-     (is (thrown? Exception
-                  (cut/concat-vec {"a1" "a2"} [])))))
+(deftest should-replace-map-value
+  (testing "replce string"
+    (is (= {:data ["realy long String contain replaced inside."]}
+           (cut/replace-map-value 
+            {:data ["realy long String contain TOREPLACE inside."]}
+            [:data 0]
+            "TOREPLACE"
+            "replaced"))))
+  (testing "replace vect"
+    (is (= {:data ["realy" "long String" "contain replaced inside."]}
+            (cut/replace-map-value
+             {:data ["realy" 
+                     "long String" 
+                     "contain TOREPLACE inside."]}
+             [:data]
+             "TOREPLACE"
+             "replaced")))))

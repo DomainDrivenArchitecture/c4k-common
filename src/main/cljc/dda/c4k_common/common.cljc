@@ -37,6 +37,19 @@
                             %)
                          coll))
 
+(defn-spec replace-map-value map?
+  [m map?
+   keys (s/+ keyword?)
+   searchstring string?
+   replacestring string?]
+  (let [value (get-in m keys)]
+    (cond
+      (nil? value) m
+      (coll? value) (assoc-in m keys
+                              (map (fn [val] (cs/replace val (re-pattern searchstring) replacestring)) value))
+      :else (assoc-in m keys
+                      (cs/replace value (re-pattern searchstring) replacestring)))))
+
 
 (defn-spec ^{:deprecated "6.2.4"} replace-all-matching-values-by-new-value cp/map-or-seq?
   "Use replace-all-matching instead"
