@@ -47,8 +47,9 @@
 
 (defn-spec concat-vec vector?
   [& vs (s/* cp/string-sequence?)]
-  (into []
-        (apply concat vs)))
+  (filter #(not (nil? %))
+          (into []
+                (apply concat vs))))
 
 (defn generate-cm
   [my-config
