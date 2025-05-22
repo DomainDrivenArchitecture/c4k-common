@@ -3,6 +3,7 @@
    [clojure.spec.alpha :as s]
    #?(:clj [orchestra.core :refer [defn-spec]]
       :cljs [orchestra.core :refer-macros [defn-spec]])
+   [dda.c4k-common.predicate :as pred]
    [dda.c4k-common.namespace :as ns]
    [dda.c4k-common.ingress.ingress-internal :as int]))
 
@@ -12,6 +13,7 @@
 (s/def ::ingress-name ::int/ingress-name)
 (s/def ::cert-name ::int/cert-name)
 (s/def ::service-port ::int/service-port)
+(s/def ::fqdn pred/fqdn-string?)
 (s/def ::fqdns ::int/fqdns)
 (s/def ::average-rate ::int/average-rate)
 (s/def ::burst-rate ::int/burst-rate)
