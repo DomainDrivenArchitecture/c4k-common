@@ -15,9 +15,12 @@
                             (into [] %)
                             %) lazy-seq))
 
+(defn- from-string-internal [input & {:as opts}]
+  (resolve-lazy-sequences (yaml/parse-string input opts)))
+
 (defn-spec from-string cp/map-or-seq? 
   [input string?]
-  (resolve-lazy-sequences (yaml/parse-string input)))
+  (from-string-internal input))
 
 (defn-spec to-string string?
   [edn cp/map-or-seq?]
@@ -38,5 +41,5 @@
 (defmethod load-resource :clj [resource-name]
   (slurp (io/resource resource-name)))
 
-(defn load-as-edn [resource-name]
-  (from-string (load-resource resource-name)))
+(defn load-as-edn [resource-name & {:as opts}]
+  (from-string-internal (load-resource resource-name) opts))

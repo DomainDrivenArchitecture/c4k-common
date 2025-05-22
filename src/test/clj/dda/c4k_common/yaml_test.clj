@@ -82,3 +82,8 @@
                 {:serviceName "another_keycloak"
                  :servicePort 8081}}]}}]}}
          (cut/load-as-edn "test/ingress_test.yaml"))))
+
+(deftest should-convert-config-yml-to-seq
+  (is (= [{:doc "first"}
+          {:doc "second"}]
+         (cut/load-as-edn "test/multi-doc.yaml" :load-all true))))
