@@ -11,6 +11,8 @@
   (is (= ["a1" "a2" "b1"]
          (cut/concat-vec ["a1" "a2"] ["b1"])))
   (is (= ["a1" "a2" "b1"]
+         (cut/concat-vec ["a1"] ["a2"] ["b1"])))
+  (is (= ["a1" "a2" "b1"]
          (cut/concat-vec '("a1" "a2") ["b1"])))
   (is (= ["a1" "a2" "b1"]
          (cut/concat-vec '("a1" "a2") '("b1"))))

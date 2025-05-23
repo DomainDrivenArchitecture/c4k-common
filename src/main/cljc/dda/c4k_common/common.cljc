@@ -50,7 +50,6 @@
       :else (assoc-in m keys
                       (cs/replace value (re-pattern searchstring) replacestring)))))
 
-
 (defn-spec ^{:deprecated "6.2.4"} replace-all-matching-values-by-new-value cp/map-or-seq?
   "Use replace-all-matching instead"
   [coll cp/map-or-seq?
@@ -64,7 +63,23 @@
           (into []
                 (apply concat vs))))
 
-(defn generate-cm
+(defn generate
+  [my-config
+   my-auth
+   config-defaults
+   config-objects
+   auth-objects
+   config-select]
+  (let [resulting-config (merge config-defaults my-config)
+        res-vec (concat-vec
+                 (config-objects config-select resulting-config)
+                 (auth-objects config-select resulting-config my-auth))]
+    (cs/join
+     "\n---\n"
+     res-vec)))
+
+(defn ^{:deprecated "10.0.0"} generate-cm
+  "use generate instead"
   [my-config
    my-auth
    config-defaults
@@ -82,7 +97,8 @@
      "\n---\n"
      res-vec)))
 
-(defn generate-common 
+(defn ^{:deprecated "10.0.0"} generate-common 
+  "use generate instead"
   [my-config 
    my-auth 
    config-defaults 
