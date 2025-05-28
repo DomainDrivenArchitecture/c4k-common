@@ -57,3 +57,9 @@
         (cut/generate-config-secret conf auth)
         [:stringData :prometheus.yaml])
        "global:\n  scrape_interval:")))
+
+(deftest should-generate-objects
+  (is (= 18
+         (count (cut/config-objects conf))))
+  (is (= 1
+         (count (cut/auth-objects conf auth)))))

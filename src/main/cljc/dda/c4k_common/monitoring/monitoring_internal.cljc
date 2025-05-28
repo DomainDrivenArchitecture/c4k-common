@@ -103,3 +103,32 @@
    (assoc-in [:stringData :prometheus.yaml]
              (yaml/to-string
               (generate-prometheus-config config auth)))))
+
+(defn-spec config-objects seq?
+  [config ::mon-cfg]
+  [(yaml/load-as-edn "monitoring/prometheus-cluster-role.yaml")
+   (yaml/load-as-edn "monitoring/prometheus-cluster-role-binding.yaml")
+   (yaml/load-as-edn "monitoring/node-exporter-cluster-role.yaml")
+   (yaml/load-as-edn "monitoring/node-exporter-cluster-role-binding.yaml")
+   (yaml/load-as-edn "monitoring/kube-state-metrics-cluster-role.yaml")
+   (yaml/load-as-edn "monitoring/kube-state-metrics-cluster-role-binding.yaml")
+
+   (yaml/load-as-edn "monitoring/prometheus-service-account.yaml")
+   (yaml/load-as-edn "monitoring/kube-state-metrics-service-account.yaml")
+   (yaml/load-as-edn "monitoring/node-exporter-service-account.yaml")
+   (yaml/load-as-edn "monitoring/push-gw-service-account.yaml")
+
+   (yaml/load-as-edn "monitoring/node-exporter-service.yaml")
+   (yaml/load-as-edn "monitoring/prometheus-service.yaml")
+   (yaml/load-as-edn "monitoring/kube-state-metrics-service.yaml")
+   (yaml/load-as-edn "monitoring/push-gw-service.yaml")
+
+   (yaml/load-as-edn "monitoring/prometheus-deployment.yaml")
+   (yaml/load-as-edn "monitoring/node-exporter-daemon-set.yaml")
+   (yaml/load-as-edn "monitoring/kube-state-metrics-deployment.yaml")
+   (yaml/load-as-edn "monitoring/push-gw-deployment.yaml")])
+
+(defn-spec auth-objects seq?
+  [config ::mon-cfg
+   auth ::mon-auth]
+  [(generate-config-secret config auth)])
