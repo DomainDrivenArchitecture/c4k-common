@@ -38,5 +38,3 @@ spec:
           secret:
             secretName: prometheus-conf
             defaultMode: 420
-        - name: prometheus-storage-volume
-          emptyDir: {}

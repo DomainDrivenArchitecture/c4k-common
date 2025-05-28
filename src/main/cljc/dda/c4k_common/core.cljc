@@ -14,15 +14,11 @@
                    :opt-un []))
 
 (defn config-objects [config]
-  (let []
-    (map yaml/to-string
-         (filter #(not (nil? %))
-                 (cm/concat-vec
-                  (monitoring/generate-config))))))
+  (map yaml/to-string
+       (cm/concat-vec
+        (monitoring/config-objects config))))
 
 (defn auth-objects [config auth]
-  (let []
-    (map yaml/to-string
-         (filter #(not (nil? %))
-                 (cm/concat-vec
-                  (monitoring/generate-auth (:mon-cfg config) (:mon-auth auth)))))))
+  (map yaml/to-string
+       (cm/concat-vec
+        (monitoring/auth-objects (:mon-cfg config) (:mon-auth auth)))))

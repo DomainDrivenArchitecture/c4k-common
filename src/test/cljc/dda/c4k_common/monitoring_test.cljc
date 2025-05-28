@@ -5,21 +5,23 @@
    [clojure.spec.test.alpha :as st]
    [dda.c4k-common.monitoring :as cut]))
 
-(st/instrument `cut/generate)
-(st/instrument `cut/generate-config)
-(st/instrument `cut/generate-auth)
+(st/instrument `cut/config-objects)
+(st/instrument `cut/auth-objects)
 
 (def conf {:cluster-name "clustername"
            :cluster-stage "test"
-           :grafana-cloud-url "https://some.url/with/path"})
+           :mode {:remote-write-url "https://some.url/with/path"}})
 
-(def auth {:grafana-cloud-user "user"
-           :grafana-cloud-password "password"
-           :hetzner-cloud-ro-token "ro-token"})
+(def auth {:remote-write-user "user"
+           :remote-write-password "password"})
 
 
 (deftest should-generate
   (is (= 19
-         (count (cut/generate-config))))
+         (count (cut/config-objects conf))))
+    (is (= 20
+         (count (cut/config-objects
+                 (merge conf {:mode {:storage-size-gb 20
+                                     :storage-class "local-path"}})))))
   (is (= 1
-         (count (cut/generate-auth conf auth)))))
+         (count (cut/auth-objects conf auth)))))

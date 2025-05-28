@@ -31,22 +31,27 @@
        "monitoring/prometheus-prometheus.yaml"                   (rc/inline "monitoring/prometheus-prometheus.yaml")
        "monitoring/prometheus-service-account.yaml"              (rc/inline "monitoring/prometheus-service-account.yaml")
        "monitoring/prometheus-service.yaml"                      (rc/inline "monitoring/prometheus-service.yaml")
+       "monitoring/prometheus-pvc.yaml"                          (rc/inline "monitoring/prometheus-pvc.yaml")
        "monitoring/push-gw-deployment.yaml"                      (rc/inline "monitoring/push-gw-deployment.yaml")
        "monitoring/push-gw-service-account.yaml"                 (rc/inline "monitoring/push-gw-service-account.yaml")
        "monitoring/push-gw-service.yaml"                         (rc/inline "monitoring/push-gw-service.yaml")
        (throw (js/Error. (str "Undefined Resource: " resource-name))))))
 
 
-(s/def ::grafana-cloud-user cp/bash-env-string?)
-(s/def ::grafana-cloud-password cp/bash-env-string?)
-(s/def ::grafana-cloud-url string?)
+(s/def ::remote-write-user cp/bash-env-string?)
+(s/def ::remote-write-password cp/bash-env-string?)
+(s/def ::remote-write-url string?)
+(s/def ::storage-class string?)
+(s/def ::storage-size-gb pos?)
 (s/def ::cluster-name string?)
 (s/def ::cluster-stage cp/stage?)
-(s/def ::mon-cfg (s/keys :req-un [::grafana-cloud-url
+(s/def ::mode (s/or ::remote-write (s/keys :req-un [::remote-write-url])
+                    ::persistent (s/keys :req-un [::storage-size-gb ::storage-class])))
+(s/def ::mon-cfg (s/keys :req-un [::mode
                                   ::cluster-name
                                   ::cluster-stage]))
-(s/def ::mon-auth (s/keys :req-un [::grafana-cloud-user
-                                   ::grafana-cloud-password]))
+(s/def ::mon-auth (s/keys :opt-un [::remote-write-user
+                                   ::remote-write-password]))
 
 (def metric-regex {:node-regex
                    (str "node_cpu_sec.+|node_load[0-9]+|node_memory_Buf.*|node_memory_Mem.*|"
@@ -66,69 +71,94 @@
 (def filter-regex-string
   (str/join "|" (vals metric-regex)))
 
-(defn-spec generate-prometheus-config map?
+(defn-spec deployment map?
+  [config ::mon-cfg]
+  (let [{:keys [mode]} config
+        volume (if (contains? mode :storage-size-gb)
+                 {:name "prometheus-storage-volume"
+                   :persistentVolumeClaim {:claimName "prometheus-storage"}}
+                 {:name "prometheus-storage-volume"
+                   :emptyDir {}})]
+    (->
+     (yaml/load-as-edn "monitoring/prometheus-deployment.yaml")
+     (assoc-in [:spec :template :spec :volumes 1] volume))))
+
+(defn-spec pvc seq?
+  [config ::mon-cfg]
+  (let [{:keys [mode]} config
+        {:keys [storage-size-gb storage-class]} mode]
+    (if (contains? mode :storage-size-gb)
+      [(->
+        (yaml/load-as-edn "monitoring/prometheus-pvc.yaml")
+        (assoc-in [:spec :resources :requests :storage] (str storage-size-gb "Gi"))
+        (assoc-in [:spec :storageClassName] storage-class))]
+      [])))
+
+(defn-spec remote-write map?
   [config ::mon-cfg
    auth ::mon-auth]
-  (let [{:keys [grafana-cloud-url cluster-name cluster-stage]} config
-        {:keys [grafana-cloud-user grafana-cloud-password]} auth]
+  (let [{:keys [mode]} config
+        {:keys [remote-write-url]} mode
+        {:keys [remote-write-user remote-write-password]} auth]
+    (if (contains? mode :remote-write-url)
+      {:remote_write 
+       [{:url remote-write-url
+         :basic_auth {:username remote-write-user, 
+                      :password remote-write-password},
+         :write_relabel_configs
+         [{:source_labels ["__name__"],
+           :regex filter-regex-string,
+           :action "keep"}]}]}
+      {})))
+
+(defn-spec prometheus-config map?
+  [config ::mon-cfg
+   auth ::mon-auth]
+  (let [{:keys [cluster-name cluster-stage mode]} config]
     (->
      (yaml/load-as-edn "monitoring/prometheus-prometheus.yaml")
      (assoc-in [:global :external_labels :cluster]
                cluster-name)
      (assoc-in [:global :external_labels :stage]
                cluster-stage)
-     (assoc-in [:remote_write 0 :url]
-               grafana-cloud-url)
-     (assoc-in [:remote_write 0 :basic_auth :username]
-               grafana-cloud-user)
-     (assoc-in [:remote_write 0 :basic_auth :password]
-               grafana-cloud-password)
-     (cm/replace-all-matching "FILTER_REGEX" filter-regex-string))))
+     (merge (remote-write config auth)))))
 
-(defn-spec generate-config-secret map?
+(defn-spec config-secret map?
   [config ::mon-cfg
    auth ::mon-auth]
   (->
    (yaml/load-as-edn "monitoring/prometheus-config-secret.yaml")
    (assoc-in [:stringData :prometheus.yaml]
              (yaml/to-string
-              (generate-prometheus-config config auth)))))
-
-(defn-spec ^{:deprecated "6.4.1"} generate-config map?
-  "Use generate-config-secret instead"
-  [config ::mon-cfg
-   auth ::mon-auth]
-  (->
-   (yaml/load-as-edn "monitoring/prometheus-config-secret.yaml")
-   (assoc-in [:stringData :prometheus.yaml]
-             (yaml/to-string
-              (generate-prometheus-config config auth)))))
+              (prometheus-config config auth)))))
 
 (defn-spec config-objects seq?
   [config ::mon-cfg]
-  [(yaml/load-as-edn "monitoring/prometheus-cluster-role.yaml")
-   (yaml/load-as-edn "monitoring/prometheus-cluster-role-binding.yaml")
-   (yaml/load-as-edn "monitoring/node-exporter-cluster-role.yaml")
-   (yaml/load-as-edn "monitoring/node-exporter-cluster-role-binding.yaml")
-   (yaml/load-as-edn "monitoring/kube-state-metrics-cluster-role.yaml")
-   (yaml/load-as-edn "monitoring/kube-state-metrics-cluster-role-binding.yaml")
+  (cm/concat-vec
+   [(yaml/load-as-edn "monitoring/prometheus-cluster-role.yaml")
+    (yaml/load-as-edn "monitoring/prometheus-cluster-role-binding.yaml")
+    (yaml/load-as-edn "monitoring/node-exporter-cluster-role.yaml")
+    (yaml/load-as-edn "monitoring/node-exporter-cluster-role-binding.yaml")
+    (yaml/load-as-edn "monitoring/kube-state-metrics-cluster-role.yaml")
+    (yaml/load-as-edn "monitoring/kube-state-metrics-cluster-role-binding.yaml")
 
-   (yaml/load-as-edn "monitoring/prometheus-service-account.yaml")
-   (yaml/load-as-edn "monitoring/kube-state-metrics-service-account.yaml")
-   (yaml/load-as-edn "monitoring/node-exporter-service-account.yaml")
-   (yaml/load-as-edn "monitoring/push-gw-service-account.yaml")
+    (yaml/load-as-edn "monitoring/prometheus-service-account.yaml")
+    (yaml/load-as-edn "monitoring/kube-state-metrics-service-account.yaml")
+    (yaml/load-as-edn "monitoring/node-exporter-service-account.yaml")
+    (yaml/load-as-edn "monitoring/push-gw-service-account.yaml")
 
-   (yaml/load-as-edn "monitoring/node-exporter-service.yaml")
-   (yaml/load-as-edn "monitoring/prometheus-service.yaml")
-   (yaml/load-as-edn "monitoring/kube-state-metrics-service.yaml")
-   (yaml/load-as-edn "monitoring/push-gw-service.yaml")
+    (yaml/load-as-edn "monitoring/node-exporter-service.yaml")
+    (yaml/load-as-edn "monitoring/prometheus-service.yaml")
+    (yaml/load-as-edn "monitoring/kube-state-metrics-service.yaml")
+    (yaml/load-as-edn "monitoring/push-gw-service.yaml")
 
-   (yaml/load-as-edn "monitoring/prometheus-deployment.yaml")
-   (yaml/load-as-edn "monitoring/node-exporter-daemon-set.yaml")
-   (yaml/load-as-edn "monitoring/kube-state-metrics-deployment.yaml")
-   (yaml/load-as-edn "monitoring/push-gw-deployment.yaml")])
+    (deployment config)]
+   (pvc config)
+   [(yaml/load-as-edn "monitoring/node-exporter-daemon-set.yaml")
+    (yaml/load-as-edn "monitoring/kube-state-metrics-deployment.yaml")
+    (yaml/load-as-edn "monitoring/push-gw-deployment.yaml")]))
 
-(defn-spec auth-objects seq?
-  [config ::mon-cfg
-   auth ::mon-auth]
-  [(generate-config-secret config auth)])
+  (defn-spec auth-objects seq?
+    [config ::mon-cfg
+     auth ::mon-auth]
+    [(config-secret config auth)])

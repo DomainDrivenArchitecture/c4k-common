@@ -8,16 +8,34 @@
    [dda.c4k-common.namespace :as ns]
    [dda.c4k-common.monitoring.monitoring-internal :as int]))
 
-(s/def ::grafana-cloud-user ::int/grafana-cloud-user)
-(s/def ::grafana-cloud-password ::int/grafana-cloud-password)
-(s/def ::grafana-cloud-url ::int/grafana-cloud-url)
+(s/def ::grafana-cloud-user ::int/remote-write-user)
+(s/def ::remote-write-user ::int/remote-write-user)
+(s/def ::grafana-cloud-password ::int/remote-write-password)
+(s/def ::remote-write-password ::int/remote-write-password)
+(s/def ::grafana-cloud-url ::int/remote-write-url)
+(s/def ::remote-write-url ::int/remote-write-url)
 (s/def ::cluster-name ::int/cluster-name)
 (s/def ::cluster-stage ::int/cluster-stage)
-(s/def ::mon-cfg (s/keys :req-un [::grafana-cloud-url
-                                  ::cluster-name
-                                  ::cluster-stage]))
-(s/def ::mon-auth (s/keys :req-un [::grafana-cloud-user
-                                   ::grafana-cloud-password]))
+(s/def ::mon-cfg (s/keys :req-un [::cluster-name
+                                  ::cluster-stage]
+                         :opt-un [::int/mode]))
+(s/def ::mon-auth (s/keys :opt-un [::remote-write-user
+                                   ::remote-write-password]))
+
+(defn-spec dynamic-defaults ::int/mon-cfg
+  [conf ::mon-cfg]
+  (if (contains? conf :grafana-cloud-url)
+    (merge conf {:mode {:remote-write-url (:grafana-cloud-url conf)}})
+    conf))
+
+(defn- dynamic-auth
+  [conf
+   auth]
+  (if (and (contains? conf :grafana-cloud-url)
+           (contains? auth :grafana-cloud-user))
+    (merge auth {:remote-write-user (:grafana-cloud-user auth)
+                 :remote-write-password (:grafana-cloud-password auth)})
+    auth))
 
 (defn-spec ^{:deprecated "10.0.0"} generate-config seq?
   "Use config-objects instead"
@@ -43,18 +61,21 @@
    (yaml/load-as-edn "monitoring/push-gw-service.yaml")])
 
 (defn-spec config-objects seq?
-   [config ::mon-cfg]
-  (cm/concat-vec
-   (ns/generate {:namespace "monitoring"})
-   (int/generate-config config)))
+  [config ::mon-cfg]
+  (let [resolved-config (dynamic-defaults config)]
+    (cm/concat-vec
+     (ns/generate {:namespace "monitoring"})
+     (int/config-objects resolved-config))))
+
+(defn-spec auth-objects seq?
+  [config ::mon-cfg
+   auth ::mon-auth]
+  (let [resolved-config (dynamic-defaults config)
+        resolved-auth (dynamic-auth config auth)]
+  (int/auth-objects resolved-config resolved-auth)))
 
 (defn-spec ^{:deprecated "10.0.0"} generate-auth seq?
   "Use auth-objects instead"
   [config ::mon-cfg
    auth ::mon-auth]
-  [(int/auth-objects config auth)])
-
-(defn-spec auth-objects seq?
-  [config ::mon-cfg
-   auth ::mon-auth]
-  [(int/auth-objects config auth)])
+  (auth-objects config auth))

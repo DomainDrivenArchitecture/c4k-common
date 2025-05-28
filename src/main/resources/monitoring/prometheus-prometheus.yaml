@@ -4,16 +4,6 @@ global:
   external_labels:
     cluster: $CLUSTERNAME
     stage: $TEST_OR_PROD
-remote_write:
-  - url: GRAFANA_CLOUD_URL
-    basic_auth:
-      username: GRAFANA_CLOUD_USER
-      password: GRAFANA_CLOUD_PASSWORD
-    write_relabel_configs:
-    - source_labels:
-      - __name__
-      regex: FILTER_REGEX
-      action: keep
 rule_files:
   - /etc/prometheus/prometheus.rules
 scrape_configs:
