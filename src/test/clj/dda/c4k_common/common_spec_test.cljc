@@ -9,8 +9,6 @@
   (is (thrown? Exception
                (cut/concat-vec ["a1" "a2"] "b1")))
   (is (thrown? Exception
-               (cut/concat-vec ["a1" "a2"] nil)))
-  (is (thrown? Exception
                (cut/concat-vec ["a1" "a2"] 2)))
   (is (thrown? Exception
                (cut/concat-vec {"a1" "a2"} []))))

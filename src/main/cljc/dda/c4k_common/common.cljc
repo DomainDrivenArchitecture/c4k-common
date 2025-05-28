@@ -39,7 +39,7 @@
 
 (defn-spec replace-map-value map?
   [m map?
-   keys (s/+ keyword?)
+   keys (s/+ any?)
    searchstring string?
    replacestring string?]
   (let [value (get-in m keys)]
@@ -58,7 +58,8 @@
   (replace-all-matching coll value-to-match value-to-replace))
 
 (defn-spec concat-vec vector?
-  [& vs (s/* cp/string-sequence?)]
+  [& vs (s/* (s/or ::string-seq cp/string-sequence?
+                   ::map (s/* map?)))]
   (filter #(not (nil? %))
           (into []
                 (apply concat vs))))

@@ -6,10 +6,15 @@
    [dda.c4k-common.common :as cut]))
 
 (st/instrument `cut/concat-vec)
+(st/instrument `cut/replace-map-value)
 
 (deftest should-concat-vec
+  (is (= [{:a 1} {:a 2} {:b 1}]
+         (cut/concat-vec [{:a 1} {:a 2}] [{:b 1}])))
   (is (= ["a1" "a2" "b1"]
          (cut/concat-vec ["a1" "a2"] ["b1"])))
+  (is (= ["a1" "a2" "b1"]
+         (cut/concat-vec ["a1" "a2"] [] ["b1"])))
   (is (= ["a1" "a2" "b1"]
          (cut/concat-vec ["a1"] ["a2"] ["b1"])))
   (is (= ["a1" "a2" "b1"]
