@@ -53,7 +53,20 @@
          (get-in (cut/deployment (merge conf
                                         {:mode {:storage-size-gb 20
                                                 :storage-class "local-path"}}))
-                 [:spec :template :spec :volumes]))))
+                 [:spec :template :spec :volumes])))
+  (is (= ["--config.file=/etc/prometheus/prometheus.yaml"
+          "--storage.tsdb.path=/prometheus/"
+          "--storage.tsdb.retention.time=1d"]
+         (get-in (cut/deployment conf)
+                 [:spec :template :spec :containers 0 :args])))
+  (is (= ["--config.file=/etc/prometheus/prometheus.yaml"
+          "--storage.tsdb.path=/prometheus/"
+          "--storage.tsdb.retention.time=120d"
+          "--web.enable-admin-api"]
+         (get-in (cut/deployment (merge conf
+                                        {:mode {:storage-size-gb 20
+                                                :storage-class "local-path"}}))
+                 [:spec :template :spec :containers 0 :args]))))
 
 (deftest should-generate-remote-write
   (is (= {:remote_write

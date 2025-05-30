@@ -74,6 +74,14 @@
 (defn-spec deployment map?
   [config ::mon-cfg]
   (let [{:keys [mode]} config
+        args (if (contains? mode :remote-write-url)
+               ["--config.file=/etc/prometheus/prometheus.yaml"
+                "--storage.tsdb.path=/prometheus/"
+                "--storage.tsdb.retention.time=1d"]
+               ["--config.file=/etc/prometheus/prometheus.yaml"
+                "--storage.tsdb.path=/prometheus/"
+                "--storage.tsdb.retention.time=120d"
+                "--web.enable-admin-api"])
         volume (if (contains? mode :storage-size-gb)
                  {:name "prometheus-storage-volume"
                    :persistentVolumeClaim {:claimName "prometheus-storage"}}
@@ -81,6 +89,7 @@
                    :emptyDir {}})]
     (->
      (yaml/load-as-edn "monitoring/prometheus-deployment.yaml")
+     (assoc-in [:spec :template :spec :containers 0 :args] args)
      (assoc-in [:spec :template :spec :volumes 1] volume))))
 
 (defn-spec pvc seq?

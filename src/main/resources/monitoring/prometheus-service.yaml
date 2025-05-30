@@ -5,10 +5,7 @@ metadata:
   namespace: monitoring
   labels:
     app.kubernetes.io/name: prometheus
-  annotations:
-    metallb.universe.tf/address-pool: private
 spec:
-  type: LoadBalancer
   selector:
     app.kubernetes.io/name: prometheus
   ports:

@@ -19,12 +19,10 @@ spec:
       enableServiceLinks: true
       containers:
         - name: prometheus
-          image: "quay.io/prometheus/prometheus:v3.2.1"
+          image: "quay.io/prometheus/prometheus:v3.4.0"
           imagePullPolicy: "IfNotPresent"
-          args:
-            - --config.file=/etc/prometheus/prometheus.yaml
-            - --storage.tsdb.path=/prometheus/
-            - --storage.tsdb.retention.time=1d
+          args: 
+            - REPLACEME
           ports:
             - containerPort: 9090
           volumeMounts:
