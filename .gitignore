@@ -28,3 +28,4 @@ my-auth.edn
 .clj-kondo/
 .lsp/
 .eastwood
+.envrc
