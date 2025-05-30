@@ -16,9 +16,12 @@
 (s/def ::remote-write-url ::int/remote-write-url)
 (s/def ::cluster-name ::int/cluster-name)
 (s/def ::cluster-stage ::int/cluster-stage)
+(s/def ::storage-size-gb ::int/storage-size-gb)
+(s/def ::cluster-name ::int/cluster-name)
+(s/def ::mode ::int/mode)
 (s/def ::mon-cfg (s/keys :req-un [::cluster-name
                                   ::cluster-stage]
-                         :opt-un [::int/mode]))
+                         :opt-un [::mode]))
 (s/def ::mon-auth (s/keys :opt-un [::remote-write-user
                                    ::remote-write-password]))
 
