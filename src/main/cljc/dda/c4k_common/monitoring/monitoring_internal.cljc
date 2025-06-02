@@ -65,8 +65,10 @@
                                        "traefik_service_.*_seconds_count|"
                                        "traefik_tls_certs_not_after")
                    :kube-state-regex (str "kube_pod_container_status_restarts_total|"
-                                          "kube_pod_status_reason|kube_node_status_capacity|kube_node_status_allocatable|"
-                                          "kube_cronjob_status_active|kube_job_.*")})
+                                          "kube_pod_status_reason|kube_node_status_capacity|"
+                                          "kube_node_status_allocatable|"
+                                          "kube_cronjob_status_active|"
+                                          "kube_job_status_.*")})
 
 (def filter-regex-string
   (str/join "|" (vals metric-regex)))

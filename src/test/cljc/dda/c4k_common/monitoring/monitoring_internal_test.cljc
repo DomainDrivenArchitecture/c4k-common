@@ -75,7 +75,7 @@
             :write_relabel_configs
             [{:action "keep",
               :regex
-              "node_cpu_sec.+|node_load[0-9]+|node_memory_Buf.*|node_memory_Mem.*|node_memory_Cached.*|node_disk_[r,w,i].*|node_filesystem_[s,a].*|node_network_receive_bytes_total|node_network_transmit_bytes_total|traefik_entrypoint_.*_total|traefik_entrypoint_.*_seconds_count|traefik_router_.*_total|traefik_router_.*_seconds_count|traefik_service_.*_total|traefik_service_.*_seconds_count|traefik_tls_certs_not_after|kube_pod_container_status_restarts_total|kube_pod_status_reason|kube_node_status_capacity|kube_node_status_allocatable|kube_cronjob_status_active|kube_job_.*",
+              "node_cpu_sec.+|node_load[0-9]+|node_memory_Buf.*|node_memory_Mem.*|node_memory_Cached.*|node_disk_[r,w,i].*|node_filesystem_[s,a].*|node_network_receive_bytes_total|node_network_transmit_bytes_total|traefik_entrypoint_.*_total|traefik_entrypoint_.*_seconds_count|traefik_router_.*_total|traefik_router_.*_seconds_count|traefik_service_.*_total|traefik_service_.*_seconds_count|traefik_tls_certs_not_after|kube_pod_container_status_restarts_total|kube_pod_status_reason|kube_node_status_capacity|kube_node_status_allocatable|kube_cronjob_status_active|kube_job_status_.*",
               :source_labels ["__name__"]}]}]}
          (cut/remote-write conf auth)))
   (is (= {}
