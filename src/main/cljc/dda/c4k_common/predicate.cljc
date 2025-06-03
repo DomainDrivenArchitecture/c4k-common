@@ -82,3 +82,27 @@
    (string? input) 
    (number? input)))
 
+(defn map-or-nil?
+  [input]
+   (or
+    (map? input)
+    (nil? input)))
+
+(defn seq-or-nil?
+  [input]
+  (or
+   (seq? input)
+   (nil? input)))
+
+(defn vec-or-nil?
+  [input]
+  (or
+   (vector? input)
+   (nil? input)))
+
+(defn string-or-nil?
+  [input]
+  (or
+   (string? input)
+   (nil? input)))
+

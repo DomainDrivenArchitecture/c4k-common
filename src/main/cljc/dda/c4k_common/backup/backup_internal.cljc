@@ -4,7 +4,7 @@
    #?(:cljs [shadow.resource :as rc])
    #?(:clj [orchestra.core :refer [defn-spec]]
       :cljs [orchestra.core :refer-macros [defn-spec]])
-   [dda.c4k-common.yaml :as yaml]
+   #?(:cljs [dda.c4k-common.yaml :as yaml])
    [dda.c4k-common.base64 :as b64]
    [dda.c4k-common.common :as cm]
    [dda.c4k-common.predicate :as p]
@@ -18,6 +18,7 @@
 (s/def ::backup-image string?)
 (s/def ::backup-postgres boolean?)
 (s/def ::backup-volume-mount (s/keys :req-un [::mount-name ::pvc-name ::mount-path]))
+(s/def ::backup-volume-mounts (s/+ ::backup-volume-mount))
 (s/def ::aws-access-key-id p/bash-env-string?)
 (s/def ::aws-secret-access-key p/bash-env-string?)
 (s/def ::restic-password p/bash-env-string?)
@@ -29,7 +30,8 @@
                               ::backup-image
                               ::backup-postgres
                               ::restic-repository]
-                     :opt-un [::backup-volume-mount]))
+                     :opt-un [::backup-volume-mount
+                              ::backup-volume-mounts]))
 
 (def auth? (s/keys :req-un [::restic-password ::aws-access-key-id ::aws-secret-access-key]
                      :opt-un [::restic-new-password]))
@@ -45,24 +47,36 @@
 
 (defn-spec backup-volumes seq?
   [config config?]
-  (let [{:keys [backup-volume-mount]} config
-        backup-secret [{:name "backup-secret-volume",
-                        :secret {:secretName "backup-secret"}}]]
-    (if (some? backup-volume-mount) 
-      (into backup-secret [{:name (:mount-name backup-volume-mount),
-                            :persistentVolumeClaim {:claimName (:pvc-name backup-volume-mount)}}]) 
-      backup-secret)))
+  (let [{:keys [backup-volume-mount backup-volume-mounts]} config
+        volume-mounts (if (some? backup-volume-mounts)
+                        backup-volume-mounts
+                        [backup-volume-mount])]
+    (cm/concat-vec
+     [{:name "backup-secret-volume",
+       :secret {:secretName "backup-secret"}}]
+     (map (fn [volume-mount]
+            (if (some? volume-mount)
+              {:name (:mount-name volume-mount),
+               :persistentVolumeClaim {:claimName (:pvc-name volume-mount)}}
+              nil))
+          volume-mounts))))
 
 (defn-spec backup-volume-mounts seq?
   [config config?]
-  (let [{:keys [backup-volume-mount]} config
-        backup-secret [{:name "backup-secret-volume",
-                        :mountPath "/var/run/secrets/backup-secrets",
-                        :readOnly true}]]
-    (if (some? backup-volume-mount)
-      (into backup-secret [{:name (:mount-name backup-volume-mount),
-                            :mountPath (:mount-path backup-volume-mount)}])
-      backup-secret)))
+  (let [{:keys [backup-volume-mount backup-volume-mounts]} config
+        volume-mounts (if (some? backup-volume-mounts)
+                        backup-volume-mounts
+                        [backup-volume-mount])]
+    (cm/concat-vec
+     [{:name "backup-secret-volume",
+       :mountPath "/var/run/secrets/backup-secrets",
+       :readOnly true}]
+     (map (fn [volume-mount]
+            (if (some? volume-mount)
+              {:name (:mount-name volume-mount),
+               :mountPath (:mount-path volume-mount)}
+              nil))
+          volume-mounts))))
 
 (defn-spec backup-env seq?
   [config config?]

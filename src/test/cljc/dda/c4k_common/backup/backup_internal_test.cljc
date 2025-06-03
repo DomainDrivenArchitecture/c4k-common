@@ -69,7 +69,7 @@
                                          {:backup-postgres true}))
                  [:spec :jobTemplate :spec :template :spec :containers 0 :env]))))
 
-(deftest should-generate-backup-cron-volume-mounts
+(deftest should-generate-backup-volume-mounts
   (is (= [{:name "backup-secret-volume",
            :mountPath "/var/run/secrets/backup-secrets",
            :readOnly true}]
@@ -85,9 +85,23 @@
                                                         {:mount-name "forgejo-data-volume"
                                                          :pvc-name "forgejo-data-pvc"
                                                          :mount-path "/var/backups"}}))
+                 [:spec :jobTemplate :spec :template :spec :containers 0 :volumeMounts])))
+  (is (= [{:mountPath "/var/run/secrets/backup-secrets",
+           :name "backup-secret-volume",
+           :readOnly true}
+          {:mountPath "/var/backups/prom", :name "prom-data-volume"}
+          {:mountPath "/var/backups/grafana", :name "grafana-data-volume"}]
+         (get-in (cut/backup-cron (merge config
+                                         {:backup-volume-mounts
+                                          [{:mount-name "prom-data-volume"
+                                            :pvc-name "prom-data-pvc"
+                                            :mount-path "/var/backups/prom"}
+                                           {:mount-name "grafana-data-volume"
+                                            :pvc-name "grafana-data-pvc"
+                                            :mount-path "/var/backups/grafana"}]}))
                  [:spec :jobTemplate :spec :template :spec :containers 0 :volumeMounts]))))
 
-(deftest should-generate-backup-cron-volumes
+(deftest should-generate-backup-volumes
   (is (= [{:name "backup-secret-volume",
            :secret {:secretName "backup-secret"}}]
          (get-in (cut/backup-cron config)
@@ -101,7 +115,21 @@
                                           {:mount-name "forgejo-data-volume"
                                            :pvc-name "forgejo-data-pvc"
                                            :mount-path "/var/backups"}}))
-                 [:spec :jobTemplate :spec :template :spec :volumes]))))
+                 [:spec :jobTemplate :spec :template :spec :volumes])))
+  (is (= [{:name "backup-secret-volume", :secret {:secretName "backup-secret"}}
+          {:name "prom-data-volume",
+           :persistentVolumeClaim {:claimName "prom-data-pvc"}}
+          {:name "grafana-data-volume",
+           :persistentVolumeClaim {:claimName "grafana-data-pvc"}}]
+          (get-in (cut/backup-cron (merge config
+                                          {:backup-volume-mounts
+                                           [{:mount-name "prom-data-volume"
+                                             :pvc-name "prom-data-pvc"
+                                             :mount-path "/var/backups/prom"}
+                                            {:mount-name "grafana-data-volume"
+                                             :pvc-name "grafana-data-pvc"
+                                             :mount-path "/var/backups/grafana"}]}))
+                  [:spec :jobTemplate :spec :template :spec :volumes]))))
 
 (deftest should-generate-backup-restore-deployment
   (is (= {:name "backup-restore",

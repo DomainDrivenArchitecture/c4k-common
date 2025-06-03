@@ -57,9 +57,12 @@
    value-to-replace cp/str-or-number?]
   (replace-all-matching coll value-to-match value-to-replace))
 
+
 (defn-spec concat-vec vector?
-  [& vs (s/* (s/or ::string-seq cp/string-sequence?
-                   ::map (s/* map?)))]
+  [& vs (s/* (s/or ::maps (s/* cp/map-or-nil?)
+                   ::strings (s/* cp/string-or-nil?)
+                   ::sequences (s/* cp/seq-or-nil?)
+                   ::vectors (s/* cp/vec-or-nil?)))]
   (filter #(not (nil? %))
           (into []
                 (apply concat vs))))
