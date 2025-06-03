@@ -70,7 +70,7 @@
 
 
 (deftest should-generate-middleware-ratelimit
-  (is (= {:apiVersion "traefik.io/v1alpha1",
+  (is (= {:apiVersion "traefik.containo.us/v1alpha1",
           :kind "Middleware",
           :metadata {:name "normal-ratelimit"
                      :namespace "myapp",},
@@ -82,7 +82,7 @@
 (deftest should-generate-middleware-basic-auth
   (is (= []
          (cut/basic-auth-middleware config)))
-  (is (= [{:apiVersion "traefik.io/v1alpha1",
+  (is (= [{:apiVersion "traefik.containo.us/v1alpha1",
            :kind "Middleware",
            :metadata {:name "c4k-common-app-auth", :namespace "default"},
            :spec {:basicAuth {:secret "basic-auth-secret"}}}]
