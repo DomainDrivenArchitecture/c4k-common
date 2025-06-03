@@ -3,7 +3,7 @@
   :url "https://domaindrivenarchitecture.org"
   :license {:name "Apache License, Version 2.0"
             :url "https://www.apache.org/licenses/LICENSE-2.0.html"}
-  :dependencies [[org.clojure/clojure "1.12.0" :scope "provided"]
+  :dependencies [[org.clojure/clojure "1.12.1" :scope "provided"]
                  [aero "1.1.6"]
                  [orchestra "2021.01.01-1"]
                  [expound "0.9.0"]]
