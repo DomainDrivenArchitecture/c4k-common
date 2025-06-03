@@ -62,7 +62,8 @@
   (is (= ["--config.file=/etc/prometheus/prometheus.yaml"
           "--storage.tsdb.path=/prometheus/"
           "--storage.tsdb.retention.time=120d"
-          "--web.enable-admin-api"]
+          "--web.enable-admin-api"
+          "--web.enable-remote-write-receiver"]
          (get-in (cut/deployment (merge conf
                                         {:mode {:storage-size-gb 20
                                                 :storage-class "local-path"}}))

@@ -83,7 +83,8 @@
                ["--config.file=/etc/prometheus/prometheus.yaml"
                 "--storage.tsdb.path=/prometheus/"
                 "--storage.tsdb.retention.time=120d"
-                "--web.enable-admin-api"])
+                "--web.enable-admin-api"
+                "--web.enable-remote-write-receiver"])
         volume (if (contains? mode :storage-size-gb)
                  {:name "prometheus-storage-volume"
                    :persistentVolumeClaim {:claimName "prometheus-storage"}}
