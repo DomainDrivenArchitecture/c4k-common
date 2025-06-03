@@ -106,7 +106,8 @@
 (defn-spec ingress map?
   [config ::ingress]
   (let [{:keys [ingress-name cert-name service-name service-port 
-                fqdns app-name rate-limit-name namespace]} config]
+                fqdns app-name rate-limit-name namespace
+                basic-auth-secret]} config]
     (->
      (yaml/load-as-edn "ingress/ingress.yaml")
      (assoc-in [:metadata :name] ingress-name)
@@ -116,10 +117,12 @@
                {:traefik.ingress.kubernetes.io/router.entrypoints
                 "web, websecure"
                 :traefik.ingress.kubernetes.io/router.middlewares
-                (if rate-limit-name
+                (if (some? basic-auth-secret)
                   (str "default-redirect-https@kubernetescrd, " 
-                       namespace "-" rate-limit-name "-ratelimit@kubernetescrd")
-                  "default-redirect-https@kubernetescrd")
+                       namespace "-" rate-limit-name "-ratelimit@kubernetescrd, "
+                       namespace "-" app-name "-auth@kubernetescrd" )
+                  (str "default-redirect-https@kubernetescrd, "
+                       namespace "-" rate-limit-name "-ratelimit@kubernetescrd"))
                 :metallb.universe.tf/address-pool "public"})
      (assoc-in [:spec :tls 0 :secretName] cert-name)
      (assoc-in [:spec :tls 0 :hosts] fqdns)

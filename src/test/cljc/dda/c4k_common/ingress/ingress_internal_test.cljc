@@ -137,7 +137,11 @@
                                     {:issuer "prod" :cert-name "test-io-cert"
                                      :fqdns ["test.de" "www.test.de"
                                              "test-it.de"
-                                             "www.test-it.de"]}))))))
+                                             "www.test-it.de"]})))))
+  (is (= "default-redirect-https@kubernetescrd, default-normal-ratelimit@kubernetescrd, default-c4k-common-app-auth@kubernetescrd"
+         (get-in (cut/ingress (merge config
+                                     {:basic-auth-secret "basic-auth-secret"}))
+                 [:metadata :annotations :traefik.ingress.kubernetes.io/router.middlewares]))))
 
 (deftest should-generate-objects
   (is (= 3
