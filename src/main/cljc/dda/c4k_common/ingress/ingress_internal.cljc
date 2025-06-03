@@ -13,10 +13,11 @@
 #?(:cljs
    (defmethod yaml/load-resource :ingress [resource-name]
      (case resource-name
-       "ingress/certificate.yaml"          (rc/inline "ingress/certificate.yaml")
-       "ingress/host-rule.yaml"            (rc/inline "ingress/host-rule.yaml")
-       "ingress/ingress.yaml"              (rc/inline "ingress/ingress.yaml")
-       "ingress/middleware-ratelimit.yaml" (rc/inline "ingress/middleware-ratelimit.yaml")
+       "ingress/certificate.yaml"           (rc/inline "ingress/certificate.yaml")
+       "ingress/host-rule.yaml"             (rc/inline "ingress/host-rule.yaml")
+       "ingress/ingress.yaml"               (rc/inline "ingress/ingress.yaml")
+       "ingress/middleware-ratelimit.yaml"  (rc/inline "ingress/middleware-ratelimit.yaml")
+       "ingress/middleware-basic-auth.yaml" (rc/inline "ingress/middleware-basic-auth.yaml")
        (throw (js/Error. (str "Undefined Resource: " resource-name))))))
 
 
@@ -26,28 +27,35 @@
 (s/def ::ingress-name string?)
 (s/def ::cert-name string?)
 (s/def ::service-port pos-int?)
-(s/def ::fqdns (s/coll-of pred/fqdn-string?))
+(s/def ::basic-auth-secret string?)
+(s/def ::fqdn pred/fqdn-string?)
+(s/def ::fqdns (s/coll-of ::fqdn))
 (s/def ::average-rate pos-int?)
 
 (s/def ::burst-rate pos-int?)
 
-(def ingress? (s/keys :req-un [::ingress-name ::app-name 
-                               ::ns/namespace 
-                               ::service-name ::service-port                                
-                               ::issuer ::cert-name 
-                               ::fqdns]
-                      :opt-un [::rate-limit-name]))
+(s/def ::ingress (s/keys :req-un [::ingress-name 
+                                  ::app-name
+                                  ::ns/namespace
+                                  ::service-name ::service-port
+                                  ::issuer ::cert-name
+                                  ::fqdns
+                                  ::rate-limit-name
+                                  ::average-rate
+                                  ::burst-rate]
+                         :opt-un [
+                                  ::basic-auth-secret]))
 
-(def certificate? (s/keys :req-un [::fqdns ::app-name ::cert-name ::issuer ::ns/namespace]))
+(s/def ::certificate (s/keys :req-un [::fqdns ::app-name ::cert-name ::issuer ::ns/namespace]))
 
 
-(def rate-limit-config? (s/keys :req-un [::rate-limit-name
-                                         ::ns/namespace
-                                         ::average-rate 
-                                         ::burst-rate]))
+(s/def ::rate-limit (s/keys :req-un [::rate-limit-name
+                                     ::ns/namespace
+                                     ::average-rate
+                                     ::burst-rate]))
 
 
-(defn-spec generate-host-rule map?
+(defn-spec host-rule map?
   [service-name ::service-name
    service-port ::service-port
    fqdn pred/fqdn-string?]
@@ -58,8 +66,8 @@
    (cm/replace-all-matching "SERVICE_NAME" service-name)))
 
 
-(defn-spec generate-certificate map?
-  [config certificate?]
+(defn-spec certificate map?
+  [config ::certificate]
   (let [{:keys [cert-name issuer fqdns app-name namespace]} config
         letsencrypt-issuer (name issuer)]
     (->
@@ -73,8 +81,8 @@
      (assoc-in [:spec :issuerRef :name] letsencrypt-issuer))))
 
 
-(defn-spec generate-rate-limit-middleware map?
-  [config rate-limit-config?]
+(defn-spec rate-limit-middleware map?
+  [config ::rate-limit]
   (let [{:keys [rate-limit-name average-rate burst-rate namespace]} config]
     (->
      (yaml/load-as-edn "ingress/middleware-ratelimit.yaml")
@@ -83,9 +91,20 @@
      (assoc-in [:spec :rateLimit :average] average-rate)
      (assoc-in [:spec :rateLimit :burst] burst-rate))))
 
+(defn-spec basic-auth-middleware seq?
+  [config ::ingress]
+  (let [{:keys [basic-auth-secret app-name namespace]} config]
+    (if (some? basic-auth-secret)
+      [(->
+        (yaml/load-as-edn "ingress/middleware-basic-auth.yaml")
+        (assoc-in [:metadata :name] (str app-name "-auth"))
+        (assoc-in [:metadata :namespace] namespace)
+        (assoc-in [:spec :basicAuth :secret] basic-auth-secret))]
+      [])))
 
-(defn-spec generate-ingress map?
-  [config ingress?]
+
+(defn-spec ingress map?
+  [config ::ingress]
   (let [{:keys [ingress-name cert-name service-name service-port 
                 fqdns app-name rate-limit-name namespace]} config]
     (->
@@ -105,4 +124,12 @@
      (assoc-in [:spec :tls 0 :secretName] cert-name)
      (assoc-in [:spec :tls 0 :hosts] fqdns)
      (assoc-in [:spec :rules]
-               (mapv (partial generate-host-rule service-name service-port) fqdns)))))
+               (mapv (partial host-rule service-name service-port) fqdns)))))
+
+(defn-spec config-objects seq?
+  [config ::ingress]
+  (cm/concat-vec
+   [(certificate config)
+    (rate-limit-middleware config)]
+   (basic-auth-middleware config)
+   [(ingress config)]))

@@ -5,11 +5,21 @@
    [clojure.spec.test.alpha :as st]
    [dda.c4k-common.ingress.ingress-internal :as cut]))
 
-(st/instrument `cut/generate-host-rule)
-(st/instrument `cut/generate-certificate)
-(st/instrument `cut/generate-rate-limit-middleware)
-(st/instrument `cut/generate-ingress)
+(st/instrument `cut/host-rule)
+(st/instrument `cut/certificate)
+(st/instrument `cut/rate-limit-middleware)
+(st/instrument `cut/basic-auth-middleware)
+(st/instrument `cut/ingress)
 
+(def config {:ingress-name "test-io-https-ingress"
+             :app-name "c4k-common-app"
+             :namespace "default"
+             :service-name "test-io-service" :service-port 80
+             :rate-limit-name "normal"
+             :average-rate 10
+             :burst-rate 100
+             :issuer "prod" :cert-name "noname"
+             :fqdns ["test.de"]})
 
 (deftest should-generate-rule
   (is (= {:host "test.com",
@@ -19,7 +29,7 @@
              :path "/",
              :backend
              {:service {:name "myservice", :port {:number 3000}}}}]}}
-         (cut/generate-host-rule "myservice" 3000 "test.com"))))
+         (cut/host-rule "myservice" 3000 "test.com"))))
 
 
 (deftest should-generate-certificate
@@ -35,7 +45,7 @@
            :renewBefore "720h",
            :dnsNames ["test.de" "test.org" "www.test.de" "www.test.org"],
            :issuerRef {:name "prod", :kind "ClusterIssuer"}}}
-         (cut/generate-certificate {:fqdns ["test.de" "test.org" "www.test.de" "www.test.org"]
+         (cut/certificate {:fqdns ["test.de" "test.org" "www.test.de" "www.test.org"]
                                     :app-name "c4k-common-app"
                                     :cert-name "test-io-cert"
                                     :issuer "prod"
@@ -52,7 +62,7 @@
            :renewBefore "720h",
            :dnsNames ["test.de" "test.org" "www.test.de" "www.test.org"],
            :issuerRef {:name "prod", :kind "ClusterIssuer"}}}
-         (cut/generate-certificate {:fqdns ["test.de" "test.org" "www.test.de" "www.test.org"]
+         (cut/certificate {:fqdns ["test.de" "test.org" "www.test.de" "www.test.org"]
                                     :app-name "c4k-common-app"
                                     :cert-name "test-io-cert"
                                     :issuer "prod"
@@ -60,14 +70,24 @@
 
 
 (deftest should-generate-middleware-ratelimit
-  (is (= {:apiVersion "traefik.containo.us/v1alpha1",
+  (is (= {:apiVersion "traefik.io/v1alpha1",
           :kind "Middleware",
           :metadata {:name "normal-ratelimit"
                      :namespace "myapp",},
           :spec {:rateLimit {:average 10, :burst 5}}}
-         (cut/generate-rate-limit-middleware {:rate-limit-name "normal"
-                                              :namespace "myapp"
-                                              :average-rate 10, :burst-rate 5}))))
+         (cut/rate-limit-middleware {:rate-limit-name "normal"
+                                     :namespace "myapp"
+                                     :average-rate 10, :burst-rate 5}))))
+
+(deftest should-generate-middleware-basic-auth
+  (is (= []
+         (cut/basic-auth-middleware config)))
+  (is (= [{:apiVersion "traefik.io/v1alpha1",
+           :kind "Middleware",
+           :metadata {:name "c4k-common-app-auth", :namespace "default"},
+           :spec {:basicAuth {:secret "basic-auth-secret"}}}]
+         (cut/basic-auth-middleware (merge config
+                                           {:basic-auth-secret "basic-auth-secret"})))))
 
 
 (deftest should-generate-ingress
@@ -80,16 +100,13 @@
            :annotations {:traefik.ingress.kubernetes.io/router.entrypoints
                          "web, websecure"
                          :traefik.ingress.kubernetes.io/router.middlewares
-                         "default-redirect-https@kubernetescrd"
+                         "default-redirect-https@kubernetescrd, myapp-normal-ratelimit@kubernetescrd"
                          :metallb.universe.tf/address-pool "public"}}}
-         (dissoc (cut/generate-ingress
-                  {:ingress-name "test-io-https-ingress"
-                   :app-name "c4k-common-app"
-                   :namespace "myapp"
-                   :service-name "test-io-service" :service-port 80                   
-                   :issuer "prod" :cert-name "noname"
-                   :fqdns ["test.de" "www.test.de" "test-it.de"
-                           "www.test-it.de"]}) :spec)))
+         (dissoc (cut/ingress
+                  (merge config
+                         {:namespace "myapp"
+                          :fqdns ["test.de" "www.test.de" "test-it.de"
+                                  "www.test-it.de"]})) :spec)))
   (is (= {:name "test-io-https-ingress",
           :namespace "default",
           :labels {:app.kubernetes.part-of "c4k-common-app"},
@@ -98,15 +115,7 @@
                         :traefik.ingress.kubernetes.io/router.middlewares
                         "default-redirect-https@kubernetescrd, default-normal-ratelimit@kubernetescrd",
                         :metallb.universe.tf/address-pool "public"}}
-         (:metadata (cut/generate-ingress
-                     {
-                      :ingress-name "test-io-https-ingress"
-                      :app-name "c4k-common-app"
-                      :namespace "default"
-                      :service-name "test-io-service" :service-port 80
-                      :rate-limit-name "normal"
-                      :issuer "prod" :cert-name "noname"
-                      :fqdns ["test.de"]}))))
+         (:metadata (cut/ingress config))))
   (is (= {:tls
           [{:hosts
             ["test.de" "www.test.de" "test-it.de" "www.test-it.de"],
@@ -124,12 +133,16 @@
            {:host "www.test-it.de",
             :http
             {:paths [{:pathType "Prefix", :path "/", :backend {:service {:name "test-io-service", :port {:number 80}}}}]}}]}
-         (:spec (cut/generate-ingress {
-                                       :ingress-name "test-io-https-ingress"
-                                       :app-name "c4k-common-app"
-                                       :namespace "default"
-                                       :service-name "test-io-service" :service-port 80
-                                       :issuer "prod" :cert-name "test-io-cert"
-                                       :fqdns ["test.de" "www.test.de"
-                                               "test-it.de"
-                                               "www.test-it.de"]})))))
+         (:spec (cut/ingress (merge config
+                                    {:issuer "prod" :cert-name "test-io-cert"
+                                     :fqdns ["test.de" "www.test.de"
+                                             "test-it.de"
+                                             "www.test-it.de"]}))))))
+
+(deftest should-generate-objects
+  (is (= 3
+         (count (cut/config-objects config))))
+  (is (= 4
+         (count (cut/config-objects 
+                 (merge config 
+                        {:basic-auth-secret "basic-auth-secret"}))))))
