@@ -90,7 +90,11 @@
           :stage "test"}
          (get-in
           (cut/prometheus-config conf auth)
-          [:global :external_labels]))))
+          [:global :external_labels])))
+  (is (= "clustername"
+         (get-in
+          (cut/prometheus-config conf auth)
+          [:scrape_configs 0 :relabel_configs 3 :replacement]))))
 
 (deftest should-generate-config
   (is (str/starts-with?

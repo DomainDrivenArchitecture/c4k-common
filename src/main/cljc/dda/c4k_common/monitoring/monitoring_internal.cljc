@@ -129,10 +129,8 @@
   (let [{:keys [cluster-name cluster-stage mode]} config]
     (->
      (yaml/load-as-edn "monitoring/prometheus-prometheus.yaml")
-     (assoc-in [:global :external_labels :cluster]
-               cluster-name)
-     (assoc-in [:global :external_labels :stage]
-               cluster-stage)
+     (cm/replace-all-matching "CLUSTERNAME" cluster-name)
+     (cm/replace-all-matching "STAGE" cluster-stage)
      (merge (remote-write config auth)))))
 
 (defn-spec config-secret map?

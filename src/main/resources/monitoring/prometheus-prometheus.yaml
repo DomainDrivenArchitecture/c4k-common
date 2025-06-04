@@ -2,8 +2,8 @@ global:
   scrape_interval: 60s
   evaluation_interval: 60s
   external_labels:
-    cluster: $CLUSTERNAME
-    stage: $TEST_OR_PROD
+    cluster: CLUSTERNAME
+    stage: STAGE
 rule_files:
   - /etc/prometheus/prometheus.rules
 scrape_configs:
@@ -24,6 +24,14 @@ scrape_configs:
       regex: (.+)
       target_label: __metrics_path__
       replacement: /api/v1/nodes/${1}/proxy/metrics
+    - source_labels: [__address__]
+      regex: '(.*)'
+      target_label: cluster
+      replacement: CLUSTERNAME
+    - source_labels: [__address__]
+      regex: '(.*)'
+      target_label: stage
+      replacement: STAGE
 
   - job_name: 'node-exporter'
     kubernetes_sd_configs:
@@ -32,6 +40,14 @@ scrape_configs:
     - source_labels: [__meta_kubernetes_endpoints_name]
       regex: 'node-exporter'
       action: keep
+    - source_labels: [__address__]
+      regex: '(.*)'
+      target_label: cluster
+      replacement: CLUSTERNAME
+    - source_labels: [__address__]
+      regex: '(.*)'
+      target_label: stage
+      replacement: STAGE
 
   - job_name: 'traefik'
     kubernetes_sd_configs:
@@ -40,6 +56,14 @@ scrape_configs:
     - source_labels: [__meta_kubernetes_endpoints_name]
       regex: 'traefik'
       action: keep
+    - source_labels: [__address__]
+      regex: '(.*)'
+      target_label: cluster
+      replacement: CLUSTERNAME
+    - source_labels: [__address__]
+      regex: '(.*)'
+      target_label: stage
+      replacement: STAGE
 
   - job_name: 'kube-state-metrics'
     kubernetes_sd_configs:
@@ -48,12 +72,38 @@ scrape_configs:
     - source_labels: [__meta_kubernetes_endpoints_name]
       regex: 'kube-state-metrics'
       action: keep
+    - source_labels: [__address__]
+      regex: '(.*)'
+      target_label: cluster
+      replacement: CLUSTERNAME
+    - source_labels: [__address__]
+      regex: '(.*)'
+      target_label: stage
+      replacement: STAGE
 
   - job_name: "prometheus"
     static_configs:
       - targets: ["localhost:9090"]
+    relabel_configs:
+    - source_labels: [__address__]
+      regex: '(.*)'
+      target_label: cluster
+      replacement: CLUSTERNAME
+    - source_labels: [__address__]
+      regex: '(.*)'
+      target_label: stage
+      replacement: STAGE
 
   - job_name: pushgateway
     honor_labels: true
     static_configs:
     - targets: ['prometheus-pushgateway:9091']
+    relabel_configs:
+    - source_labels: [__address__]
+      regex: '(.*)'
+      target_label: cluster
+      replacement: CLUSTERNAME
+    - source_labels: [__address__]
+      regex: '(.*)'
+      target_label: stage
+      replacement: STAGE
