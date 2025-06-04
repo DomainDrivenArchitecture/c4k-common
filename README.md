@@ -374,19 +374,20 @@ You can get a cluster local node-exporter, kube-state-metrics, pushgateway & pro
 
 ## Refactoring & Module Overview
 
-| Module         | Version | [backup monitoring][bakMon] | [commons backup][bakCommon] | [new monitoring] | [splitable deployments] |
-| -------------- | ------- | :-------------------------: | :-------------------------: | :--------------: | :---------------------: |
-| c4k-keycloak   | 1.4     |              x              |                             |                  |                         |
-| c4k-taiga      | 2.0     |                             |                             |                  |                         |
-| c4k-nextcloud  | 11.0    |                             |                             |                  |                         |
-| c4k-jitsi      | 3.0     |              -              |              -              |                  |                         |
-| c4k-forgejo    | 7.0     |              x              |              x              |                  |                         |
-| c4k-stats      | 1.0     |              x              |              x              |                  |                         |
-| c4k-website    | 2.1     |              -              |              -              |                  |                         |
-| c4k-monitoring | 0.1     |              x              |              x              |        x         |            x            |
+| Module         | Version | [backup monitoring][bakMon] | [commons backup][bakCommon] | [new monitoring] | [splitable deployments][splitDeployments] |
+| -------------- | ------- | :-------------------------: | :-------------------------: | :--------------: | :---------------------------------------: |
+| c4k-keycloak   | 1.4     |              x              |                             |                  |                                           |
+| c4k-taiga      | 2.0     |                             |                             |                  |                                           |
+| c4k-nextcloud  | 11.0    |                             |                             |                  |                                           |
+| c4k-jitsi      | 3.0     |              -              |              -              |                  |                                           |
+| c4k-forgejo    | 7.0     |              x              |              x              |        x         |                     x                     |
+| c4k-stats      | 1.0     |              x              |              x              |                  |                                           |
+| c4k-website    | 2.1     |              -              |              -              |                  |                                           |
+| c4k-monitoring | 0.1     |              x              |              x              |        x         |                     x                     |
 
 [bakMon]: https://repo.prod.meissa.de/meissa/c4k-keycloak/pulls/5/files
 [bakCommon]: https://repo.prod.meissa.de/meissa/c4k-forgejo/pulls/10/files
+[splitDeployments]: https://repo.prod.meissa.de/meissa/c4k-forgejo/pulls/12/files
 
 ## Development & Mirrors
 
