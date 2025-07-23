@@ -104,7 +104,7 @@
   (config-objects config))
 
 (defn-spec ^{:deprecated "11.0.0"} generate-auth seq?
-  "use config-auth instead"
+  "use auth-objects instead"
   [config pg-config?
    auth pg-auth?]
   (auth-objects config auth))
