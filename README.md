@@ -356,7 +356,7 @@ You can get a cluster local node-exporter, kube-state-metrics, pushgateway & pro
 | c4k-keycloak   | 1.4     |              x              |                             |                  |                                           |
 | c4k-taiga      | 2.0     |                             |                             |                  |                                           |
 | c4k-nextcloud  | 11.0    |                             |                             |                  |                                           |
-| c4k-jitsi      | 3.0     |              -              |              -              |                  |                                           |
+| c4k-jitsi      | 3.0     |              -              |              -              |        x         |                     x                     |
 | c4k-forgejo    | 7.0     |              x              |              x              |        x         |                     x                     |
 | c4k-stats      | 1.0     |              x              |              x              |                  |                                           |
 | c4k-website    | 2.1     |              -              |              -              |                  |                                           |
