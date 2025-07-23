@@ -20,9 +20,7 @@ def initialize(project):
         "build_types": [],
         "mixin_types": ["RELEASE"],
         "release_primary_build_file": "project.clj",
-        "release_secondary_build_files": [
-            "project-cljs.clj",
-        ],
+        "release_secondary_build_files": [],
         "release_main_branch": "main",
     }
 
@@ -36,29 +34,8 @@ def test_clj(project):
 
 
 @task
-def test_cljs(project):
-    run("shadow-cljs compile test", shell=True, check=True)
-    run("node target/node-tests.js", shell=True, check=True)
-
-
-@task
 def upload_clj(project):
     run("lein deploy", shell=True, check=True)
-
-
-@task
-def upload_cljs(project):
-    run(
-        "mv project.clj project-clj.clj && mv project-cljs.clj project.clj",
-        shell=True,
-        check=True,
-    )
-    run("lein deploy", shell=True, check=True)
-    run(
-        "mv project.clj project-cljs.clj && mv project-clj.clj project.clj",
-        shell=True,
-        check=True,
-    )
 
 
 @task
@@ -120,5 +97,4 @@ def linttest(project, release_type):
     build = get_devops_build(project)
     build.update_release_type(release_type)
     test_clj(project)
-    test_cljs(project)
     lint(project)

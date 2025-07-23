@@ -3,8 +3,7 @@
    [clojure.walk]
    [clojure.spec.alpha :as s]
    [clojure.string :as cs]
-   #?(:clj [orchestra.core :refer [defn-spec]]
-      :cljs [orchestra.core :refer-macros [defn-spec]])
+   [orchestra.core :refer [defn-spec]]
    [dda.c4k-common.predicate :as cp]))
 
 (defn-spec replace-named-value cp/map-or-seq?

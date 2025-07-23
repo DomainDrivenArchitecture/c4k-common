@@ -1,7 +1,6 @@
 (ns dda.c4k-common.namespace
   (:require 
-   #?(:clj [orchestra.core :refer [defn-spec]]
-      :cljs [orchestra.core :refer-macros [defn-spec]])
+   [orchestra.core :refer [defn-spec]]
    [clojure.spec.alpha :as s]
    [dda.c4k-common.predicate :as cp]
    [dda.c4k-common.yaml :as yaml]

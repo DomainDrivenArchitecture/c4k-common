@@ -4,19 +4,6 @@ stages:
   - security
   - upload
 
-.cljs-job: &cljs
-  image: "domaindrivenarchitecture/ddadevops-clj-cljs:4.11.4"
-  cache:
-    key: ${CI_COMMIT_REF_SLUG}
-    paths:
-      - node_modules/
-      - .shadow-cljs/
-      - .m2
-  before_script:
-    - export RELEASE_ARTIFACT_TOKEN=$MEISSA_REPO_BUERO_RW
-    - echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/.npmrc
-    - npm install
-
 .clj-job: &clj
   image: "domaindrivenarchitecture/ddadevops-clj:4.11.4"
   cache:
@@ -40,22 +27,9 @@ test-clj:
   script:
     - pyb test_clj
 
-test-cljs:
-  <<: *cljs
-  stage: build_and_test
-  script:
-    - pyb test_cljs
-
 upload-clj-release:
   <<: *clj
   <<: *tag_only
   stage: upload
   script:
     - pyb upload_clj
-
-upload-cljs-release:
-  <<: *clj
-  <<: *tag_only
-  stage: upload
-  script:
-    - pyb upload_cljs

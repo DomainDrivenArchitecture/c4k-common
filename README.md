@@ -1,5 +1,5 @@
 # convention 4 kubernetes: c4k-common
-[![Clojars Project](https://img.shields.io/clojars/v/org.domaindrivenarchitecture/c4k-common-clj.svg)](https://clojars.org/org.domaindrivenarchitecture/c4k-common-clj) [![Clojars Project](https://img.shields.io/clojars/v/org.domaindrivenarchitecture/c4k-common-cljs.svg)](https://clojars.org/org.domaindrivenarchitecture/c4k-common-cljs) [![pipeline status](https://gitlab.com/domaindrivenarchitecture/c4k-common/badges/master/pipeline.svg)](https://gitlab.com/domaindrivenarchitecture/c4k-common/-/commits/main) 
+[![Clojars Project](https://img.shields.io/clojars/v/org.domaindrivenarchitecture/c4k-common-clj.svg)](https://clojars.org/org.domaindrivenarchitecture/c4k-common-clj) [![pipeline status](https://gitlab.com/domaindrivenarchitecture/c4k-common/badges/master/pipeline.svg)](https://gitlab.com/domaindrivenarchitecture/c4k-common/-/commits/main) 
 
 [<img src="https://domaindrivenarchitecture.org/img/delta-chat.svg" width=20 alt="DeltaChat"> chat over e-mail](mailto:buero@meissa-gmbh.de?subject=community-chat) | [<img src="https://meissa.de/images/parts/contact/mastodon36_hue9b2464f10b18e134322af482b9c915e_5501_filter_14705073121015236177.png" width=20 alt="M"> meissa@social.meissa-gmbh.de](https://social.meissa-gmbh.de/@meissa) | [Blog](https://domaindrivenarchitecture.org) | [Website](https://meissa.de)
 
@@ -59,29 +59,6 @@ To create your own c4k module set up your cli analogous to the following:
 ```
 
 The full example can be found here: https://repo.prod.meissa.de/meissa/c4k-forgejo/src/branch/main/src/main/clj/dda/c4k_forgejo/uberjar.clj
-
-With c4k instead of using cli to generate manifests, you can also generate your manifests via web-application (using page local js without server interaction)
-
-```html
-<html>
-
-<head>
-  <link href="bootstrap.min.css" rel="stylesheet" type="text/css" />
-</head>
-
-<body>
-  <div id="c4k-content"></div>
-  <script src="js/main.js"></script>
-</body>
-
-</html>
-```
-
-[![Try it out](doc/tryItOut.png "Try out yourself")](https://domaindrivenarchitecture.org/pages/dda-provision/c4k-forgejo/)
-
-See: https://repo.prod.meissa.de/meissa/c4k-forgejo/src/branch/main/public/index.html
-
-and: https://repo.prod.meissa.de/meissa/c4k-forgejo/src/branch/main/src/main/cljs/dda/c4k_forgejo/browser.cljs
 
 #### Separate Configuration From Credentials
 

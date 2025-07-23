@@ -1,25 +1,11 @@
 (ns dda.c4k-common.ingress.ingress-internal
   (:require
    [clojure.spec.alpha :as s]
-   #?(:cljs [shadow.resource :as rc])
-   #?(:clj [orchestra.core :refer [defn-spec]]
-      :cljs [orchestra.core :refer-macros [defn-spec]])
+   [orchestra.core :refer [defn-spec]]
    [dda.c4k-common.yaml :as yaml]
    [dda.c4k-common.common :as cm]
    [dda.c4k-common.namespace :as ns]
    [dda.c4k-common.predicate :as pred]))
-
-
-#?(:cljs
-   (defmethod yaml/load-resource :ingress [resource-name]
-     (case resource-name
-       "ingress/certificate.yaml"           (rc/inline "ingress/certificate.yaml")
-       "ingress/host-rule.yaml"             (rc/inline "ingress/host-rule.yaml")
-       "ingress/ingress.yaml"               (rc/inline "ingress/ingress.yaml")
-       "ingress/middleware-ratelimit.yaml"  (rc/inline "ingress/middleware-ratelimit.yaml")
-       "ingress/middleware-basic-auth.yaml" (rc/inline "ingress/middleware-basic-auth.yaml")
-       (throw (js/Error. (str "Undefined Resource: " resource-name))))))
-
 
 (s/def ::issuer pred/letsencrypt-issuer?)
 (s/def ::service-name string?)

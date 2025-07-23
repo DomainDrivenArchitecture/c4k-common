@@ -1,8 +1,7 @@
 (ns dda.c4k-common.ingress
   (:require
    [clojure.spec.alpha :as s]
-   #?(:clj [orchestra.core :refer [defn-spec]]
-      :cljs [orchestra.core :refer-macros [defn-spec]])
+   [orchestra.core :refer [defn-spec]]
    [dda.c4k-common.predicate :as pred]
    [dda.c4k-common.namespace :as ns]
    [dda.c4k-common.ingress.ingress-internal :as int]))

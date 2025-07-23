@@ -1,7 +1,6 @@
 (ns dda.c4k-common.predicate-test
   (:require
-   #?(:clj [clojure.test :refer [deftest is are testing run-tests]]
-      :cljs [cljs.test :refer-macros [deftest is are testing run-tests]])
+   [clojure.test :refer [deftest is are testing run-tests]]
    [dda.c4k-common.predicate :as cut]))
 
 (deftest test-bash-env-string?
