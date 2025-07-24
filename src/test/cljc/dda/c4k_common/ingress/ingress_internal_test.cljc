@@ -99,8 +99,7 @@
            :annotations {:traefik.ingress.kubernetes.io/router.entrypoints
                          "web, websecure"
                          :traefik.ingress.kubernetes.io/router.middlewares
-                         "default-redirect-https@kubernetescrd, myapp-normal-ratelimit@kubernetescrd"
-                         :metallb.universe.tf/address-pool "public"}}}
+                         "default-redirect-https@kubernetescrd, myapp-normal-ratelimit@kubernetescrd"}}}
          (dissoc (cut/ingress
                   (merge config
                          {:namespace "myapp"
@@ -112,8 +111,7 @@
           :annotations {:traefik.ingress.kubernetes.io/router.entrypoints
                         "web, websecure"
                         :traefik.ingress.kubernetes.io/router.middlewares
-                        "default-redirect-https@kubernetescrd, default-normal-ratelimit@kubernetescrd",
-                        :metallb.universe.tf/address-pool "public"}}
+                        "default-redirect-https@kubernetescrd, default-normal-ratelimit@kubernetescrd"}}
          (:metadata (cut/ingress config))))
   (is (= {:tls
           [{:hosts
