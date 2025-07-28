@@ -353,13 +353,13 @@ You can get a cluster local node-exporter, kube-state-metrics, pushgateway & pro
 
 | Module         | Version | [backup monitoring][bakMon] | [commons backup][bakCommon] | [new monitoring] | [splitable deployments][splitDeployments] | [drop cljs] |
 | -------------- | ------- | :-------------------------: | :-------------------------: | :--------------: | :---------------------------------------: | :---------: |
-| c4k-keycloak   | 1.4     |              x              |                             |        x         |                     x                     |      x      |
+| c4k-keycloak   | 2.0     |              x              |                             |        x         |                     x                     |      x      |
 | c4k-taiga      | 2.0     |                             |                             |        x         |                     x                     |      x      |
 | c4k-nextcloud  | 11.0    |                             |                             |        x         |                     x                     |      x      |
-| c4k-jitsi      | 3.0     |              -              |              -              |        x         |                     x                     |      x      |
+| c4k-jitsi      | 4.0     |              -              |              -              |        x         |                     x                     |      x      |
 | c4k-forgejo    | 7.0     |              x              |              x              |        x         |                     x                     |      x      |
-| c4k-stats      | 1.0     |              x              |              x              |        x         |                     x                     |      x      |
-| c4k-website    | 2.1     |              -              |              -              |        x         |                     x                     |      x      |
+| c4k-stats      | 2.0     |              x              |              x              |        x         |                     x                     |      x      |
+| c4k-website    | 3.0     |              -              |              -              |        x         |                     x                     |      x      |
 | c4k-monitoring | 0.1     |              x              |              x              |        x         |                     x                     |      x      |
 
 [bakMon]: https://repo.prod.meissa.de/meissa/c4k-keycloak/pulls/5/files
