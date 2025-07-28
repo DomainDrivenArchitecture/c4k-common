@@ -46,12 +46,7 @@
 (defn-spec ^{:deprecated "6.4.1"} generate-config map?
   "use generate-configmap instead"
   [config pg-config?]
-  (let [{:keys [postgres-size db-name namespace]} config]
-    (->
-     (yaml/from-string (yaml/load-resource
-                        (str "postgres/config-" (name postgres-size) ".yaml")))
-     (assoc-in [:metadata :namespace] namespace)
-     (assoc-in [:data :postgres-db] db-name))))
+  (generate-configmap config))
 
 
 (defn-spec generate-deployment map?
