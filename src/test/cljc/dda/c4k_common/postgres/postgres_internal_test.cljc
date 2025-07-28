@@ -113,7 +113,7 @@
           :apiVersion "v1"
           :metadata
           {:name "postgres-pv-volume",
-           :namespace "default"
+           :namespace "other"
            :labels {:type "local"}}
           :spec
           {:storageClassName "manual"
@@ -126,7 +126,7 @@
                                           :pvc-storage-class-name "manual"
                                           :postgres-data-volume-path "xx"
                                           :pv-storage-size-gb 20
-                                          :namespace "default"}))))
+                                          :namespace "other"}))))
 
 
 (deftest should-generate-persistent-volume-claim
