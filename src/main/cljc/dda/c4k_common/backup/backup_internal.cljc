@@ -1,10 +1,7 @@
 (ns dda.c4k-common.backup.backup-internal
   (:require
    [clojure.spec.alpha :as s]
-   #?(:cljs [shadow.resource :as rc])
-   #?(:clj [orchestra.core :refer [defn-spec]]
-      :cljs [orchestra.core :refer-macros [defn-spec]])
-   #?(:cljs [dda.c4k-common.yaml :as yaml])
+   [orchestra.core :refer [defn-spec]]
    [dda.c4k-common.base64 :as b64]
    [dda.c4k-common.common :as cm]
    [dda.c4k-common.predicate :as p]
@@ -35,15 +32,6 @@
 
 (def auth? (s/keys :req-un [::restic-password ::aws-access-key-id ::aws-secret-access-key]
                      :opt-un [::restic-new-password]))
-
-#?(:cljs
-   (defmethod yaml/load-resource :backup [resource-name]
-     (case resource-name
-       "backup/backup-restore-deployment.yaml" (rc/inline "backup/backup-restore-deployment.yaml")
-       "backup/backup-cron.yaml"               (rc/inline "backup/backup-cron.yaml")
-       "backup/secret.yaml"                    (rc/inline "backup/secret.yaml")
-       "backup/config.yaml"                    (rc/inline "backup/config.yaml")
-       (throw (js/Error. (str "Undefined Resource: " resource-name))))))
 
 (defn-spec backup-volumes seq?
   [config config?]

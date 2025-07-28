@@ -1,30 +1,12 @@
 (ns dda.c4k-common.postgres.postgres-internal
   (:require
    [clojure.spec.alpha :as s]
-   #?(:cljs [shadow.resource :as rc])
-   #?(:clj [orchestra.core :refer [defn-spec]]
-      :cljs [orchestra.core :refer-macros [defn-spec]])
+   [orchestra.core :refer [defn-spec]]
    [dda.c4k-common.yaml :as yaml]
    [dda.c4k-common.base64 :as b64]
    [dda.c4k-common.predicate :as cp]
    [dda.c4k-common.common :as cm]
    [dda.c4k-common.namespace :as ns]))
-
-
-#?(:cljs
-   (defmethod yaml/load-resource :postgres [resource-name]
-     (case resource-name
-       "postgres/config-2gb.yaml"        (rc/inline "postgres/config-2gb.yaml")
-       "postgres/config-4gb.yaml"        (rc/inline "postgres/config-4gb.yaml")
-       "postgres/config-8gb.yaml"        (rc/inline "postgres/config-8gb.yaml")
-       "postgres/config-16gb.yaml"       (rc/inline "postgres/config-16gb.yaml")
-       "postgres/deployment.yaml"        (rc/inline "postgres/deployment.yaml")
-       "postgres/persistent-volume.yaml" (rc/inline "postgres/persistent-volume.yaml")
-       "postgres/pvc.yaml"               (rc/inline "postgres/pvc.yaml")
-       "postgres/secret.yaml"            (rc/inline "postgres/secret.yaml")
-       "postgres/service.yaml"           (rc/inline "postgres/service.yaml")
-       (throw (js/Error. (str "Undefined Resource: " resource-name))))))
-
 
 (defn postgres-size?
   [input]
@@ -64,12 +46,7 @@
 (defn-spec ^{:deprecated "6.4.1"} generate-config map?
   "use generate-configmap instead"
   [config pg-config?]
-  (let [{:keys [postgres-size db-name namespace]} config]
-    (->
-     (yaml/from-string (yaml/load-resource
-                        (str "postgres/config-" (name postgres-size) ".yaml")))
-     (assoc-in [:metadata :namespace] namespace)
-     (assoc-in [:data :postgres-db] db-name))))
+  (generate-configmap config))
 
 
 (defn-spec generate-deployment map?

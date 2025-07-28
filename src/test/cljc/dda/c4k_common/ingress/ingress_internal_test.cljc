@@ -1,7 +1,6 @@
 (ns dda.c4k-common.ingress.ingress-internal-test
   (:require
-   #?(:clj [clojure.test :refer [deftest is are testing run-tests]]
-      :cljs [cljs.test :refer-macros [deftest is are testing run-tests]])
+   [clojure.test :refer [deftest is are testing run-tests]]
    [clojure.spec.test.alpha :as st]
    [dda.c4k-common.ingress.ingress-internal :as cut]))
 
@@ -100,8 +99,7 @@
            :annotations {:traefik.ingress.kubernetes.io/router.entrypoints
                          "web, websecure"
                          :traefik.ingress.kubernetes.io/router.middlewares
-                         "default-redirect-https@kubernetescrd, myapp-normal-ratelimit@kubernetescrd"
-                         :metallb.universe.tf/address-pool "public"}}}
+                         "default-redirect-https@kubernetescrd, myapp-normal-ratelimit@kubernetescrd"}}}
          (dissoc (cut/ingress
                   (merge config
                          {:namespace "myapp"
@@ -113,8 +111,7 @@
           :annotations {:traefik.ingress.kubernetes.io/router.entrypoints
                         "web, websecure"
                         :traefik.ingress.kubernetes.io/router.middlewares
-                        "default-redirect-https@kubernetescrd, default-normal-ratelimit@kubernetescrd",
-                        :metallb.universe.tf/address-pool "public"}}
+                        "default-redirect-https@kubernetescrd, default-normal-ratelimit@kubernetescrd"}}
          (:metadata (cut/ingress config))))
   (is (= {:tls
           [{:hosts

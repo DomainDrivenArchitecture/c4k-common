@@ -1,14 +1,8 @@
 (ns dda.c4k-common.namespace.namespace-internal
   (:require 
    [clojure.spec.alpha :as s]
-   #?(:clj [orchestra.core :refer [defn-spec]]
-      :cljs [orchestra.core :refer-macros [defn-spec]])
-   [dda.c4k-common.yaml :as yaml]
-   #?(:cljs [dda.c4k-common.macros :refer-macros [inline-resources]])))
-
-#?(:cljs
-   (defmethod yaml/load-resource :namespace [resource-name]
-     (get (inline-resources "namespace") resource-name)))
+   [orchestra.core :refer [defn-spec]]
+   [dda.c4k-common.yaml :as yaml]))
 
 (s/def ::namespace string?)
 

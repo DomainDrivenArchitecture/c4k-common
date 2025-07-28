@@ -1,7 +1,6 @@
 (ns dda.c4k-common.postgres.postgres-internal-test
   (:require
-   #?(:clj [clojure.test :refer [deftest is are testing run-tests]]
-      :cljs [cljs.test :refer-macros [deftest is are testing run-tests]])
+   [clojure.test :refer [deftest is are testing run-tests]]
    [clojure.spec.test.alpha :as st]
    [dda.c4k-common.postgres.postgres-internal :as cut]))
 
@@ -114,7 +113,7 @@
           :apiVersion "v1"
           :metadata
           {:name "postgres-pv-volume",
-           :namespace "default"
+           :namespace "other"
            :labels {:type "local"}}
           :spec
           {:storageClassName "manual"
@@ -127,7 +126,7 @@
                                           :pvc-storage-class-name "manual"
                                           :postgres-data-volume-path "xx"
                                           :pv-storage-size-gb 20
-                                          :namespace "default"}))))
+                                          :namespace "other"}))))
 
 
 (deftest should-generate-persistent-volume-claim

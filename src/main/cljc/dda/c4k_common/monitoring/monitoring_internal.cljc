@@ -1,42 +1,11 @@
 (ns dda.c4k-common.monitoring.monitoring-internal
   (:require
    [clojure.spec.alpha :as s]
-   #?(:cljs [shadow.resource :as rc])
-   #?(:clj [orchestra.core :refer [defn-spec]]
-      :cljs [orchestra.core :refer-macros [defn-spec]])
+   [orchestra.core :refer [defn-spec]]
    [dda.c4k-common.yaml :as yaml]
    [dda.c4k-common.predicate :as cp]
    [dda.c4k-common.common :as cm]
    [clojure.string :as str]))
-
-
-#?(:cljs
-   (defmethod yaml/load-resource :monitoring [resource-name]
-     (case resource-name
-       "monitoring/kube-state-metrics-cluster-role-binding.yaml" (rc/inline "monitoring/kube-state-metrics-cluster-role-binding.yaml")
-       "monitoring/kube-state-metrics-cluster-role.yaml"         (rc/inline "monitoring/kube-state-metrics-cluster-role.yaml")
-       "monitoring/kube-state-metrics-deployment.yaml"           (rc/inline "monitoring/kube-state-metrics-deployment.yaml")
-       "monitoring/kube-state-metrics-service-account.yaml"      (rc/inline "monitoring/kube-state-metrics-service-account.yaml")
-       "monitoring/kube-state-metrics-service.yaml"              (rc/inline "monitoring/kube-state-metrics-service.yaml")
-       "monitoring/namespace.yaml"                               (rc/inline "monitoring/namespace.yaml")
-       "monitoring/node-exporter-cluster-role-binding.yaml"      (rc/inline "monitoring/node-exporter-cluster-role-binding.yaml")
-       "monitoring/node-exporter-cluster-role.yaml"              (rc/inline "monitoring/node-exporter-cluster-role.yaml")
-       "monitoring/node-exporter-daemon-set.yaml"                (rc/inline "monitoring/node-exporter-daemon-set.yaml")
-       "monitoring/node-exporter-service-account.yaml"           (rc/inline "monitoring/node-exporter-service-account.yaml")
-       "monitoring/node-exporter-service.yaml"                   (rc/inline "monitoring/node-exporter-service.yaml")
-       "monitoring/prometheus-cluster-role-binding.yaml"         (rc/inline "monitoring/prometheus-cluster-role-binding.yaml")
-       "monitoring/prometheus-cluster-role.yaml"                 (rc/inline "monitoring/prometheus-cluster-role.yaml")
-       "monitoring/prometheus-config-secret.yaml"                (rc/inline "monitoring/prometheus-config-secret.yaml")
-       "monitoring/prometheus-deployment.yaml"                   (rc/inline "monitoring/prometheus-deployment.yaml")
-       "monitoring/prometheus-prometheus.yaml"                   (rc/inline "monitoring/prometheus-prometheus.yaml")
-       "monitoring/prometheus-service-account.yaml"              (rc/inline "monitoring/prometheus-service-account.yaml")
-       "monitoring/prometheus-service.yaml"                      (rc/inline "monitoring/prometheus-service.yaml")
-       "monitoring/prometheus-pvc.yaml"                          (rc/inline "monitoring/prometheus-pvc.yaml")
-       "monitoring/push-gw-deployment.yaml"                      (rc/inline "monitoring/push-gw-deployment.yaml")
-       "monitoring/push-gw-service-account.yaml"                 (rc/inline "monitoring/push-gw-service-account.yaml")
-       "monitoring/push-gw-service.yaml"                         (rc/inline "monitoring/push-gw-service.yaml")
-       (throw (js/Error. (str "Undefined Resource: " resource-name))))))
-
 
 (s/def ::remote-write-user cp/bash-env-string?)
 (s/def ::remote-write-password cp/bash-env-string?)

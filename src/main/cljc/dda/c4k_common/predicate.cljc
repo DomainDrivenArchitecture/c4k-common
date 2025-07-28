@@ -1,8 +1,7 @@
 (ns dda.c4k-common.predicate
   (:require
    [clojure.string :as str]
-   #?(:clj [clojure.edn :as edn]
-      :cljs [cljs.reader :as edn])))
+   [clojure.edn :as edn]))
 
 (defn bash-env-string?
   [input]

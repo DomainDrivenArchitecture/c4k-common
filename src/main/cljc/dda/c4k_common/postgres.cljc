@@ -1,8 +1,7 @@
 (ns dda.c4k-common.postgres
   (:require
    [clojure.spec.alpha :as s]
-   #?(:clj [orchestra.core :refer [defn-spec]]
-      :cljs [orchestra.core :refer-macros [defn-spec]])
+   [orchestra.core :refer [defn-spec]]
    [dda.c4k-common.namespace :as ns]
    [dda.c4k-common.postgres.postgres-internal :as int]))
 
@@ -87,7 +86,10 @@
   [(generate-configmap resolved-config)
    (when (contains? resolved-config :postgres-data-volume-path)
      (generate-persistent-volume
-      (select-keys resolved-config [:postgres-data-volume-path :pv-storage-size-gb])))
+      (select-keys resolved-config 
+                   [:namespace 
+                    :postgres-data-volume-path 
+                    :pv-storage-size-gb])))
    (generate-pvc resolved-config)
    (generate-deployment resolved-config)
    (generate-service resolved-config)]))
@@ -105,7 +107,7 @@
   (config-objects config))
 
 (defn-spec ^{:deprecated "11.0.0"} generate-auth seq?
-  "use config-auth instead"
+  "use auth-objects instead"
   [config pg-config?
    auth pg-auth?]
   (auth-objects config auth))

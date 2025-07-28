@@ -1,7 +1,6 @@
 (ns dda.c4k-common.monitoring.monitoring-internal-test
   (:require
-   #?(:clj [clojure.test :refer [deftest is are testing run-tests]]
-      :cljs [cljs.test :refer-macros [deftest is are testing run-tests]])
+   [clojure.test :refer [deftest is are testing run-tests]]
    [clojure.string :as str]
    [clojure.spec.test.alpha :as st]
    [dda.c4k-common.monitoring.monitoring-internal :as cut]))
@@ -26,7 +25,7 @@
 
 (deftest should-not-generate-config
   (is (thrown?
-       #?(:clj Exception :cljs js/Error)
+       Exception
        (cut/config-secret invalid-conf auth))))
 
 (deftest should-generate-pvc
